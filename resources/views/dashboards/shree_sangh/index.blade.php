@@ -52,11 +52,11 @@
 <div class="col">
     <div class="card h-100 border-0 shadow-lg rounded-4">
         <div class="card-body text-center" style="background: linear-gradient(to right, #56ccf2, #2f80ed); color: white; border-radius: 1rem 1rem 0 0;">
-            <h5 class="card-title fs-5">Aanchal</h5>
-            <p class="card-text">View, Edit Or Add a New Aanchal.</p>
+            <h5 class="card-title fs-5">NEWS</h5>
+            <p class="card-text">View, Edit Or Add a New NEWS.</p>
         </div>
         <div class="card-footer bg-white text-center rounded-bottom-4 py-3">
-            <a href="{{ url('/aanchal') }}" class="btn btn-outline-primary fw-semibold">📂 Go</a>
+            <a href="{{ url('/news') }}" class="btn btn-outline-primary fw-semibold">📂 Go</a>
         </div>
     </div>
 </div>

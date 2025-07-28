@@ -16,7 +16,7 @@ use App\Http\Controllers\Shree_sangh\Karyakarini\SthayiSampatiSanwardhanSamitiCo
 use App\Http\Controllers\Shree_sangh\Karyakarini\SanyojanMandalAntrastriyaSadasyataController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\SamtaJanKalyanPranayashController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\PadhadhikariPrashashanKaryashalaController;
-
+use App\Http\Controllers\Shree_sangh\News\NewsUpdateController;
 
 
 
@@ -164,11 +164,15 @@ Route::apiResource('/samta-jan-kalyan-pranayash', SamtaJanKalyanPranayashControl
 // -----------------Samta Jan Kalyan Pranayash api ------------------------------------
 
 
-// -----------------Padhadhikari Prashashan Karyashala api ------------------------------------]
+// -----------------Padhadhikari Prashashan Karyashala api ------------------------------------
 
 Route::apiResource('padhadhikari-prashashan-karyashala', PadhadhikariPrashashanKaryashalaController::class)
      ->parameters([
          'padhadhikari-prashashan-karyashala' => 'record' // 👈 shorten the route parameter
-     ]);// -----------------Padhadhikari Prashashan Karyashala api ------------------------------------]
+     ]);
+// -----------------Padhadhikari Prashashan Karyashala api ------------------------------------
 
 
+// -----------------news api ------------------------------------
+Route::apiResource('news', NewsUpdateController::class);
+// -----------------news api ------------------------------------

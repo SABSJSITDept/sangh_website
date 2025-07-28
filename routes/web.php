@@ -136,3 +136,7 @@ Route::get('/samta_jan_kalyan_pranayash', function () {
 Route::get('/padhadhikari_prashashan_karyashala', function () {
     return view('dashboards.shree_sangh.karyakarini.padhadhikari_prashashan_karyashala');
 });
+
+Route::get('/news', function () {
+    return view('dashboards.shree_sangh.news.news_update');
+});
