@@ -125,3 +125,8 @@ Route::get('/sthayi_sampati_sanwardhan_samiti', function () {
 Route::get('/sanyojan_mandal_antrastriya_sadasyata', function () {
     return view('dashboards.shree_sangh.karyakarini.sanyojan_mandal_antrastriya_sadasyata');
 });
+
+
+Route::get('/samta_jan_kalyan_pranayash', function () {
+    return view('dashboards.shree_sangh.karyakarini.samta_jan_kalyan_pranayash');
+});

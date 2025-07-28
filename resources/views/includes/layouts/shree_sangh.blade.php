@@ -327,6 +327,7 @@
         <li><a href="{{ url('/karyasamiti-sadasya') }}">कार्यसमिति सदस्य</a></li>
         <li><a href="{{ url('/sthayi_sampati_sanwardhan_samiti') }}">स्थायि सम्पति संवर्द्धन समित</a></li>
         <li><a href="{{ url('/sanyojan_mandal_antrastriya_sadasyata') }}">संयोजन मंडल अंतरस्त्रिय सदस्यता</a></li>
+        <li><a href="{{ url('/samta_jan_kalyan_pranayash') }}">समता जन कल्याण प्राणायास</a></li>
       </ul>
     </div>
   </div>

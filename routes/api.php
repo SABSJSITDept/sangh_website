@@ -14,6 +14,7 @@ use App\Http\Controllers\Aanchal\AanchalController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\KaryasamitiSadasyaController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\SthayiSampatiSanwardhanSamitiController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\SanyojanMandalAntrastriyaSadasyataController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\SamtaJanKalyanPranayashController;
 
 
 
@@ -155,3 +156,8 @@ Route::apiResource('sanyojan-mandal-antrastriya-sadasyata', SanyojanMandalAntras
     ->parameters(['sanyojan-mandal-antrastriya-sadasyata' => 'sadasya']);
 
 // -----------------Sanyojan Mandal Antrastriya Sadasyata api ------------------------------------
+
+
+// -----------------Samta Jan Kalyan Pranayash api ------------------------------------
+Route::apiResource('/samta-jan-kalyan-pranayash', SamtaJanKalyanPranayashController::class);
+// -----------------Samta Jan Kalyan Pranayash api ------------------------------------
