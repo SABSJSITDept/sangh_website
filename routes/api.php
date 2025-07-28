@@ -11,6 +11,7 @@ use App\Http\Controllers\Shree_sangh\Karyakarini\ItCellController;
 use App\Http\Controllers\Pravarti\PravartiShreeSanghController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\PravartiSanyojakController;
 use App\Http\Controllers\Aanchal\AanchalController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\KaryasamitiSadasyaController;
 
 
 // ------------------Login api ------------------------------------
@@ -129,3 +130,6 @@ Route::prefix('aanchal')->group(function () {
     Route::delete('{id}', [AanchalController::class, 'destroy']);
 });
 // -----------------aanchal api ------------------------------------
+
+
+Route::apiResource('karyasamiti_sadasya', KaryasamitiSadasyaController::class);

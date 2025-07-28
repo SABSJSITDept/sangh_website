@@ -11,9 +11,9 @@ return new class extends Migration
      */
  public function up(): void
 {
-  Schema::create('aanchal', function (Blueprint $table) {
-    $table->id();
-    $table->string('name'); // ✅ this line is REQUIRED
+Schema::create('aanchal', function (Blueprint $table) {
+    $table->id(); // 👈 BIGINT UNSIGNED
+    $table->string('name');
     $table->timestamps();
 });
 }

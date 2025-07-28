@@ -112,3 +112,7 @@ Route::get('/pravarti-sanyojak', function () {
 Route::get('/aanchal', function () {
     return view('aanchal.add_aanchal');
 });
+
+Route::get('/karyasamiti-sadasya', function () {
+    return view('dashboards.shree_sangh.karyakarini.karyasamiti_sadasya');
+});
