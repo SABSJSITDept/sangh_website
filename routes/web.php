@@ -130,3 +130,9 @@ Route::get('/sanyojan_mandal_antrastriya_sadasyata', function () {
 Route::get('/samta_jan_kalyan_pranayash', function () {
     return view('dashboards.shree_sangh.karyakarini.samta_jan_kalyan_pranayash');
 });
+
+
+
+Route::get('/padhadhikari_prashashan_karyashala', function () {
+    return view('dashboards.shree_sangh.karyakarini.padhadhikari_prashashan_karyashala');
+});
