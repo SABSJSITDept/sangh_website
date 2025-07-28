@@ -12,6 +12,8 @@ use App\Http\Controllers\Pravarti\PravartiShreeSanghController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\PravartiSanyojakController;
 use App\Http\Controllers\Aanchal\AanchalController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\KaryasamitiSadasyaController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\SthayiSampatiSanwardhanSamitiController;
+
 
 
 // ------------------Login api ------------------------------------
@@ -131,5 +133,11 @@ Route::prefix('aanchal')->group(function () {
 });
 // -----------------aanchal api ------------------------------------
 
-
+// -----------------karyasamiti_sadasya api ------------------------------------
 Route::apiResource('karyasamiti_sadasya', KaryasamitiSadasyaController::class);
+// -----------------karyasamiti_sadasya api ------------------------------------
+
+
+// -----------------Sthayi Sampati Sanwardhan Samiti api ------------------------------------
+Route::apiResource('sthayi_sampati_sanwardhan_samiti', SthayiSampatiSanwardhanSamitiController::class);
+// -----------------Sthayi Sampati Sanwardhan Samiti api ------------------------------------

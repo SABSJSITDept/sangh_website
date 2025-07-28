@@ -325,7 +325,7 @@
         <li><a href="{{ route('admin.it_cell') }}">IT-CELL सदस्य </a></li>
         <li><a href="{{ url('/pravarti-sanyojak') }}">प्रवर्ती संयोजक</a></li>
         <li><a href="{{ url('/karyasamiti-sadasya') }}">कार्यसमिति सदस्य</a></li>
-
+        <li><a href="{{ url('/sthayi_sampati_sanwardhan_samiti') }}">स्थायि सम्पति संवर्द्धन समित</a></li>
 
       </ul>
     </div>

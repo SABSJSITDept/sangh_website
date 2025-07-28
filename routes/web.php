@@ -116,3 +116,7 @@ Route::get('/aanchal', function () {
 Route::get('/karyasamiti-sadasya', function () {
     return view('dashboards.shree_sangh.karyakarini.karyasamiti_sadasya');
 });
+
+Route::get('/sthayi_sampati_sanwardhan_samiti', function () {
+    return view('dashboards.shree_sangh.karyakarini.sthayi_sampati_sanwardhan_samiti');
+});
