@@ -140,3 +140,7 @@ Route::get('/padhadhikari_prashashan_karyashala', function () {
 Route::get('/news', function () {
     return view('dashboards.shree_sangh.news.news_update');
 });
+
+Route::get('/shivir', function () {
+    return view('dashboards.shree_sangh.news.shivir_update');
+});

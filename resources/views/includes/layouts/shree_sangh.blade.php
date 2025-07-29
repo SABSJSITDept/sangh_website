@@ -306,7 +306,7 @@
         <li><a href="{{ url('/dashboard/shree_sangh/daily-thoughts') }}">आज का विचार</a></li>
         <li><a href="{{ url('/dashboard/vihar-sewa') }}">विहार जानकारी </a></li>
         <li><a href="{{ url('/news') }}">NEWS</a></li>
-        <li><a href="#">Logs</a></li>
+        <li><a href="{{ url('/shivir') }}">शिविर</a></li>
       </ul>
     </div>
   </div>

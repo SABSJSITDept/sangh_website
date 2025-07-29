@@ -17,32 +17,8 @@ use App\Http\Controllers\Shree_sangh\Karyakarini\SanyojanMandalAntrastriyaSadasy
 use App\Http\Controllers\Shree_sangh\Karyakarini\SamtaJanKalyanPranayashController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\PadhadhikariPrashashanKaryashalaController;
 use App\Http\Controllers\Shree_sangh\News\NewsUpdateController;
+use App\Http\Controllers\Shree_sangh\Shivir\ShivirUpdateController;
 
-
-
-// ------------------Login api ------------------------------------
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/dashboard', function (Request $request) {
-        $role = $request->user()->role;
-
-        switch ($role) {
-            case 'super_admin':
-                return response()->json(['message' => '🎯 Super Admin Dashboard']);
-            case 'sahitya':
-                return response()->json(['message' => '📚 Sahitya Dashboard']);
-            case 'shree_sangh':
-                return response()->json(['message' => '🏛️ Shree Sangh Dashboard']);
-            case 'yuva_sangh':
-                return response()->json(['message' => '🔥 Yuva Sangh Dashboard']);
-            case 'mahila_samiti':
-                return response()->json(['message' => '🌸 Mahila Samiti Dashboard']);
-            default:
-                return response()->json(['message' => '⛔ Unauthorized Role'], 403);
-        }
-    });
-
-});
-// ------------------Login api ------------------------------------
 
 // ------------------Thoughts api ------------------------------------
 Route::get('/latest-thought', [ThoughtApiController::class, 'latest']);
@@ -176,3 +152,8 @@ Route::apiResource('padhadhikari-prashashan-karyashala', PadhadhikariPrashashanK
 // -----------------news api ------------------------------------
 Route::apiResource('news', NewsUpdateController::class);
 // -----------------news api ------------------------------------
+
+
+// -----------------shivir api ------------------------------------
+Route::apiResource('shivir', ShivirUpdateController::class);
+// -----------------shivir api ------------------------------------
