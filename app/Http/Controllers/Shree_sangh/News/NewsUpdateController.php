@@ -24,7 +24,7 @@ class NewsUpdateController extends Controller
         'date'        => 'nullable|date',
         'time'        => 'nullable|string',
         'location'    => 'nullable|string',
-        'photo'       => 'nullable|image|max:20' // 20KB
+        'photo'       => 'nullable|image|max:200' // 20KB
     ]);
 
     $data = $request->only(['title', 'date', 'time', 'location', 'description']);
@@ -48,7 +48,7 @@ class NewsUpdateController extends Controller
         'date'        => 'nullable|date',
         'time'        => 'nullable|string',
         'location'    => 'nullable|string',
-        'photo'       => 'nullable|image|max:20' // 20KB
+        'photo'       => 'nullable|image|max:200' // 20KB
     ]);
 
     if ($request->hasFile('photo')) {
