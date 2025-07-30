@@ -19,23 +19,24 @@ class AavedanPatraController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'file' => 'required',
+            'file_type' => 'required|in:pdf,google_form',
+            'file' => $request->file_type === 'pdf'
+                ? 'required|mimes:pdf|max:2048'
+                : 'required|string',
         ]);
 
-        if ($request->hasFile('file')) {
-            $request->validate([
-                'file' => 'mimes:pdf|max:2048',
-            ]);
-
+        if ($request->file_type === 'pdf' && $request->hasFile('file')) {
             $filename = time().'_'.Str::random(10).'.'.$request->file('file')->extension();
             $request->file('file')->storeAs('public/aavedan_patra', $filename);
+            $filePath = $filename;
         } else {
-            $filename = $request->file; // google form link
+            $filePath = $request->file; // google form link
         }
 
         $data = AavedanPatra::create([
             'name' => $request->name,
-            'file' => $filename,
+            'file' => $filePath,
+            'file_type' => $request->file_type,
         ]);
 
         return response()->json($data, 201);
@@ -47,27 +48,30 @@ class AavedanPatraController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'file_type' => 'required|in:pdf,google_form',
+            'file' => $request->file_type === 'pdf'
+                ? 'nullable|mimes:pdf|max:2048'
+                : 'required|string',
         ]);
 
-        if ($request->hasFile('file')) {
-            $request->validate([
-                'file' => 'mimes:pdf|max:2048',
-            ]);
-
-            // delete old
-            if (Storage::exists('public/aavedan_patra/' . $data->file)) {
+        if ($request->file_type === 'pdf' && $request->hasFile('file')) {
+            if ($data->file_type === 'pdf' && Storage::exists('public/aavedan_patra/' . $data->file)) {
                 Storage::delete('public/aavedan_patra/' . $data->file);
             }
 
             $filename = time().'_'.Str::random(10).'.'.$request->file('file')->extension();
             $request->file('file')->storeAs('public/aavedan_patra', $filename);
+            $filePath = $filename;
+        } elseif ($request->file_type === 'google_form') {
+            $filePath = $request->file;
         } else {
-            $filename = $request->file;
+            $filePath = $data->file;
         }
 
         $data->update([
             'name' => $request->name,
-            'file' => $filename,
+            'file' => $filePath,
+            'file_type' => $request->file_type,
         ]);
 
         return response()->json($data);
@@ -76,10 +80,13 @@ class AavedanPatraController extends Controller
     public function destroy($id)
     {
         $data = AavedanPatra::findOrFail($id);
-        if (Storage::exists('public/aavedan_patra/' . $data->file)) {
+
+        if ($data->file_type === 'pdf' && Storage::exists('public/aavedan_patra/' . $data->file)) {
             Storage::delete('public/aavedan_patra/' . $data->file);
         }
+
         $data->delete();
+
         return response()->json(['message' => 'Deleted']);
     }
 }

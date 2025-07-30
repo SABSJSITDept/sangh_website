@@ -9,15 +9,32 @@
         <div class="card-body">
             <form id="aavedanForm">
                 <input type="hidden" id="edit_id">
+
                 <div class="mb-3">
                     <label>नाम</label>
                     <input type="text" class="form-control" id="name" required>
                 </div>
 
                 <div class="mb-3">
-                    <label>फ़ाइल (PDF या Google Form लिंक)</label>
+                    <label>फ़ाइल का प्रकार</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="file_type" id="fileTypePdf" value="pdf" checked>
+                        <label class="form-check-label" for="fileTypePdf">PDF</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="file_type" id="fileTypeGoogle" value="google_form">
+                        <label class="form-check-label" for="fileTypeGoogle">Google Form</label>
+                    </div>
+                </div>
+
+                <div class="mb-3" id="pdfInputGroup">
+                    <label>PDF फ़ाइल</label>
                     <input type="file" class="form-control" id="fileInput" accept=".pdf">
-                    <input type="text" class="form-control mt-2" id="googleFormLink" placeholder="या Google Form लिंक डालें">
+                </div>
+
+                <div class="mb-3 d-none" id="googleInputGroup">
+                    <label>Google Form लिंक</label>
+                    <input type="text" class="form-control" id="googleFormLink" placeholder="https://...">
                 </div>
 
                 <button type="submit" class="btn btn-success">Save</button>
@@ -32,6 +49,7 @@
                 <thead>
                     <tr>
                         <th>नाम</th>
+                        <th>प्रकार</th>
                         <th>फ़ाइल</th>
                         <th>एक्शन</th>
                     </tr>
@@ -49,47 +67,62 @@
 {{-- Axios & JS --}}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', fetchData);
+document.addEventListener('DOMContentLoaded', () => {
+    toggleFileInputs();
+    fetchData();
+});
+
+document.querySelectorAll('input[name="file_type"]').forEach(input => {
+    input.addEventListener('change', toggleFileInputs);
+});
+
+function toggleFileInputs() {
+    const type = document.querySelector('input[name="file_type"]:checked').value;
+    document.getElementById('pdfInputGroup').classList.toggle('d-none', type !== 'pdf');
+    document.getElementById('googleInputGroup').classList.toggle('d-none', type !== 'google_form');
+}
 
 function fetchData() {
     axios.get('/api/aavedan-patra').then(res => {
         const tbody = document.querySelector('#aavedanTable tbody');
         tbody.innerHTML = '';
         res.data.forEach(item => {
-            const tr = document.createElement('tr');
-            const fileLink = item.file.endsWith('.pdf')
+            const fileLink = item.file_type === 'pdf'
                 ? `<a href="/storage/aavedan_patra/${item.file}" target="_blank">📎 PDF</a>`
                 : `<a href="${item.file}" target="_blank">🔗 Google Form</a>`;
-
-            tr.innerHTML = `
-                <td>${item.name}</td>
-                <td>${fileLink}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="editItem(${item.id})">Edit</button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})">Delete</button>
-                </td>
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.file_type}</td>
+                    <td>${fileLink}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editItem(${item.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})">Delete</button>
+                    </td>
+                </tr>
             `;
-            tbody.appendChild(tr);
         });
     });
 }
 
 document.getElementById('aavedanForm').addEventListener('submit', function(e) {
     e.preventDefault();
+
     const id = document.getElementById('edit_id').value;
+    const fileType = document.querySelector('input[name="file_type"]:checked').value;
     const formData = new FormData();
     formData.append('name', document.getElementById('name').value);
+    formData.append('file_type', fileType);
 
     const fileInput = document.getElementById('fileInput').files[0];
     const googleFormLink = document.getElementById('googleFormLink').value;
 
-    if (fileInput) {
-        formData.append('file', fileInput);
-    } else if (googleFormLink) {
-        formData.append('file', googleFormLink);
+    if (fileType === 'pdf') {
+        if (!fileInput && !id) return alert("कृपया PDF चुनें");
+        if (fileInput) formData.append('file', fileInput);
     } else {
-        alert('PDF या Google Form लिंक दें!');
-        return;
+        if (!googleFormLink) return alert("Google Form लिंक डालें");
+        formData.append('file', googleFormLink);
     }
 
     const headers = {
@@ -99,17 +132,12 @@ document.getElementById('aavedanForm').addEventListener('submit', function(e) {
 
     const method = id ? 'post' : 'post';
     const url = id ? `/api/aavedan-patra/${id}` : '/api/aavedan-patra';
-
     if (id) formData.append('_method', 'PUT');
 
-    axios({
-        method,
-        url,
-        data: formData,
-        headers
-    }).then(() => {
+    axios({ method, url, data: formData, headers }).then(() => {
         document.getElementById('aavedanForm').reset();
         document.getElementById('edit_id').value = '';
+        toggleFileInputs();
         fetchData();
     });
 });
@@ -119,14 +147,20 @@ function editItem(id) {
         const data = res.data.find(i => i.id === id);
         document.getElementById('edit_id').value = data.id;
         document.getElementById('name').value = data.name;
-        if (!data.file.endsWith('.pdf')) {
+
+        if (data.file_type === 'google_form') {
+            document.getElementById('fileTypeGoogle').checked = true;
             document.getElementById('googleFormLink').value = data.file;
+        } else {
+            document.getElementById('fileTypePdf').checked = true;
         }
+
+        toggleFileInputs();
     });
 }
 
 function deleteItem(id) {
-    if (confirm("Delete this?")) {
+    if (confirm("क्या आप वाकई हटाना चाहते हैं?")) {
         axios.delete(`/api/aavedan-patra/${id}`, {
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
