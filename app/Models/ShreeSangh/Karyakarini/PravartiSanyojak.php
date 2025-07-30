@@ -1,6 +1,5 @@
 <?php
 
-// app/Models/ShreeSangh/Karyakarini/PravartiSanyojak.php
 namespace App\Models\ShreeSangh\Karyakarini;
 
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +11,6 @@ class PravartiSanyojak extends Model
 
     public function pravarti()
     {
-        return $this->belongsTo(\App\Models\Pravarti\Pravarti::class, 'id');
+        return $this->belongsTo(\App\Models\Pravarti\Pravarti::class, 'pravarti_id');
     }
 }

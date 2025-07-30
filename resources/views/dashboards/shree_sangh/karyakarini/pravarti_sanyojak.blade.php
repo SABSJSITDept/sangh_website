@@ -102,13 +102,18 @@ document.getElementById("pravartiSanyojakForm").addEventListener("submit", async
 
     const id = document.getElementById("editId").value;
     const formData = new FormData(this);
+
+    // 👇 Add CSRF token manually into formData
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+    formData.append('_token', csrf);
+
     const url = id ? `/api/pravarti-sanyojak/${id}` : '/api/pravarti-sanyojak';
-    const method = 'POST'; // Always POST for both store & update
+    const method = 'POST';
 
     try {
         const res = await fetch(url, {
-            method: method,
-            body: formData, // ✅ No manual headers!
+            method,
+            body: formData
         });
 
         const result = await res.json();
@@ -132,6 +137,7 @@ document.getElementById("pravartiSanyojakForm").addEventListener("submit", async
         alert("❌ नेटवर्क या सर्वर की समस्या है।");
     }
 });
+
 
 
 // 👇 Fetch & show cards

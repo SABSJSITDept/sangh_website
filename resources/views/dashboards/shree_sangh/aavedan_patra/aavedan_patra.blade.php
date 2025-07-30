@@ -19,11 +19,11 @@
                     <label>फ़ाइल का प्रकार</label><br>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="file_type" id="fileTypePdf" value="pdf" checked>
-                        <label class="form-check-label" for="fileTypePdf">PDF</label>
+                        <label class="form-check-label" for="fileTypePdf">Offline</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="file_type" id="fileTypeGoogle" value="google_form">
-                        <label class="form-check-label" for="fileTypeGoogle">Google Form</label>
+                        <label class="form-check-label" for="fileTypeGoogle">Online</label>
                     </div>
                 </div>
 
