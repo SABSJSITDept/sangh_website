@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Shree_sangh\Karyakarini;
 
 use App\Http\Controllers\Controller;
@@ -9,76 +8,70 @@ use Illuminate\Support\Facades\Storage;
 
 class ExPresidentController extends Controller
 {
-    // ✅ 1. Blade view for managing entries
     public function index()
     {
         return view('dashboards.shree_sangh.karyakarini.ex_president');
     }
 
-    // ✅ 2. Get all entries as JSON
     public function all()
     {
-        $data = ExPresident::all();
-        return response()->json($data);
+        return response()->json(ExPresident::all());
     }
 
-    // ✅ 3. Store new entry via API
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string',
             'place' => 'required|string',
             'karaykal' => 'required|string',
-            'photo' => 'required|image|max:2048', // only image, max 2MB
+            'photo' => 'required|image|max:2048'
         ]);
 
         $path = $request->file('photo')->store('ex_presidents', 'public');
 
-        $president = ExPresident::create([
+        $data = ExPresident::create([
             'name' => $request->name,
             'place' => $request->place,
             'karaykal' => $request->karaykal,
-            'photo' => $path,
+            'photo' => $path
         ]);
 
-        return response()->json(['message' => 'Added Successfully', 'data' => $president]);
+        return response()->json(['message' => 'Added Successfully', 'data' => $data]);
     }
 
-    // ✅ 4. Update entry
     public function update(Request $request, $id)
     {
-        $president = ExPresident::findOrFail($id);
+        $data = ExPresident::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string',
             'place' => 'required|string',
             'karaykal' => 'required|string',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|max:2048'
         ]);
 
         if ($request->hasFile('photo')) {
-            if ($president->photo) {
-                Storage::disk('public')->delete($president->photo);
+            if ($data->photo) {
+                Storage::disk('public')->delete($data->photo);
             }
-
-            $president->photo = $request->file('photo')->store('ex_presidents', 'public');
+            $data->photo = $request->file('photo')->store('ex_presidents', 'public');
         }
 
-        $president->update([
+        $data->update([
             'name' => $request->name,
             'place' => $request->place,
             'karaykal' => $request->karaykal,
+            'photo' => $data->photo,
         ]);
 
-        return response()->json(['message' => 'Updated Successfully', 'data' => $president]);
+        return response()->json(['message' => 'Updated Successfully', 'data' => $data]);
     }
 
-    // ✅ 5. Delete entry
     public function destroy($id)
     {
-        $president = ExPresident::findOrFail($id);
-        Storage::disk('public')->delete($president->photo);
-        $president->delete();
+        $data = ExPresident::findOrFail($id);
+        Storage::disk('public')->delete($data->photo);
+        $data->delete();
 
         return response()->json(['message' => 'Deleted Successfully']);
     }

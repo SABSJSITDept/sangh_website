@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Shree_sangh\ThoughtApiController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\ExPresidentController;
 
-
+// Login Page (Accessible to All)
 Route::get('/', function () {
     return view('login');
 })->name('login');
 
+// Login Submit
 Route::post('/login', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
@@ -43,104 +44,111 @@ Route::post('/login', function (Request $request) {
     }
 });
 
+// Logout
 Route::get('/logout', function () {
     session()->forget('user');
     return redirect('/');
 })->name('logout');
 
 
-Route::middleware(['web', 'checkSession', 'matchRole:super_admin'])->get('/dashboard/super_admin', function () {
-    return view('dashboards.super_admin.index');
-})->name('dashboard.super_admin');
+// ✅ All routes below require user to be logged in
+Route::middleware(['web', 'checkSession'])->group(function () {
 
-Route::middleware(['web', 'checkSession', 'matchRole:sahitya'])->get('/dashboard/sahitya', function () {
-    return view('dashboards.sahitya.index');
-})->name('dashboard.sahitya');
+    // Super Admin Dashboard
+    Route::middleware('matchRole:super_admin')->get('/dashboard/super_admin', function () {
+        return view('dashboards.super_admin.index');
+    })->name('dashboard.super_admin');
 
-Route::middleware(['web', 'checkSession', 'matchRole:shree_sangh'])->group(function () {
+    // Sahitya Dashboard
+    Route::middleware('matchRole:sahitya')->get('/dashboard/sahitya', function () {
+        return view('dashboards.sahitya.index');
+    })->name('dashboard.sahitya');
 
-    // Shree Sangh Dashboard
-    Route::get('/dashboard/shree_sangh', function () {
-        return view('dashboards.shree_sangh.index');
-    })->name('dashboard.shree_sangh');
+    // Yuva Sangh Dashboard
+    Route::middleware('matchRole:yuva_sangh')->get('/dashboard/yuva_sangh', function () {
+        return view('dashboards.yuva_sangh.index');
+    })->name('dashboard.yuva_sangh');
 
-    // Daily Thoughts Form Page
-    Route::get('/dashboard/shree_sangh/daily-thoughts', [ThoughtApiController::class, 'create'])->name('daily-thoughts.create');
+    // Mahila Samiti Dashboard
+    Route::middleware('matchRole:mahila_samiti')->get('/dashboard/mahila_samiti', function () {
+        return view('dashboards.mahila_samiti.index');
+    })->name('dashboard.mahila_samiti');
 
-    
+    // Shree Sangh Role Routes
+    Route::middleware('matchRole:shree_sangh')->group(function () {
+        Route::get('/dashboard/shree_sangh', function () {
+            return view('dashboards.shree_sangh.index');
+        })->name('dashboard.shree_sangh');
 
-});
-Route::middleware(['web', 'checkSession', 'matchRole:yuva_sangh'])->get('/dashboard/yuva_sangh', function () {
-    return view('dashboards.yuva_sangh.index');
-})->name('dashboard.yuva_sangh');
+        Route::get('/dashboard/shree_sangh/daily-thoughts', [ThoughtApiController::class, 'create'])->name('daily-thoughts.create');
+    });
 
-Route::middleware(['web', 'checkSession', 'matchRole:mahila_samiti'])->get('/dashboard/mahila_samiti', function () {
-    return view('dashboards.mahila_samiti.index');
-})->name('dashboard.mahila_samiti');
+    // Shared routes for any authenticated user
+    Route::get('/thoughts/list', [ThoughtApiController::class, 'index'])->name('thoughts.index');
 
-Route::get('/thoughts/list', [ThoughtApiController::class, 'index'])->name('thoughts.index');
+    Route::get('/dashboard/vihar-sewa', function () {
+        return view('dashboards.shree_sangh.vihar_sewa');
+    })->name('vihar.sewa');
 
-Route::get('/dashboard/vihar-sewa', function () {
-    return view('dashboards.shree_sangh.vihar_sewa');
-})->name('vihar.sewa');
+    Route::get('/shree-sangh/ex-president', [ExPresidentController::class, 'index'])->name('ex_president.index');
 
-Route::get('/shree-sangh/ex-president', [ExPresidentController::class, 'index'])->name('ex_president.index');
-Route::get('/shree-sangh/karyakarini', function () {
-    return view('dashboards.shree_sangh.karyakarini.index');
-})->name('karyakarini.index');
+    Route::get('/shree-sangh/karyakarini', function () {
+        return view('dashboards.shree_sangh.karyakarini.index');
+    })->name('karyakarini.index');
 
-Route::get('/shree-sangh/karyakarini/pst', function () {
-    return view('dashboards.shree_sangh.karyakarini.pst');
-})->name('pst.view');
+    Route::get('/shree-sangh/karyakarini/pst', function () {
+        return view('dashboards.shree_sangh.karyakarini.pst');
+    })->name('pst.view');
 
-Route::get('/vp-sec', function () {
-    return view('dashboards.shree_sangh.karyakarini.vp_sec');
-})->name('vp_sec.manage');
+    Route::get('/vp-sec', function () {
+        return view('dashboards.shree_sangh.karyakarini.vp_sec');
+    })->name('vp_sec.manage');
 
-Route::get('/admin/it-cell', function () {
-    return view('dashboards.shree_sangh.karyakarini.it_cell');
-})->name('admin.it_cell');
+    Route::get('/admin/it-cell', function () {
+        return view('dashboards.shree_sangh.karyakarini.it_cell');
+    })->name('admin.it_cell');
 
-Route::get('/pravarti', function () {
-    return view('pravarti.add_pravarti');
-});
+    Route::get('/pravarti', function () {
+        return view('pravarti.add_pravarti');
+    });
 
-Route::get('/pravarti-sanyojak', function () {
-    return view('dashboards.shree_sangh.karyakarini.pravarti_sanyojak');
-});
+    Route::get('/pravarti-sanyojak', function () {
+        return view('dashboards.shree_sangh.karyakarini.pravarti_sanyojak');
+    });
 
-Route::get('/aanchal', function () {
-    return view('aanchal.add_aanchal');
-});
+    Route::get('/aanchal', function () {
+        return view('aanchal.add_aanchal');
+    });
 
-Route::get('/karyasamiti-sadasya', function () {
-    return view('dashboards.shree_sangh.karyakarini.karyasamiti_sadasya');
-});
+    Route::get('/karyasamiti-sadasya', function () {
+        return view('dashboards.shree_sangh.karyakarini.karyasamiti_sadasya');
+    });
 
-Route::get('/sthayi_sampati_sanwardhan_samiti', function () {
-    return view('dashboards.shree_sangh.karyakarini.sthayi_sampati_sanwardhan_samiti');
-});
+    Route::get('/sthayi_sampati_sanwardhan_samiti', function () {
+        return view('dashboards.shree_sangh.karyakarini.sthayi_sampati_sanwardhan_samiti');
+    });
 
+    Route::get('/sanyojan_mandal_antrastriya_sadasyata', function () {
+        return view('dashboards.shree_sangh.karyakarini.sanyojan_mandal_antrastriya_sadasyata');
+    });
 
-Route::get('/sanyojan_mandal_antrastriya_sadasyata', function () {
-    return view('dashboards.shree_sangh.karyakarini.sanyojan_mandal_antrastriya_sadasyata');
-});
+    Route::get('/samta_jan_kalyan_pranayash', function () {
+        return view('dashboards.shree_sangh.karyakarini.samta_jan_kalyan_pranayash');
+    });
 
+    Route::get('/padhadhikari_prashashan_karyashala', function () {
+        return view('dashboards.shree_sangh.karyakarini.padhadhikari_prashashan_karyashala');
+    });
 
-Route::get('/samta_jan_kalyan_pranayash', function () {
-    return view('dashboards.shree_sangh.karyakarini.samta_jan_kalyan_pranayash');
-});
+    Route::get('/news', function () {
+        return view('dashboards.shree_sangh.news.news_update');
+    });
 
+    Route::get('/shivir', function () {
+        return view('dashboards.shree_sangh.news.shivir_update');
+    });
 
-
-Route::get('/padhadhikari_prashashan_karyashala', function () {
-    return view('dashboards.shree_sangh.karyakarini.padhadhikari_prashashan_karyashala');
-});
-
-Route::get('/news', function () {
-    return view('dashboards.shree_sangh.news.news_update');
-});
-
-Route::get('/shivir', function () {
-    return view('dashboards.shree_sangh.news.shivir_update');
+      Route::get('/aavedan_patra', function () {
+        return view('dashboards.shree_sangh.aavedan_patra.aavedan_patra');
+    });
 });

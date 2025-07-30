@@ -22,7 +22,7 @@
 </script>
 
   
-  <title>Dashboard Sidebar Menu</title>
+  <title>SABSJS   Dashboard</title>
 
   <!-- Bootstrap & FontAwesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -307,6 +307,7 @@
         <li><a href="{{ url('/dashboard/vihar-sewa') }}">विहार जानकारी </a></li>
         <li><a href="{{ url('/news') }}">NEWS</a></li>
         <li><a href="{{ url('/shivir') }}">शिविर</a></li>
+        <li><a href="{{ url('/aavedan_patra') }}">आवेदन पत्र</a></li>
       </ul>
     </div>
   </div>

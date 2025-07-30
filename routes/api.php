@@ -18,6 +18,8 @@ use App\Http\Controllers\Shree_sangh\Karyakarini\SamtaJanKalyanPranayashControll
 use App\Http\Controllers\Shree_sangh\Karyakarini\PadhadhikariPrashashanKaryashalaController;
 use App\Http\Controllers\Shree_sangh\News\NewsUpdateController;
 use App\Http\Controllers\Shree_sangh\Shivir\ShivirUpdateController;
+use App\Http\Controllers\Shree_sangh\AavedanPatra\AavedanPatraController;
+
 
 
 // ------------------Thoughts api ------------------------------------
@@ -157,3 +159,7 @@ Route::apiResource('news', NewsUpdateController::class);
 // -----------------shivir api ------------------------------------
 Route::apiResource('shivir', ShivirUpdateController::class);
 // -----------------shivir api ------------------------------------
+
+// -----------------Aavedan Patra api ------------------------------------
+Route::apiResource('aavedan-patra', AavedanPatraController::class);
+// -----------------Aavedan Patra api ------------------------------------
