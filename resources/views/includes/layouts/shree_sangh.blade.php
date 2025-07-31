@@ -162,6 +162,7 @@
             transition: margin-left 0.3s ease;
             width: 100%;
             min-height: calc(100vh - 90px);
+             padding-bottom: 60px;
         }
         .sidebar.expanded ~ main.content {
             margin-left: var(--sidebar-width);
@@ -182,6 +183,9 @@
             z-index: 1040;
             margin-left: var(--sidebar-collapsed);
             transition: margin-left 0.3s ease;
+            display: flex;
+    align-items: center;
+    justify-content: flex-end;
         }
         .sidebar.expanded ~ footer.footer {
             margin-left: var(--sidebar-width);
@@ -220,7 +224,7 @@
     <!-- HEADER -->
     <header class="main-header">
         <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
-        <b><i class="bi bi-speedometer2"></i> SABSJS</b>
+        <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन संघ </b>
         <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="admin" />
     </header>
 
