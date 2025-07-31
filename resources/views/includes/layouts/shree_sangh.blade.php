@@ -25,7 +25,7 @@
     top: 0;                      /* ADD THIS */
     left: 0;                     /* ADD THIS */
     right: 0;                    /* ADD THIS */
-    background: #181824;
+   background: linear-gradient(to right, #ff6a00, #ee0979);
     color: #fff;
     padding: 7px 1rem;
     display: flex;
@@ -277,8 +277,7 @@
         </div>
     </div>
 
-    <!-- Other existing menu items (Users, Settings, Logout etc.) -->
-    <!-- Paste your existing Users, Settings, Logout etc. sections here -->
+
 
 
 <div class="nav-item">
