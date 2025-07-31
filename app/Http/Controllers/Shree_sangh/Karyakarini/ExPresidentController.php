@@ -13,10 +13,11 @@ class ExPresidentController extends Controller
         return view('dashboards.shree_sangh.karyakarini.ex_president');
     }
 
-    public function all()
-    {
-        return response()->json(ExPresident::all());
-    }
+  public function all()
+{
+    return response()->json(ExPresident::orderBy('created_at', 'desc')->get());
+}
+
 
     public function store(Request $request)
     {
@@ -24,7 +25,7 @@ class ExPresidentController extends Controller
             'name' => 'required|string',
             'place' => 'required|string',
             'karaykal' => 'required|string',
-            'photo' => 'required|image|max:2048'
+            'photo' => 'required|image|max:200'
         ]);
 
         $path = $request->file('photo')->store('ex_presidents', 'public');
@@ -47,7 +48,7 @@ class ExPresidentController extends Controller
             'name' => 'required|string',
             'place' => 'required|string',
             'karaykal' => 'required|string',
-            'photo' => 'nullable|image|max:2048'
+            'photo' => 'nullable|image|max:200'
         ]);
 
         if ($request->hasFile('photo')) {

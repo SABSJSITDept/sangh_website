@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Shree_sangh\ThoughtApiController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\ExPresidentController;
+use App\Models\Aanchal\Aanchal;
+
 
 // Login Page (Accessible to All)
 Route::get('/', function () {
@@ -119,6 +121,13 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::get('/aanchal', function () {
         return view('aanchal.add_aanchal');
     });
+
+
+    Route::get('/aanchals', function () {
+    return Aanchal::select('name')->orderBy('name')->get();
+});
+
+
 
     Route::get('/karyasamiti-sadasya', function () {
         return view('dashboards.shree_sangh.karyakarini.karyasamiti_sadasya');

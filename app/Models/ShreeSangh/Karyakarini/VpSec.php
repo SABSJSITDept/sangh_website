@@ -9,6 +9,6 @@ class VpSec extends Model
     protected $table = 'vp_sec';
 
     protected $fillable = [
-        'name', 'post', 'city',  'mobile', 'photo'
+        'name', 'post', 'city', 'mobile','aanchal', 'photo'
     ];
 }

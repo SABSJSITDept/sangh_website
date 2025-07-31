@@ -17,31 +17,39 @@
                         <label>नाम</label>
                         <input type="text" name="name" class="form-control" required>
                     </div>
+
                     <div class="col-md-4">
                         <label>पद</label>
-                        <input type="text" name="post" class="form-control" required>
+                        <select name="post" class="form-select" required>
+                            <option value="">चुनें</option>
+                            <option value="उपाध्यक्ष">उपाध्यक्ष</option>
+                            <option value="मंत्री">मंत्री</option>
+                        </select>
                     </div>
+
                     <div class="col-md-4">
                         <label>शहर</label>
                         <input type="text" name="city" class="form-control" required>
                     </div>
+
                     <div class="col-md-4">
-    <label>मोबाइल</label>
-    <input 
-        type="text" 
-        name="mobile" 
-        class="form-control" 
-        required 
-        maxlength="10" 
-        pattern="[0-9]{10}" 
-        title="10 अंकों का मोबाइल नंबर डालें" 
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-    >
-</div>
+                        <label>मोबाइल</label>
+                        <input type="text" name="mobile" class="form-control"
+                               required maxlength="10" pattern="[0-9]{10}"
+                               title="10 अंकों का मोबाइल नंबर डालें"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>अंचल</label>
+                        <select name="aanchal" class="form-select" id="aanchalDropdown" required>
+                            <option value="">चुनें</option>
+                        </select>
+                    </div>
 
                     <div class="col-md-4">
                         <label>फोटो (200KB तक)</label>
-                        <input type="file" name="photo" class="form-control" accept="image/*">
+                        <input type="file" name="photo" class="form-control" accept="image/*" id="photoInput">
                     </div>
                 </div>
 
@@ -55,12 +63,60 @@
 
     {{-- 🔹 CARD GRID --}}
     <h5 class="fw-bold text-secondary mb-3">🔽 सदस्यों की सूची</h5>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" id="vpSecList"></div>
+    <div id="vpSecList"></div>
+</div>
+
+{{-- 🔻 TOAST CONTAINER --}}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+    <div id="toastBox" class="toast align-items-center text-bg-primary border-0" role="alert"
+         aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg">Toast message here</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
 </div>
 
 {{-- 🔻 SCRIPT --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script>
 loadData();
+loadAanchals();
+
+document.getElementById("photoInput").addEventListener("change", function () {
+    if (this.files[0] && this.files[0].size > 200 * 1024) {
+        showToast("⚠️ फ़ोटो का आकार 200KB से अधिक है!", "danger");
+        this.value = "";
+    }
+});
+
+function showToast(message, type = "primary") {
+    const toastEl = document.getElementById("toastBox");
+    const toastMsg = document.getElementById("toastMsg");
+    toastMsg.textContent = message;
+
+    toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+}
+
+async function loadAanchals() {
+    try {
+        const res = await fetch("/api/aanchal");
+        const aanchals = await res.json();
+        const dropdown = document.getElementById("aanchalDropdown");
+        aanchals.forEach(item => {
+            const opt = document.createElement("option");
+            opt.value = item.name;
+            opt.textContent = item.name;
+            dropdown.appendChild(opt);
+        });
+    } catch (error) {
+        showToast("❌ आंचल लोड नहीं हुआ", "danger");
+        console.error(error);
+    }
+}
 
 async function loadData() {
     const res = await fetch("/api/vp-sec");
@@ -68,42 +124,60 @@ async function loadData() {
     const container = document.getElementById("vpSecList");
     container.innerHTML = "";
 
-    data.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "col";
+    data.forEach(group => {
+        if (group.length === 0) return;
 
-        card.innerHTML = `
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 16px;">
-               <img src="${item.photo ? `/storage/${item.photo}` : 'https://via.placeholder.com/300x240?text=No+Image'}"
-     class="card-img-top rounded-top"
-     style="height: 240px; width: 100%; object-fit: contain; padding: 10px; background: #f8f9fa;">
+        const aanchalName = group[0].aanchal ?? '—';
+        const sectionTitle = document.createElement("h5");
+        sectionTitle.className = "mt-4 mb-2 text-primary fw-bold";
+        sectionTitle.textContent = `अंचल: ${aanchalName}`;
+        container.appendChild(sectionTitle);
 
-                <div class="card-body text-center p-3">
-                    <h6 class="fw-bold mb-1 text-primary">${item.name}</h6>
-                    <p class="mb-1 small text-muted">पद: ${item.post}</p>
-                    <p class="mb-1 small text-muted">शहर: ${item.city}</p>
-                    <p class="mb-3 small text-muted">📞 ${item.mobile}</p>
-                    <div class="d-flex justify-content-center gap-2">
-                        <button class="btn btn-sm btn-outline-warning" onclick='editItem(${JSON.stringify(item)})'>✏️</button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(${item.id})">🗑️</button>
+        const row = document.createElement("div");
+        row.className = "row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-2";
+
+        group.forEach(item => {
+            const card = document.createElement("div");
+            card.className = "col";
+            card.innerHTML = `
+                <div class="card border h-100" style="border-radius: 8px; font-size: 12px;">
+                    <div class="text-center p-2" style="background-color: #f9f9f9;">
+                        <img src="${item.photo ? `/storage/${item.photo}` : 'https://via.placeholder.com/80x80?text=No+Image'}"
+                             class="rounded" style="height: 80px; object-fit: contain;" />
                     </div>
-                </div>
-            </div>
-        `;
+                    <div class="card-body p-2 text-center">
+                        <div class="fw-bold text-primary" style="font-size: 13px;">${item.name}</div>
+                        <div class="text-muted">पद: ${item.post}</div>
+                        <div class="text-muted">शहर: ${item.city}</div>
+                        <div class="text-muted">📞 ${item.mobile}</div>
+                        <div class="d-flex justify-content-center gap-1 mt-2">
+                            <button class="btn btn-sm btn-outline-warning py-0 px-1" title="Edit"
+                                    onclick='editItem(${JSON.stringify(item)})'>✏️</button>
+                            <button class="btn btn-sm btn-outline-danger py-0 px-1" title="Delete"
+                                    onclick="deleteItem(${item.id})">🗑️</button>
+                        </div>
+                    </div>
+                </div>`;
+            row.appendChild(card);
+        });
 
-        container.appendChild(card);
+        container.appendChild(row);
     });
 }
 
 function editItem(item) {
     document.querySelector("input[name='name']").value = item.name;
-    document.querySelector("input[name='post']").value = item.post;
+    document.querySelector("select[name='post']").value = item.post;
     document.querySelector("input[name='city']").value = item.city;
     document.querySelector("input[name='mobile']").value = item.mobile;
+    document.querySelector("select[name='aanchal']").value = item.aanchal ?? "";
 
     document.getElementById("editId").value = item.id;
     document.getElementById("formMethod").value = "PUT";
     document.getElementById("submitBtn").innerText = "✅ अपडेट करें";
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelector("input[name='name']").focus();
 }
 
 function resetForm() {
@@ -136,19 +210,30 @@ document.getElementById("vpSecForm").addEventListener("submit", async function (
         });
 
         const resultText = await response.text();
-        const result = JSON.parse(resultText);
+        let result;
+        try {
+            result = JSON.parse(resultText);
+        } catch {
+            result = { message: "⚠️ Unexpected error." };
+        }
 
         if (response.ok) {
-            alert("✅ सफलतापूर्वक सहेजा गया!");
+            showToast("✅ सफलतापूर्वक सहेजा गया!", "success");
             resetForm();
             loadData();
         } else {
-            console.error(result);
-            alert("❌ Error: " + JSON.stringify(result));
+            if (result.message) {
+                showToast(result.message, "danger");
+            } else if (typeof result === 'object') {
+                const errors = Object.values(result).flat().join(" | ");
+                showToast(errors, "danger");
+            } else {
+                showToast("❌ Unknown Error", "danger");
+            }
         }
     } catch (err) {
         console.error("❌ Server/Network Error", err);
-        alert("⚠️ Unexpected error. See console.");
+        showToast("⚠️ सर्वर से जवाब नहीं मिला।", "danger");
     }
 });
 
@@ -160,10 +245,10 @@ async function deleteItem(id) {
     });
 
     if (res.ok) {
-        alert("🗑️ सदस्य को हटा दिया गया");
+        showToast("🗑️ सदस्य को हटा दिया गया", "success");
         loadData();
     } else {
-        alert("❌ डिलीट में समस्या आई");
+        showToast("❌ डिलीट में समस्या आई", "danger");
     }
 }
 </script>

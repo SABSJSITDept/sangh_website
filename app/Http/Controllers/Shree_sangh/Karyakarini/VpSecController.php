@@ -12,28 +12,52 @@ class VpSecController extends Controller
 {
     public function index()
     {
-        return VpSec::all();
+        return VpSec::orderBy('aanchal')
+            ->orderByRaw("FIELD(post, 'उपाध्यक्ष', 'मंत्री')")
+            ->get()
+            ->groupBy('aanchal')
+            ->values();
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'post' => 'required',
-            'city' => 'required',
-            'aanchal' => 'nullable',
+            'name'   => 'required',
+            'post'   => 'required',
+            'city'   => 'required',
+            'aanchal'=> 'nullable',
             'mobile' => 'required',
-            'photo' => 'nullable|image|max:200', // 200 KB
+            'photo'  => 'nullable|image',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        // ✅ Check duplicate पद in same आंचल
+        if ($request->aanchal && $request->post) {
+            $exists = VpSec::where('aanchal', $request->aanchal)
+                ->where('post', $request->post)
+                ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'message' => '❌ इस आंचल में यह पद पहले से मौजूद है।'
+                ], 422);
+            }
+        }
+
         $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile']);
 
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('vp_sec', 'public');
+            $image = $request->file('photo');
+            $extension = $image->getClientOriginalExtension();
+            $filename = 'vp_sec/' . uniqid() . '.' . $extension;
+
+            $resizedImage = $this->resizeImage($image->getPathname(), $extension, 500);
+            Storage::disk('public')->put($filename, $resizedImage);
+
+            $data['photo'] = $filename;
         }
 
         $vpSec = VpSec::create($data);
@@ -41,23 +65,52 @@ class VpSecController extends Controller
         return response()->json($vpSec, 201);
     }
 
-    public function show($id)
-    {
-        return VpSec::findOrFail($id);
-    }
-
     public function update(Request $request, $id)
     {
         $vpSec = VpSec::findOrFail($id);
 
+        $validator = Validator::make($request->all(), [
+            'name'   => 'required',
+            'post'   => 'required',
+            'city'   => 'required',
+            'aanchal'=> 'nullable',
+            'mobile' => 'required',
+            'photo'  => 'nullable|image',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // ✅ Check duplicate पद in same आंचल (excluding self)
+        if ($request->aanchal && $request->post) {
+            $exists = VpSec::where('aanchal', $request->aanchal)
+                ->where('post', $request->post)
+                ->where('id', '!=', $vpSec->id)
+                ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'message' => '❌ इस आंचल में यह पद पहले से मौजूद है।'
+                ], 422);
+            }
+        }
+
         $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile']);
 
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
             if ($vpSec->photo) {
                 Storage::disk('public')->delete($vpSec->photo);
             }
-            $data['photo'] = $request->file('photo')->store('vp_sec', 'public');
+
+            $image = $request->file('photo');
+            $extension = $image->getClientOriginalExtension();
+            $filename = 'vp_sec/' . uniqid() . '.' . $extension;
+
+            $resizedImage = $this->resizeImage($image->getPathname(), $extension, 500);
+            Storage::disk('public')->put($filename, $resizedImage);
+
+            $data['photo'] = $filename;
         }
 
         $vpSec->update($data);
@@ -76,5 +129,49 @@ class VpSecController extends Controller
         $vpSec->delete();
 
         return response()->json(['message' => 'Deleted successfully']);
+    }
+
+    /**
+     * Resize image using GD (no external package)
+     */
+    private function resizeImage($path, $extension, $maxWidth)
+    {
+        list($width, $height) = getimagesize($path);
+        $newWidth = $maxWidth;
+        $newHeight = intval($height * $newWidth / $width);
+
+        $src = null;
+        switch (strtolower($extension)) {
+            case 'jpg':
+            case 'jpeg':
+                $src = imagecreatefromjpeg($path);
+                break;
+            case 'png':
+                $src = imagecreatefrompng($path);
+                break;
+            case 'gif':
+                $src = imagecreatefromgif($path);
+                break;
+            default:
+                return file_get_contents($path);
+        }
+
+        $dst = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        ob_start();
+        if (in_array(strtolower($extension), ['jpg', 'jpeg'])) {
+            imagejpeg($dst, null, 80);
+        } elseif ($extension === 'png') {
+            imagepng($dst, null, 8);
+        } elseif ($extension === 'gif') {
+            imagegif($dst);
+        }
+        $imageData = ob_get_clean();
+
+        imagedestroy($src);
+        imagedestroy($dst);
+
+        return $imageData;
     }
 }
