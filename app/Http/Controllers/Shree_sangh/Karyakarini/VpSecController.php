@@ -11,13 +11,36 @@ use Illuminate\Support\Facades\Validator;
 class VpSecController extends Controller
 {
     public function index()
-    {
-        return VpSec::orderBy('aanchal')
-            ->orderByRaw("FIELD(post, 'उपाध्यक्ष', 'मंत्री')")
-            ->get()
-            ->groupBy('aanchal')
-            ->values();
-    }
+{
+    $customOrder = [
+        'Mewar',
+        'Bikaner Marwar',
+        'Jaipur Beawar',
+        'Madhya Pradesh',
+        'Chattisgarh Odisha',
+        'Karnataka Andhra Pradesh',
+        'Tamil Nadu',
+        'Mumbai-Gujarat-UAE',
+        'Maharashtra Vidarbha Khandesh',
+        'Bengal-Bihar-Nepal-Bhutan-Jharkhand-Aanshik Orissa',
+        'Purvottar',
+        'Delhi-Punjab-Hariyana-Uttari',
+    ];
+
+    $grouped = VpSec::orderByRaw("FIELD(post, 'उपाध्यक्ष', 'मंत्री')")
+        ->get()
+        ->groupBy('aanchal');
+
+    // Custom sort by order
+    $sorted = collect($customOrder)->map(function ($aanchalName) use ($grouped) {
+        return $grouped[$aanchalName] ?? collect();
+    })->filter(function ($group) {
+        return $group->isNotEmpty();
+    })->values();
+
+    return $sorted;
+}
+
 
     public function store(Request $request)
     {

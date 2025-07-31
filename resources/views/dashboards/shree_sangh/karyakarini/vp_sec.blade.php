@@ -61,107 +61,118 @@
         </div>
     </div>
 
-    {{-- 🔹 CARD GRID --}}
-    <h5 class="fw-bold text-secondary mb-3">🔽 सदस्यों की सूची</h5>
-    <div id="vpSecList"></div>
+    {{-- 🔹 FILTER --}}
+    <div class="mb-3">
+        <label class="form-label">🔍 अंचल फ़िल्टर करें</label>
+        <select id="filterAanchal" class="form-select" onchange="loadData()">
+            <option value="">सभी</option>
+        </select>
+    </div>
+
+    {{-- 🔹 LIST VIEW --}}
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th>फोटो</th>
+                    <th>नाम</th>
+                    <th>पद</th>
+                    <th>शहर</th>
+                    <th>अंचल</th>
+                    <th>मोबाइल</th>
+                    <th>एक्शन</th>
+                </tr>
+            </thead>
+            <tbody id="vpSecList"></tbody>
+        </table>
+    </div>
 </div>
 
-{{-- 🔻 TOAST CONTAINER --}}
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
-    <div id="toastBox" class="toast align-items-center text-bg-primary border-0" role="alert"
-         aria-live="assertive" aria-atomic="true">
+{{-- 🔻 TOAST --}} 
+<div class="position-fixed top-0 end-0 mt-5 me-3" style="z-index: 1055">
+    <div id="toastBox" class="toast align-items-center text-bg-primary border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body" id="toastMsg">Toast message here</div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                    data-bs-dismiss="toast" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
 </div>
 
-{{-- 🔻 SCRIPT --}}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 loadData();
 loadAanchals();
-
-document.getElementById("photoInput").addEventListener("change", function () {
-    if (this.files[0] && this.files[0].size > 200 * 1024) {
-        showToast("⚠️ फ़ोटो का आकार 200KB से अधिक है!", "danger");
-        this.value = "";
-    }
-});
 
 function showToast(message, type = "primary") {
     const toastEl = document.getElementById("toastBox");
     const toastMsg = document.getElementById("toastMsg");
     toastMsg.textContent = message;
-
     toastEl.className = `toast align-items-center text-bg-${type} border-0`;
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
 }
+
+document.getElementById("photoInput").addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (!file) {
+        showToast("⚠️ कृपया फ़ोटो चुनें!", "danger");
+        return;
+    }
+
+    if (file.size > 200 * 1024) {
+        showToast("⚠️ फ़ोटो का SIZE 200KB से अधिक है!", "danger");
+        this.value = "";
+    }
+});
+
 
 async function loadAanchals() {
     try {
         const res = await fetch("/api/aanchal");
         const aanchals = await res.json();
         const dropdown = document.getElementById("aanchalDropdown");
+        const filter = document.getElementById("filterAanchal");
+
         aanchals.forEach(item => {
-            const opt = document.createElement("option");
-            opt.value = item.name;
-            opt.textContent = item.name;
-            dropdown.appendChild(opt);
+            const opt1 = document.createElement("option");
+            opt1.value = item.name;
+            opt1.textContent = item.name;
+            dropdown.appendChild(opt1);
+
+            const opt2 = document.createElement("option");
+            opt2.value = item.name;
+            opt2.textContent = item.name;
+            filter.appendChild(opt2);
         });
     } catch (error) {
-        showToast("❌ आंचल लोड नहीं हुआ", "danger");
-        console.error(error);
+        showToast("❌ अंचल लोड नहीं हुआ", "danger");
     }
 }
 
 async function loadData() {
+    const selected = document.getElementById("filterAanchal").value;
     const res = await fetch("/api/vp-sec");
     const data = await res.json();
-    const container = document.getElementById("vpSecList");
-    container.innerHTML = "";
+    const tbody = document.getElementById("vpSecList");
+    tbody.innerHTML = "";
 
-    data.forEach(group => {
-        if (group.length === 0) return;
-
-        const aanchalName = group[0].aanchal ?? '—';
-        const sectionTitle = document.createElement("h5");
-        sectionTitle.className = "mt-4 mb-2 text-primary fw-bold";
-        sectionTitle.textContent = `अंचल: ${aanchalName}`;
-        container.appendChild(sectionTitle);
-
-        const row = document.createElement("div");
-        row.className = "row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-2";
-
-        group.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "col";
-            card.innerHTML = `
-                <div class="card border h-100" style="border-radius: 8px; font-size: 12px;">
-                    <div class="text-center p-2" style="background-color: #f9f9f9;">
-                        <img src="${item.photo ? `/storage/${item.photo}` : 'https://via.placeholder.com/80x80?text=No+Image'}"
-                             class="rounded" style="height: 80px; object-fit: contain;" />
-                    </div>
-                    <div class="card-body p-2 text-center">
-                        <div class="fw-bold text-primary" style="font-size: 13px;">${item.name}</div>
-                        <div class="text-muted">पद: ${item.post}</div>
-                        <div class="text-muted">शहर: ${item.city}</div>
-                        <div class="text-muted">📞 ${item.mobile}</div>
-                        <div class="d-flex justify-content-center gap-1 mt-2">
-                            <button class="btn btn-sm btn-outline-warning py-0 px-1" title="Edit"
-                                    onclick='editItem(${JSON.stringify(item)})'>✏️</button>
-                            <button class="btn btn-sm btn-outline-danger py-0 px-1" title="Delete"
-                                    onclick="deleteItem(${item.id})">🗑️</button>
-                        </div>
-                    </div>
-                </div>`;
-            row.appendChild(card);
-        });
-
-        container.appendChild(row);
+    data.flat().filter(item => !selected || item.aanchal === selected).forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><img src="${item.photo ? `/storage/${item.photo}` : 'https://via.placeholder.com/60x60?text=No+Image'}" class="rounded" style="height: 60px; object-fit: contain;"/></td>
+            <td>${item.name}</td>
+            <td>${item.post}</td>
+            <td>${item.city}</td>
+            <td>${item.aanchal}</td>
+            <td>${item.mobile}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-warning" onclick='editItem(${JSON.stringify(item)})'>✏️</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(${item.id})">🗑️</button>
+            </td>`;
+        tbody.appendChild(row);
     });
 }
 
@@ -232,7 +243,6 @@ document.getElementById("vpSecForm").addEventListener("submit", async function (
             }
         }
     } catch (err) {
-        console.error("❌ Server/Network Error", err);
         showToast("⚠️ सर्वर से जवाब नहीं मिला।", "danger");
     }
 });

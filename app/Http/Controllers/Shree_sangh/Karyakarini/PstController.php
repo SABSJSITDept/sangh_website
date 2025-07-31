@@ -69,7 +69,7 @@ public function store(Request $request)
     // ✅ Check for duplicate post excluding current record
     $existing = Pst::where('post', $request->post)->where('id', '!=', $id)->first();
     if ($existing) {
-        return response()->json(['error' => '❌ यह पद पहले से किसी अन्य व्यक्ति को सौंपा गया है।'], 403);
+        return response()->json(['error' => '❌ यह पद पहले से किसी अन्य व्यक्ति के पास है।'], 403);
     }
 
     $pst->name = $request->name;
