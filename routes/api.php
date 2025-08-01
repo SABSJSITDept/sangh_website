@@ -99,7 +99,7 @@ Route::prefix('pravarti')->group(function () {
 Route::prefix('pravarti-sanyojak')->group(function () {
     Route::get('/', [PravartiSanyojakController::class, 'index']);
     Route::post('/', [PravartiSanyojakController::class, 'store']);
-    Route::post('/{id}', [PravartiSanyojakController::class, 'update']);
+    Route::put('/{id}', [PravartiSanyojakController::class, 'update']); // ✅ Change this line
     Route::delete('/{id}', [PravartiSanyojakController::class, 'destroy']);
 });
 // -----------------pravarti_sanyojak api ------------------------------------

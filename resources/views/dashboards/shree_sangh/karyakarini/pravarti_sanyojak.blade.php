@@ -11,13 +11,13 @@
     {{-- 🔹 FORM --}}
     <div class="card shadow-sm p-4 mb-4 rounded-4 border-start border-success border-3">
         <form id="pravartiSanyojakForm" enctype="multipart/form-data">
-            <input type="hidden" id="formMethod" name="formMethod" value="POST">
+            @csrf {{-- ✅ Required for Laravel protection --}}
             <input type="hidden" id="editId" name="editId">
 
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label>नाम</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="नाम" required>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="नाम">
                 </div>
                 <div class="col-md-4">
                     <label>पद</label>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-md-4">
                     <label>शहर</label>
-                    <input type="text" class="form-control" id="city" name="city" placeholder="शहर" required>
+                    <input type="text" class="form-control" id="city" name="city" required placeholder="शहर">
                 </div>
             </div>
 
@@ -43,10 +43,10 @@
                 </div>
                 <div class="col-md-4">
                     <label>मोबाइल</label>
-                    <input type="text" name="mobile" id="mobile" class="form-control"
+                    <input type="text" class="form-control" id="mobile" name="mobile"
                         maxlength="10" pattern="\d{10}" required
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                        placeholder="10 अंकों का मोबाइल नंबर">
+                        placeholder="10 अंकों का मोबाइल नंबर"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
                 <div class="col-md-4">
                     <label>फोटो (200KB तक)</label>
@@ -59,41 +59,24 @@
         </form>
     </div>
 
-    {{-- 🔹 TABLE LIST --}}
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle" id="pravartiSanyojakList">
-            <thead class="table-light text-center">
-                <tr>
-                    <th>फोटो</th>
-                    <th>नाम</th>
-                    <th>पद</th>
-                    <th>शहर</th>
-                    <th>मोबाइल</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    {{-- 🔹 TABLE --}}
+    <div id="pravartiSanyojakList"></div>
 </div>
 
 <script>
-const headers = {
-    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-    'X-Requested-With': 'XMLHttpRequest'
-};
+const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
-// ✅ Load Pravarti Dropdown
+// 🔹 Dropdown Load
 fetch("/api/pravarti")
     .then(res => res.json())
     .then(data => {
         const dropdown = document.getElementById("pravarti_id");
-        data.forEach(item => {
-            dropdown.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+        data.forEach(p => {
+            dropdown.innerHTML += `<option value="${p.id}">${p.name}</option>`;
         });
     });
 
-// ✅ Image Preview
+// 🔹 Image Preview
 document.getElementById("photo").addEventListener("change", function () {
     const file = this.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -107,101 +90,128 @@ document.getElementById("photo").addEventListener("change", function () {
     }
 });
 
-// ✅ Submit Form (Create / Update)
+// 🔹 Submit
 document.getElementById("pravartiSanyojakForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const id = document.getElementById("editId").value;
     const formData = new FormData(this);
+    formData.append('_token', csrf);
+    if (id) formData.append('_method', 'PUT');
 
     const url = id ? `/api/pravarti-sanyojak/${id}` : '/api/pravarti-sanyojak';
-    const method = 'POST';
 
     try {
-        const res = await fetch(url, { method, body: formData });
-        const result = await res.json();
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrf,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        });
 
+        const result = await res.json();
         if (!res.ok) {
             alert(result.error || "❌ कोई त्रुटि हुई।");
             return;
         }
 
-        if (result.success) {
-            alert("✅ सफलतापूर्वक सहेजा गया!");
-            location.reload();
-        }
+        alert("✅ सफलतापूर्वक सहेजा गया!");
+        loadData();
+        this.reset();
+        document.getElementById('editId').value = '';
+        document.getElementById('preview').innerHTML = '';
     } catch {
         alert("❌ नेटवर्क या सर्वर की समस्या है।");
     }
 });
 
-// ✅ Load and Render Data (Group by Pravarti)
-fetch('/api/pravarti-sanyojak')
-    .then(res => res.json())
-    .then(groupedData => {
-        const tbody = document.querySelector("#pravartiSanyojakList tbody");
-        tbody.innerHTML = '';
+// 🔹 Load Data
+async function loadData() {
+    const res = await fetch('/api/pravarti-sanyojak');
+    const data = await res.json();
+    const container = document.getElementById("pravartiSanyojakList");
+    container.innerHTML = '';
 
-        for (const [pravartiName, entries] of Object.entries(groupedData)) {
-            // 🔷 Section Header
-            tbody.innerHTML += `
-                <tr class="table-primary fw-semibold text-center">
-                    <td colspan="6">${pravartiName}</td>
-                </tr>
-            `;
+    for (const [pravartiName, members] of Object.entries(data)) {
+        const table = `
+            <h5 class="text-primary border-bottom pb-1 mt-4">${pravartiName}</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th>फोटो</th>
+                            <th>नाम</th>
+                            <th>पद</th>
+                            <th>शहर</th>
+                            <th>मोबाइल</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${members.map(d => `
+                            <tr class="text-center">
+                                <td>
+                                    <img src="${d.photo ? '/storage/' + d.photo : 'https://via.placeholder.com/80x100?text=No+Image'}"
+                                        class="img-thumbnail" style="width: 80px; height: 100px; object-fit: cover;">
+                                </td>
+                                <td>${d.name}</td>
+                                <td>${d.post}</td>
+                                <td>${d.city}</td>
+                                <td>${d.mobile}</td>
+                                <td>
+                                    <button onclick="editEntry(${d.id})" class="btn btn-sm btn-warning me-1">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
+                                    <button onclick="deleteEntry(${d.id})" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        container.innerHTML += table;
+    }
+}
 
-            // 🔁 Member Rows
-            entries.forEach(item => {
-                const imageUrl = item.photo ? `/storage/${item.photo}` : 'https://via.placeholder.com/80x100?text=No+Image';
-                tbody.innerHTML += `
-                    <tr class="text-center">
-                        <td><img src="${imageUrl}" class="img-thumbnail" style="width: 80px; height: 100px; object-fit: cover;"></td>
-                        <td>${item.name}</td>
-                        <td>${item.post}</td>
-                        <td>${item.city}</td>
-                        <td>${item.mobile}</td>
-                        <td>
-                            <button onclick="editEntry(${item.id})" class="btn btn-sm btn-warning me-1">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                            <button onclick="deleteEntry(${item.id})" class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-    });
-
-// ✅ Edit Entry
+// 🔹 Edit
 function editEntry(id) {
-    fetch(`/api/pravarti-sanyojak`)
+    fetch('/api/pravarti-sanyojak')
         .then(res => res.json())
-        .then(grouped => {
-            let all = Object.values(grouped).flat();
-            const entry = all.find(e => e.id === id);
-            if (entry) {
-                document.getElementById("editId").value = entry.id;
-                document.getElementById("name").value = entry.name;
-                document.getElementById("post").value = entry.post;
-                document.getElementById("city").value = entry.city;
-                document.getElementById("pravarti_id").value = entry.pravarti_id;
-                document.getElementById("mobile").value = entry.mobile;
-                document.getElementById("preview").innerHTML = `<img src="/storage/${entry.photo}" class="img-thumbnail" width="100">`;
+        .then(data => {
+            let all = Object.values(data).flat();
+            const d = all.find(i => i.id === id);
+            if (d) {
+                document.getElementById("editId").value = d.id;
+                document.getElementById("name").value = d.name;
+                document.getElementById("post").value = d.post;
+                document.getElementById("city").value = d.city;
+                document.getElementById("pravarti_id").value = d.pravarti_id;
+                document.getElementById("mobile").value = d.mobile;
+                document.getElementById("preview").innerHTML = `<img src="/storage/${d.photo}" class="img-thumbnail" width="100">`;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
 }
 
-// ✅ Delete Entry
+// 🔹 Delete
 function deleteEntry(id) {
-    if (confirm("क्या आप वाकई इसे हटाना चाहते हैं?")) {
-        fetch(`/api/pravarti-sanyojak/${id}`, {
-            method: 'DELETE',
-            headers
-        }).then(() => location.reload());
-    }
+    if (!confirm("क्या आप वाकई इसे हटाना चाहते हैं?")) return;
+
+    fetch(`/api/pravarti-sanyojak/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': csrf,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    }).then(() => loadData());
 }
+
+// 🔹 Init
+loadData();
 </script>
 @endsection
