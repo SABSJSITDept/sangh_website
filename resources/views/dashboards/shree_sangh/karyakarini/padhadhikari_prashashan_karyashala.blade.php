@@ -3,15 +3,29 @@
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+.toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+}
+</style>
 
 <div class="container py-4">
     <h2 class="mb-4">पदाधिकारी प्रशासन कार्यशाला</h2>
 
-    <!-- Toast Alert -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
-        <div id="toastAlert" class="toast align-items-center text-bg-danger border-0" role="alert">
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <div id="toastAlert" class="toast align-items-center text-white bg-danger border-0" role="alert">
             <div class="d-flex">
                 <div class="toast-body" id="toastMsg"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+        <div id="toastSuccess" class="toast align-items-center text-white bg-success border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastSuccessMsg"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
@@ -34,6 +48,9 @@
 
     <div class="row" id="pdfList"></div>
 </div>
+
+<!-- Bootstrap JS Bundle (needed for toast) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', fetchData);
@@ -61,10 +78,14 @@ function fetchData() {
         });
 }
 
-// Toast
+// Toast functions
 function showToast(message) {
     document.getElementById('toastMsg').textContent = message;
     new bootstrap.Toast(document.getElementById('toastAlert')).show();
+}
+function showSuccess(message) {
+    document.getElementById('toastSuccessMsg').textContent = message;
+    new bootstrap.Toast(document.getElementById('toastSuccess')).show();
 }
 
 // Handle Submit (Add or Edit)
@@ -77,7 +98,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(e) {
     const isEdit = id !== '';
 
     if (file && file.size > 2 * 1024 * 1024) {
-        showToast("PDF size must be 2MB or less.");
+        showToast("PDF फ़ाइल 2MB से बड़ी नहीं हो सकती।");
         return;
     }
 
@@ -85,7 +106,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(e) {
     const method = isEdit ? 'POST' : 'POST';
 
     if (isEdit) {
-        formData.append('_method', 'PUT'); // Laravel expects _method for PUT via POST
+        formData.append('_method', 'PUT');
     }
 
     fetch(url, {
@@ -99,14 +120,18 @@ document.getElementById('uploadForm').addEventListener('submit', function(e) {
     .then(res => res.json())
     .then((data) => {
         if (data.status === false && data.errors) {
-            showToast("Validation failed.");
+            showToast("Form validation विफल रही।");
         } else {
-            this.reset();
+            showSuccess(isEdit ? "डेटा अपडेट हुआ!" : "डेटा सेव हुआ!");
+            document.getElementById('uploadForm').reset();
             document.getElementById('recordId').value = '';
             document.getElementById('submitBtn').textContent = 'सेव करें';
             document.getElementById('cancelEdit').classList.add('d-none');
             fetchData();
         }
+    })
+    .catch(() => {
+        showToast("सर्वर त्रुटि। कृपया पुनः प्रयास करें।");
     });
 });
 
@@ -132,7 +157,7 @@ document.getElementById('cancelEdit').addEventListener('click', function () {
 
 // Delete Record
 function deletePdf(id) {
-    if (!confirm('Are you sure to delete?')) return;
+    if (!confirm('क्या आप वाकई हटाना चाहते हैं?')) return;
 
     fetch(`/api/padhadhikari-prashashan-karyashala/${id}`, {
         method: 'DELETE',
@@ -140,7 +165,15 @@ function deletePdf(id) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'X-Requested-With': 'XMLHttpRequest'
         }
-    }).then(() => fetchData());
+    })
+    .then(res => {
+        if (res.ok) {
+            showSuccess("PDF सफलतापूर्वक हटाया गया!");
+            fetchData();
+        } else {
+            showToast("हटाने में समस्या आई।");
+        }
+    });
 }
 </script>
 @endsection

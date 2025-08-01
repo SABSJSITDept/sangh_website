@@ -4,9 +4,19 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<style>
+.toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1055;
+}
+</style>
+
 <div class="container py-4">
     <h2 class="mb-4">समता जन कल्याण प्रणयाश</h2>
 
+    {{-- 🔹 FORM --}}
     <form id="addForm" enctype="multipart/form-data" class="row g-3">
         <div class="col-md-6">
             <label class="form-label">नाम</label>
@@ -32,14 +42,52 @@
 
     <hr>
 
-    <div class="row mt-4" id="dataList">
-        <!-- Cards will be rendered here -->
+    {{-- 🔹 DATA TABLE --}}
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered align-middle text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th>📸 फोटो</th>
+                    <th>नाम</th>
+                    <th>शहर</th>
+                    <th>मोबाइल</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="dataList"></tbody>
+        </table>
     </div>
 </div>
+
+{{-- 🔹 TOASTS --}}
+<div class="toast-container">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="successMessage"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+    <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="errorMessage"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+{{-- Bootstrap JS --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 let isEditMode = false;
 let editId = null;
+
+function showToast(type, message) {
+    const toastEl = document.getElementById(type + 'Toast');
+    const toastMsg = document.getElementById(type + 'Message');
+    toastMsg.innerText = message;
+    new bootstrap.Toast(toastEl).show();
+}
 
 document.getElementById('addForm').addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -50,29 +98,37 @@ document.getElementById('addForm').addEventListener('submit', async function (e)
         ? `/api/samta-jan-kalyan-pranayash/${editId}`
         : `/api/samta-jan-kalyan-pranayash`;
 
-    if (isEditMode) {
-        formData.append('_method', 'PUT');
-    }
+    if (isEditMode) formData.append('_method', 'PUT');
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: formData
-    });
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        });
 
-    if (response.ok) {
-        alert(isEditMode ? "Updated successfully!" : "Saved successfully!");
-        form.reset();
-        isEditMode = false;
-        editId = null;
-        document.querySelector('button[type="submit"]').innerText = 'सेव करें';
-        document.getElementById('cancelEdit').style.display = 'none';
-        fetchData();
-    } else {
-        alert("Error submitting form.");
+        const data = await response.json();
+
+        if (response.ok) {
+            showToast('success', isEditMode ? 'डेटा अपडेट हुआ!' : 'डेटा जोड़ा गया!');
+            form.reset();
+            isEditMode = false;
+            editId = null;
+            document.querySelector('button[type="submit"]').innerText = 'सेव करें';
+            document.getElementById('cancelEdit').style.display = 'none';
+            fetchData();
+        } else {
+            let msg = data.message || 'त्रुटि आई।';
+            if (data.errors) {
+                msg = Object.values(data.errors).flat().join(', ');
+            }
+            showToast('error', msg);
+        }
+    } catch (error) {
+        showToast('error', 'सर्वर से कनेक्ट नहीं हो पाया।');
     }
 });
 
@@ -87,30 +143,28 @@ document.getElementById('cancelEdit').addEventListener('click', () => {
 async function fetchData() {
     const res = await fetch('/api/samta-jan-kalyan-pranayash');
     const data = await res.json();
-    const list = document.getElementById('dataList');
-    list.innerHTML = '';
+    const tbody = document.getElementById('dataList');
+    tbody.innerHTML = '';
 
     data.forEach(item => {
-        const col = document.createElement('div');
-        col.className = 'col-md-4';
-        col.innerHTML = `
-            <div class="card mb-3">
-                <img src="/storage/${item.photo ?? 'default.png'}" class="card-img-top" style="height:200px; object-fit:cover;" onerror="this.src='/default.png'">
-                <div class="card-body">
-                    <h5 class="card-title">${item.name}</h5>
-                    <p class="card-text">${item.city} <br> ${item.mobile}</p>
-                    <button onclick="editItem(${item.id})" class="btn btn-sm btn-warning">Edit</button>
-                    <button onclick="deleteItem(${item.id})" class="btn btn-sm btn-danger">Delete</button>
-                </div>
-            </div>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><img src="/storage/${item.photo ?? 'default.png'}" height="60" class="rounded-circle" onerror="this.src='/default.png'"></td>
+            <td>${item.name}</td>
+            <td>${item.city}</td>
+            <td>${item.mobile}</td>
+            <td>
+                <button onclick="editItem(${item.id})" class="btn btn-sm btn-warning">Edit</button>
+                <button onclick="deleteItem(${item.id})" class="btn btn-sm btn-danger">Delete</button>
+            </td>
         `;
-        list.appendChild(col);
+        tbody.appendChild(row);
     });
 }
 
 async function editItem(id) {
     const res = await fetch(`/api/samta-jan-kalyan-pranayash/${id}`);
-    if (!res.ok) return alert("Error fetching item");
+    if (!res.ok) return showToast('error', "डेटा प्राप्त करने में त्रुटि");
 
     const item = await res.json();
     const form = document.getElementById('addForm');
@@ -128,7 +182,7 @@ async function editItem(id) {
 }
 
 async function deleteItem(id) {
-    if (!confirm("Are you sure you want to delete this?")) return;
+    if (!confirm("क्या आप वाकई हटाना चाहते हैं?")) return;
 
     const res = await fetch(`/api/samta-jan-kalyan-pranayash/${id}`, {
         method: 'DELETE',
@@ -139,10 +193,10 @@ async function deleteItem(id) {
     });
 
     if (res.ok) {
-        alert("Deleted successfully!");
+        showToast('success', 'डेटा हटाया गया!');
         fetchData();
     } else {
-        alert("Failed to delete!");
+        showToast('error', 'हटाने में त्रुटि हुई!');
     }
 }
 
