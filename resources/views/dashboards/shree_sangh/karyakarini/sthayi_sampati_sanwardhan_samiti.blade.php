@@ -42,6 +42,7 @@
     {{-- ✅ Cards Section --}}
     <div class="row" id="cardContainer"></div>
 </div>
+@endsection
 
 @section('scripts')
 <script>
