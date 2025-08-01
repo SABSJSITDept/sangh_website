@@ -102,6 +102,7 @@ Route::prefix('pravarti-sanyojak')->group(function () {
     Route::put('/{id}', [PravartiSanyojakController::class, 'update']); // ✅ Change this line
     Route::delete('/{id}', [PravartiSanyojakController::class, 'destroy']);
 });
+
 // -----------------pravarti_sanyojak api ------------------------------------
 
 

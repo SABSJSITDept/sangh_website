@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Shree_sangh\ThoughtApiController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\ExPresidentController;
 use App\Models\Aanchal\Aanchal;
+use App\Http\Controllers\API\AuthController;
+
+
+ Route::post('/change-password', [AuthController::class, 'updatePassword'])->name('password.update');
+    Route::view('/change-password', 'change-password')->name('password.change');
+
+
 
 
 // Login Page (Accessible to All)
