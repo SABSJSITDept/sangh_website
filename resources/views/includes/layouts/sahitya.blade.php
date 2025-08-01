@@ -11,8 +11,8 @@
 
     <style>
         :root {
-            --sidebar-width: 220px;
-            --sidebar-collapsed: 70px;
+            --sidebar-width: 170px;
+            --sidebar-collapsed: 100px;
         }
         body {
             margin: 0;
@@ -65,7 +65,7 @@
             width: var(--sidebar-collapsed);
             background: #181824;
             color: white;
-            transition: width 0.3s ease;
+            transition: width 0.0s ease;
             height: calc(100vh - 50px);
             position: fixed;
             top: 50px;
@@ -100,7 +100,7 @@
         }
         .nav-link {
             color: #b6bbc7;
-            padding: 10px 15px;
+            padding: 10px 38px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -118,6 +118,10 @@
         .sidebar.expanded .nav-link span {
             display: inline;
         }
+        .sidebar:not(.expanded) .nav-link span {
+         display: none !important;
+         }
+
         .nav-item {
             width: 100%;
         }
@@ -145,11 +149,11 @@
         }
         .sidebar.expanded .submenu .nav-link {
             font-size: 0.9rem;
-            padding: 7px 8px;
+            padding: 0px 0px;
             color: #aab0c7;
         }
         .submenu-toggle {
-            margin-left: auto;
+            margin-left: 0px;
             transition: transform 0.3s ease;
             font-size: 1rem;
         }
@@ -255,7 +259,6 @@
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-speedometer2"></i>
             <span class="link-text">Dashboard</span>
-            <i class="bi bi-chevron-down submenu-toggle"></i>
         </div>
         <div class="submenu">
            
@@ -287,7 +290,6 @@
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-diagram-3"></i>
             <span class="link-text">कार्यकारिणी</span>
-            <i class="bi bi-chevron-down submenu-toggle"></i>
         </div>
         <div class="submenu">
             <a href="{{ route('karyakarini.index') }}" class="nav-link">
@@ -342,7 +344,6 @@
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-people"></i>
             <span class="link-text">Users</span>
-            <i class="bi bi-chevron-down submenu-toggle"></i>
         </div>
         <div class="submenu">
             <a href="#" class="nav-link">
@@ -365,7 +366,6 @@
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-gear"></i>
             <span class="link-text">Settings</span>
-            <i class="bi bi-chevron-down submenu-toggle"></i>
         </div>
         <div class="submenu">
             <a href="#" class="nav-link">
