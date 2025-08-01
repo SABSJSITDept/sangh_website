@@ -13,60 +13,69 @@ class ItCellController extends Controller
 {
     public function index()
     {
-        return response()->json(ItCell::latest()->get());
+       return response()->json(ItCell::orderBy('priority')->latest()->get());
+
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name'   => 'required|string|max:255',
-            'post'   => 'required|string|max:255',
-            'city'   => 'required|string|max:255',
-            'mobile' => 'required|string|max:20',
-            'photo'  => 'nullable|image|max:200',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'name'     => 'required|string|max:255',
+        'post'     => 'required|string|max:255',
+        'city'     => 'required|string|max:255',
+        'mobile'   => 'required|string|max:20',
+        'priority' => 'required|integer|min:1',
+        'photo'    => 'nullable|image|max:200',
+    ]);
 
-        $photoPath = null;
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('it_cell', 'public');
+    $photoPath = null;
+    if ($request->hasFile('photo')) {
+        $photoPath = $request->file('photo')->store('it_cell', 'public');
+    }
+
+    $entry = ItCell::create([
+        'name'     => $request->name,
+        'post'     => $request->post,
+        'city'     => $request->city,
+        'mobile'   => $request->mobile,
+        'priority' => $request->priority,
+        'photo'    => $photoPath,
+    ]);
+
+    return response()->json($entry);
+}
+
+
+  public function update(Request $request, $id)
+{
+    $entry = ItCell::findOrFail($id);
+
+    $request->validate([
+        'name'     => 'required|string|max:255',
+        'post'     => 'required|string|max:255',
+        'city'     => 'required|string|max:255',
+        'mobile'   => 'required|string|max:20',
+        'priority' => 'required|integer|min:1',
+        'photo'    => 'nullable|image|max:200',
+    ]);
+
+    if ($request->hasFile('photo')) {
+        if ($entry->photo) {
+            Storage::disk('public')->delete($entry->photo);
         }
-
-        $entry = ItCell::create([
-            'name' => $request->name,
-            'post' => $request->post,
-            'city' => $request->city,
-            'mobile' => $request->mobile,
-            'photo' => $photoPath,
-        ]);
-
-        return response()->json($entry);
+        $entry->photo = $request->file('photo')->store('it_cell', 'public');
     }
 
-    public function update(Request $request, $id)
-    {
-        $entry = ItCell::findOrFail($id);
+    $entry->update([
+        'name'     => $request->name,
+        'post'     => $request->post,
+        'city'     => $request->city,
+        'mobile'   => $request->mobile,
+        'priority' => $request->priority,
+    ]);
 
-        $request->validate([
-            'name'   => 'required|string|max:255',
-            'post'   => 'required|string|max:255',
-            'city'   => 'required|string|max:255',
-            'mobile' => 'required|string|max:20',
-            'photo'  => 'nullable|image|max:200',
-        ]);
-
-        if ($request->hasFile('photo')) {
-            // Delete old photo
-            if ($entry->photo) {
-                Storage::disk('public')->delete($entry->photo);
-            }
-
-            $entry->photo = $request->file('photo')->store('it_cell', 'public');
-        }
-
-        $entry->update($request->only(['name', 'post', 'city', 'mobile']));
-
-        return response()->json($entry);
-    }
+    return response()->json($entry);
+}
 
     public function destroy($id)
     {

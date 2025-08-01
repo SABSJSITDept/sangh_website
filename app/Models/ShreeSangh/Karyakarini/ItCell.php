@@ -9,5 +9,5 @@ class ItCell extends Model
 {
     protected $table = 'it_cell';
 
-    protected $fillable = ['name', 'post', 'city', 'mobile', 'photo'];
+    protected $fillable = ['name', 'post', 'city', 'mobile', 'photo', 'priority'];
 }
