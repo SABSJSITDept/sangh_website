@@ -11,59 +11,96 @@ use Illuminate\Support\Facades\Validator;
 
 class PravartiSanyojakController extends Controller
 {
-    public function index()
-    {
-        return PravartiSanyojak::with('pravarti')->latest()->get();
+   public function index()
+{
+    return PravartiSanyojak::with('pravarti')
+        ->orderByRaw("
+            FIELD(post, 'संयोजक', 'सह संयोजक', 'संयोजन मण्डल सदस्य')
+        ")
+        ->latest()
+        ->get();
+}
+
+
+public function store(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'name'        => 'required',
+        'post'        => 'required',
+        'city'        => 'required',
+        'pravarti_id' => 'required|exists:pravarti,id',
+        'mobile'      => 'required|digits:10',
+        'photo'       => 'required|image|max:200' // Max 200KB
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name'       => 'required',
-            'post'       => 'required',
-            'city'       => 'required',
-            'pravarti_id'=> 'required|exists:pravarti,id',
-            'mobile'     => 'required',
-            'photo'      => 'required|image|max:200' // ~200KB
-        ]);
+    // ❗ Check for existing संयोजक in same प्रवर्ती
+    if ($request->post === 'संयोजक') {
+        $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
+            ->where('post', 'संयोजक')
+            ->exists();
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        if ($exists) {
+            return response()->json([
+                'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक मौजूद है।'
+            ], 422);
         }
-
-        $path = $request->file('photo')->store('pravarti_sanyojak', 'public');
-
-        PravartiSanyojak::create($request->only(['name', 'post', 'city', 'pravarti_id', 'mobile']) + ['photo' => $path]);
-
-        return response()->json(['success' => true]);
     }
 
-    public function update(Request $request, $id)
-    {
-        $data = PravartiSanyojak::findOrFail($id);
+    $path = $request->file('photo')->store('pravarti_sanyojak', 'public');
 
-        $validator = Validator::make($request->all(), [
-            'name'       => 'required',
-            'post'       => 'required',
-            'city'       => 'required',
-            'pravarti_id'=> 'required|exists:pravarti,id',
-            'mobile'     => 'required',
-            'photo'      => 'nullable|image|max:200'
-        ]);
+    PravartiSanyojak::create(
+        $request->only(['name', 'post', 'city', 'pravarti_id', 'mobile']) + ['photo' => $path]
+    );
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+    return response()->json(['success' => true]);
+}
 
-        if ($request->hasFile('photo')) {
-            Storage::disk('public')->delete($data->photo);
-            $data->photo = $request->file('photo')->store('pravarti_sanyojak', 'public');
-        }
+   public function update(Request $request, $id)
+{
+    $data = PravartiSanyojak::findOrFail($id);
 
-        $data->update($request->only(['name', 'post', 'city', 'pravarti_id', 'mobile']));
+    $validator = Validator::make($request->all(), [
+        'name'        => 'required',
+        'post'        => 'required',
+        'city'        => 'required',
+        'pravarti_id' => 'required|exists:pravarti,id',
+        'mobile'      => 'required|digits:10',
+        'photo'       => 'nullable|image|max:200' // Max 200KB
+    ]);
 
-        return response()->json(['success' => true]);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+
+    // ❗ Check for duplicate संयोजक (excluding current ID)
+    if ($request->post === 'संयोजक') {
+        $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
+            ->where('post', 'संयोजक')
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक मौजूद है।'
+            ], 422);
+        }
+    }
+
+    // Update photo if new one uploaded
+    if ($request->hasFile('photo')) {
+        Storage::disk('public')->delete($data->photo);
+        $data->photo = $request->file('photo')->store('pravarti_sanyojak', 'public');
+    }
+
+    $data->update($request->only(['name', 'post', 'city', 'pravarti_id', 'mobile']));
+    $data->save();
+
+    return response()->json(['success' => true]);
+}
 
     public function destroy($id)
     {
