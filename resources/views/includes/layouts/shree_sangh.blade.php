@@ -454,5 +454,7 @@
             document.querySelectorAll('.submenu-toggle').forEach(i => i.classList.remove('rotate'));
         }
     </script>
+    @yield('scripts')
+
 </body>
 </html>
