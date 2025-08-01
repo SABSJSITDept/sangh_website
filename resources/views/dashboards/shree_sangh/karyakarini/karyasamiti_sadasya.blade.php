@@ -7,6 +7,14 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .toast {
+        z-index: 1060; /* Make sure it's above Bootstrap components */
+        top: 70px !important; /* Adjust this value as needed */
+        right: 20px;
+    }
+</style>
+
 
 <div class="container py-4">
     <div class="card shadow-lg rounded-4 border-0">
@@ -20,12 +28,12 @@
 
                 <div class="col-md-6">
                     <label class="form-label">नाम</label>
-                    <input type="text" name="name" id="name" class="form-control shadow-sm" required  placeholder="नाम लिखें">
+                    <input type="text" name="name" id="name" class="form-control shadow-sm" required placeholder="नाम लिखें">
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">शहर</label>
-                    <input type="text" name="city" id="city" class="form-control shadow-sm" required  placeholder="शहर लिखें">
+                    <input type="text" name="city" id="city" class="form-control shadow-sm" required placeholder="शहर लिखें">
                 </div>
 
                 <div class="col-md-6">
@@ -56,9 +64,16 @@
 
     <div class="mt-5">
         <h5 class="fw-semibold mb-3">📋 सदस्य सूची</h5>
-        <div id="dataList" class="row g-4"></div>
+        <div id="dataList"></div>
     </div>
 </div>
+
+<style>
+    img.rounded-circle {
+        object-fit: cover;
+        aspect-ratio: 1/1;
+    }
+</style>
 
 <script>
     const token = document.querySelector('meta[name="csrf-token"]').content;
@@ -70,59 +85,65 @@
         select.innerHTML += data.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
     }
 
-async function loadData() {
-    let res = await fetch('/api/karyasamiti_sadasya');
-    let data = await res.json();
-    let list = document.getElementById('dataList');
-    list.innerHTML = '';
+    async function loadData() {
+        let res = await fetch('/api/karyasamiti_sadasya');
+        let data = await res.json();
+        let list = document.getElementById('dataList');
+        list.innerHTML = '';
 
-    // ✅ Group by aanchal name
-    const grouped = data.reduce((acc, item) => {
-        const key = item.aanchal?.name || 'अन्य';
-        acc[key] = acc[key] || [];
-        acc[key].push(item);
-        return acc;
-    }, {});
+        const grouped = data.reduce((acc, item) => {
+            const key = item.aanchal?.name || 'अन्य';
+            acc[key] = acc[key] || [];
+            acc[key].push(item);
+            return acc;
+        }, {});
 
-    // ✅ Render sections
-    for (const [aanchalName, entries] of Object.entries(grouped)) {
-        const section = document.createElement('div');
-        section.className = 'mb-5';
+        for (const [aanchalName, entries] of Object.entries(grouped)) {
+            const section = document.createElement('div');
+            section.className = 'mb-5';
 
-        section.innerHTML = `
-            <h5 class="text-primary border-bottom pb-1 mb-4">${aanchalName}</h5>
-            <div class="row g-4">
-                ${entries.map(d => `
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow rounded-4 overflow-hidden">
-                            <div class="ratio ratio-4x3">
-                                ${d.photo ? `<img src="/storage/${d.photo}" class="object-fit-cover w-100 h-100" alt="Photo">` : `<div class="bg-secondary text-white d-flex justify-content-center align-items-center">No Image</div>`}
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title text-primary mb-1">${d.name}</h5>
-                                <p class="card-text small mb-2">
-                                    <i class="bi bi-geo-alt-fill me-1 text-danger"></i>${d.city}<br>
-                                    <i class="bi bi-telephone-fill me-1 text-success"></i>${d.mobile}
-                                </p>
-                                <div class="d-flex justify-content-between">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="editData(${d.id})">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteData(${d.id})">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
+            section.innerHTML = `
+                <h5 class="text-primary border-bottom pb-1 mb-3">${aanchalName}</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 80px;">फोटो</th>
+                                <th>नाम</th>
+                                <th>शहर</th>
+                                <th>आंचल</th>
+                                <th>मोबाइल</th>
+                                <th style="width: 100px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${entries.map(d => `
+                                <tr>
+                                    <td>
+                                        ${d.photo ? `<img src="/storage/${d.photo}" class="rounded-circle" width="60" height="60">` : `<span class="text-muted">No Image</span>`}
+                                    </td>
+                                    <td>${d.name}</td>
+                                    <td>${d.city}</td>
+                                    <td>${d.aanchal?.name || ''}</td>
+                                    <td>${d.mobile}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editData(${d.id})">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteData(${d.id})">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
 
-        list.appendChild(section);
+            list.appendChild(section);
+        }
     }
-}
-
 
     document.getElementById('karyasamitiForm').addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -192,6 +213,7 @@ async function loadData() {
         setTimeout(() => toast.remove(), 4000);
     }
 
+    // Initialize
     loadAanchal();
     loadData();
 </script>
