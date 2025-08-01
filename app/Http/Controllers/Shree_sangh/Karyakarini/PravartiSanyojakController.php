@@ -11,15 +11,29 @@ use Illuminate\Support\Facades\Validator;
 
 class PravartiSanyojakController extends Controller
 {
-   public function index()
+public function index()
 {
-    return PravartiSanyojak::with('pravarti')
-        ->orderByRaw("
-            FIELD(post, 'संयोजक', 'सह संयोजक', 'संयोजन मण्डल सदस्य')
-        ")
-        ->latest()
-        ->get();
+    $postPriority = ['संयोजक', 'सह संयोजक', 'संयोजन मण्डल सदस्य'];
+
+    // Fetch all with relation
+    $data = PravartiSanyojak::with('pravarti')->get();
+
+    // Group by Pravarti
+    $grouped = $data->groupBy(function ($item) {
+        return $item->pravarti->name ?? 'अन्य';
+    });
+
+    // Sort each group by post priority
+    $sortedGrouped = $grouped->map(function ($group) use ($postPriority) {
+        return $group->sortBy(function ($item) use ($postPriority) {
+            return array_search($item->post, $postPriority) ?? 999;
+        })->values(); // Reset index
+    });
+
+    return response()->json($sortedGrouped);
 }
+
+
 
 
 public function store(Request $request)

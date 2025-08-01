@@ -83,7 +83,7 @@ const headers = {
     'X-Requested-With': 'XMLHttpRequest'
 };
 
-// 👇 Fill pravarti dropdown
+// ✅ Load Pravarti Dropdown
 fetch("/api/pravarti")
     .then(res => res.json())
     .then(data => {
@@ -93,7 +93,7 @@ fetch("/api/pravarti")
         });
     });
 
-// 👇 Preview Image
+// ✅ Image Preview
 document.getElementById("photo").addEventListener("change", function () {
     const file = this.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -107,23 +107,18 @@ document.getElementById("photo").addEventListener("change", function () {
     }
 });
 
-// 👇 Submit form
+// ✅ Submit Form (Create / Update)
 document.getElementById("pravartiSanyojakForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const id = document.getElementById("editId").value;
     const formData = new FormData(this);
-    formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
     const url = id ? `/api/pravarti-sanyojak/${id}` : '/api/pravarti-sanyojak';
     const method = 'POST';
 
     try {
-        const res = await fetch(url, {
-            method,
-            body: formData
-        });
-
+        const res = await fetch(url, { method, body: formData });
         const result = await res.json();
 
         if (!res.ok) {
@@ -135,56 +130,57 @@ document.getElementById("pravartiSanyojakForm").addEventListener("submit", async
             alert("✅ सफलतापूर्वक सहेजा गया!");
             location.reload();
         }
-    } catch (error) {
+    } catch {
         alert("❌ नेटवर्क या सर्वर की समस्या है।");
     }
 });
 
-// 👇 Fetch & Show table rows
+// ✅ Load and Render Data (Group by Pravarti)
 fetch('/api/pravarti-sanyojak')
     .then(res => res.json())
-    .then(data => {
+    .then(groupedData => {
         const tbody = document.querySelector("#pravartiSanyojakList tbody");
-        tbody.innerHTML = "";
+        tbody.innerHTML = '';
 
-        data.forEach(item => {
-            const imageUrl = item.photo ? `/storage/${item.photo}` : 'https://via.placeholder.com/80x100?text=No+Image';
+        for (const [pravartiName, entries] of Object.entries(groupedData)) {
+            // 🔷 Section Header
             tbody.innerHTML += `
-                <tr class="text-center">
-                    <td><img src="${imageUrl}" class="img-thumbnail" style="width: 80px; height: 100px; object-fit: cover;"></td>
-                    <td>${item.name}</td>
-                    <td>${item.post}</td>
-                    <td>${item.city}</td>
-                    <td>${item.mobile}</td>
-                    <td>
-                        <button onclick="editEntry(${item.id})" class="btn btn-sm btn-warning me-1">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
-                        <button onclick="deleteEntry(${item.id})" class="btn btn-sm btn-outline-danger">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                    </td>
+                <tr class="table-primary fw-semibold text-center">
+                    <td colspan="6">${pravartiName}</td>
                 </tr>
             `;
-        });
+
+            // 🔁 Member Rows
+            entries.forEach(item => {
+                const imageUrl = item.photo ? `/storage/${item.photo}` : 'https://via.placeholder.com/80x100?text=No+Image';
+                tbody.innerHTML += `
+                    <tr class="text-center">
+                        <td><img src="${imageUrl}" class="img-thumbnail" style="width: 80px; height: 100px; object-fit: cover;"></td>
+                        <td>${item.name}</td>
+                        <td>${item.post}</td>
+                        <td>${item.city}</td>
+                        <td>${item.mobile}</td>
+                        <td>
+                            <button onclick="editEntry(${item.id})" class="btn btn-sm btn-warning me-1">
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+                            <button onclick="deleteEntry(${item.id})" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
     });
 
-// 👇 Delete Entry
-function deleteEntry(id) {
-    if (confirm("क्या आप वाकई इसे हटाना चाहते हैं?")) {
-        fetch(`/api/pravarti-sanyojak/${id}`, {
-            method: 'DELETE',
-            headers
-        }).then(() => location.reload());
-    }
-}
-
-// 👇 Edit Entry
+// ✅ Edit Entry
 function editEntry(id) {
     fetch(`/api/pravarti-sanyojak`)
         .then(res => res.json())
-        .then(data => {
-            const entry = data.find(e => e.id === id);
+        .then(grouped => {
+            let all = Object.values(grouped).flat();
+            const entry = all.find(e => e.id === id);
             if (entry) {
                 document.getElementById("editId").value = entry.id;
                 document.getElementById("name").value = entry.name;
@@ -192,11 +188,20 @@ function editEntry(id) {
                 document.getElementById("city").value = entry.city;
                 document.getElementById("pravarti_id").value = entry.pravarti_id;
                 document.getElementById("mobile").value = entry.mobile;
-                document.getElementById("formMethod").value = 'PUT';
                 document.getElementById("preview").innerHTML = `<img src="/storage/${entry.photo}" class="img-thumbnail" width="100">`;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
+}
+
+// ✅ Delete Entry
+function deleteEntry(id) {
+    if (confirm("क्या आप वाकई इसे हटाना चाहते हैं?")) {
+        fetch(`/api/pravarti-sanyojak/${id}`, {
+            method: 'DELETE',
+            headers
+        }).then(() => location.reload());
+    }
 }
 </script>
 @endsection
