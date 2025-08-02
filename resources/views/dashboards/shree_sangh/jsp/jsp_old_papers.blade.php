@@ -5,13 +5,14 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <div class="container py-4">
-    <h2 class="mb-4">📚 JSP Old Papers</h2>
+    <h2 class="mb-4">📄 JSP Old Papers</h2>
 
     <!-- Toast -->
     <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
 
+    <!-- Form -->
     <form id="paperForm" class="mb-4">
-        <div class="row g-2">
+        <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">Class</label>
                 <select class="form-select" name="class" required>
@@ -31,13 +32,14 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label class="form-label">PDF</label>
+                <label class="form-label">PDF (Max 2MB)</label>
                 <input type="file" class="form-control" name="pdf" accept="application/pdf" required>
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Upload</button>
     </form>
 
+    <!-- Table -->
     <table class="table table-bordered" id="papersTable">
         <thead>
             <tr>
@@ -73,14 +75,20 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(data => {
                 let tbody = '';
-                data.forEach(paper => {
+                Object.keys(data).forEach(classNum => {
                     tbody += `
-                        <tr>
-                            <td>${paper.class}</td>
-                            <td>${paper.year}</td>
-                            <td><a href="/storage/${paper.pdf}" target="_blank">View PDF</a></td>
-                            <td><button class="btn btn-danger btn-sm" onclick="deletePaper(${paper.id})">Delete</button></td>
+                        <tr class="table-secondary">
+                            <th colspan="4" class="text-start">📘 Class ${classNum}</th>
                         </tr>`;
+                    data[classNum].forEach(paper => {
+                        tbody += `
+                            <tr>
+                                <td>${paper.class}</td>
+                                <td>${paper.year}</td>
+                                <td><a href="/storage/${paper.pdf}" target="_blank">View PDF</a></td>
+                                <td><button class="btn btn-danger btn-sm" onclick="deletePaper(${paper.id})">Delete</button></td>
+                            </tr>`;
+                    });
                 });
                 document.querySelector('#papersTable tbody').innerHTML = tbody;
             });
@@ -94,16 +102,18 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Requested-With': 'XMLHttpRequest',
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: form
         })
         .then(res => res.json())
         .then(data => {
             if (data.errors) {
-                Object.values(data.errors).forEach(msgs => msgs.forEach(msg => showToast(msg, 'danger')));
+                Object.values(data.errors).forEach(msgs =>
+                    msgs.forEach(msg => showToast(msg, 'danger'))
+                );
             } else {
-                showToast(data.message);
+                showToast(data.message, 'success');
                 this.reset();
                 fetchData();
             }
@@ -112,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     window.deletePaper = function (id) {
-        if (!confirm('Delete this paper?')) return;
+        if (!confirm('Are you sure you want to delete this paper?')) return;
 
         fetch(`/api/jsp-old-papers/${id}`, {
             method: 'DELETE',
@@ -123,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(res => res.json())
         .then(data => {
-            showToast(data.message);
+            showToast(data.message, 'success');
             fetchData();
         });
     }
