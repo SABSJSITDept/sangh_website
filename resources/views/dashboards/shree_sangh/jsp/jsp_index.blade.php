@@ -30,16 +30,17 @@
 </div>
 
 
-        <!-- Card 3 -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow border-danger">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-danger">🧘 श्रमणोपासक</h5>
-                    <p class="card-text">श्रमणोपासक से जुड़ी जानकारी प्रबंधित करें।</p>
-                    <a href="#" class="btn btn-danger">View</a>
-                </div>
-            </div>
+     <!-- Card 3 -->
+<div class="col-md-4 mb-4">
+    <div class="card shadow border-danger">
+        <div class="card-body text-center">
+            <h5 class="card-title text-danger">🧘 श्रमणोपासक</h5>
+            <p class="card-text">श्रमणोपासक से जुड़ी जानकारी प्रबंधित करें।</p>
+            <a href="{{ route('jsp-bigexam') }}" class="btn btn-danger">View</a>
         </div>
+    </div>
+</div>
+
 
         <!-- Card 4 -->
         <div class="col-md-4 mb-4">

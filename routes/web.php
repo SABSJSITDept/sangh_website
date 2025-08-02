@@ -185,4 +185,10 @@ Route::get('/jsp-exam', function () {
     return view('dashboards.shree_sangh.jsp.jsp_exam');
 })->name('jsp_exam.view');
 
+
+
+Route::get('/jsp-bigexam', function () {
+    return view('dashboards.shree_sangh.jsp.jsp_bigexam');
+})->name('jsp-bigexam');
+
 });

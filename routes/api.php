@@ -22,7 +22,7 @@ use App\Http\Controllers\Shree_sangh\AavedanPatra\AavedanPatraController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\DharmikPravartiyaController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\SpBasicController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspExamController;
-
+use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspBigexamController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -178,3 +178,7 @@ Route::apiResource('jsp-basic', SpBasicController::class);
 // -----------------JSP Exam api ------------------------------------
 Route::apiResource('jsp-exam', JspExamController::class);
 // -----------------JSP Exam api ------------------------------------
+
+// -----------------JSP Big Exam api ------------------------------------
+Route::apiResource('jsp-bigexam', JspBigexamController::class);
+// -----------------JSP Big Exam api ------------------------------------
