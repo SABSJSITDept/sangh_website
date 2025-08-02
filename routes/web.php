@@ -171,4 +171,14 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::get('/dharmik-pravartiya', function () {
     return view('dashboards.shree_sangh.sangh_pravartiya.dharmik_pravartiya');
 })->name('dharmik_pravartiya');
+
+ Route::get('/add-user-dashboard', function () {
+    return view('dashboards.shree_sangh.jsp.jsp_index');
+})->name('jsp.dashboard');
+
+Route::get('/shree-sangh/sangh-pravartiya/jsp-basic', function () {
+    return view('dashboards.shree_sangh.jsp.jsp_basic');
+})->name('jsp.basic');
+
+
 });

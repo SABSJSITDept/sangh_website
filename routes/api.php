@@ -20,6 +20,8 @@ use App\Http\Controllers\Shree_sangh\News\NewsUpdateController;
 use App\Http\Controllers\Shree_sangh\Shivir\ShivirUpdateController;
 use App\Http\Controllers\Shree_sangh\AavedanPatra\AavedanPatraController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\DharmikPravartiyaController;
+use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\SpBasicController;
+
 
 
 
@@ -169,3 +171,7 @@ Route::apiResource('aavedan-patra', AavedanPatraController::class);
 // -----------------Dharmik Pravartiya api ------------------------------------
 Route::apiResource('dharmik-pravartiya', DharmikPravartiyaController::class);
 // -----------------Dharmik Pravartiya api ------------------------------------
+
+// -----------------JSP api ------------------------------------
+Route::apiResource('jsp-basic', SpBasicController::class);
+// -----------------JSP api ------------------------------------

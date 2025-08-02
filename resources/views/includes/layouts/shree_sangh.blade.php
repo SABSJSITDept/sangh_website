@@ -347,10 +347,11 @@
     <span class="link-text">धार्मिक प्रवर्तियाँ</span>
 </a>
 
-            <a href="#" class="nav-link">
-                <i class="bi bi-person-plus"></i>
-                <span class="link-text">Add User</span>
-            </a>
+         <a href="{{ route('jsp.dashboard') }}" class="nav-link">
+    <i class="bi bi-person-plus"></i>
+    <span class="link-text">JSP</span>
+</a>
+
             <a href="#" class="nav-link">
                 <i class="bi bi-shield-lock"></i>
                 <span class="link-text">Roles</span>
