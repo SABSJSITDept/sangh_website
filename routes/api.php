@@ -26,6 +26,7 @@ use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspBigexamController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspHindiBooksController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspGujratiBooksController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspOldPapersController;
+use App\Http\Controllers\SanghSahitya\Shramnopasak\AddShramnopasakController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -197,3 +198,11 @@ Route::apiResource('/jsp-gujrati-books', JspGujratiBooksController::class);
 // -----------------JSP Old Papers api ------------------------------------]
 Route::apiResource('jsp-old-papers', JspOldPapersController::class);
 // -----------------JSP Old Papers api ------------------------------------
+
+// -----------------LATEST Shramnopasak api ------------------------------------
+Route::get('/shramnopasak/latest', [AddShramnopasakController::class, 'latest']);
+// -----------------LATEST Shramnopasak api ------------------------------------
+
+// -----------------Shramnopasak api ------------------------------------
+Route::apiResource('shramnopasak', AddShramnopasakController::class);
+// -----------------Shramnopasak api ------------------------------------
