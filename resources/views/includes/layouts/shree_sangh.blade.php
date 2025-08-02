@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>@yield('title', 'SABSJS Admin Panel')</title>
+    <title>@yield('title', 'Admin Panel')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap 5 -->
@@ -11,8 +11,8 @@
 
     <style>
         :root {
-            --sidebar-width: 170px;
-            --sidebar-collapsed: 100px;
+            --sidebar-width: 220px;
+            --sidebar-collapsed: 70px;
         }
         body {
             margin: 0;
@@ -65,7 +65,7 @@
             width: var(--sidebar-collapsed);
             background: #181824;
             color: white;
-            transition: width 0.0s ease;
+            transition: width 0.3s ease;
             height: calc(100vh - 50px);
             position: fixed;
             top: 50px;
@@ -100,7 +100,7 @@
         }
         .nav-link {
             color: #b6bbc7;
-            padding: 10px 38px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -118,10 +118,6 @@
         .sidebar.expanded .nav-link span {
             display: inline;
         }
-        .sidebar:not(.expanded) .nav-link span {
-         display: none !important;
-         }
-
         .nav-item {
             width: 100%;
         }
@@ -149,11 +145,11 @@
         }
         .sidebar.expanded .submenu .nav-link {
             font-size: 0.9rem;
-            padding: 0px 0px;
+            padding: 7px 8px;
             color: #aab0c7;
         }
         .submenu-toggle {
-            margin-left: 0px;
+            margin-left: auto;
             transition: transform 0.3s ease;
             font-size: 1rem;
         }
@@ -246,22 +242,18 @@
         <div class="role">SuperUser</div>
     </div>
 
-    <!-- Home - No Submenu -->
-    <div class="nav-item">
-        <a href="{{ url('dashboard/shree_sangh') }}" class="nav-link">
-            <i class="bi bi-house-door"></i>
-            <span class="link-text">Home</span>
-        </a>
-    </div>
-
     <!-- Dashboard -->
     <div class="nav-item">
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-speedometer2"></i>
             <span class="link-text">Dashboard</span>
+            <i class="bi bi-chevron-down submenu-toggle"></i>
         </div>
         <div class="submenu">
-           
+            <a href="{{ url('dashboard/shree_sangh') }}" class="nav-link">
+                <i class="bi bi-house"></i>
+                <span class="link-text">HOME</span>
+            </a>
             <a href="{{ url('/dashboard/shree_sangh/daily-thoughts') }}" class="nav-link">
                 <i class="bi bi-lightbulb"></i>
                 <span class="link-text">आज का विचार</span>
@@ -285,71 +277,76 @@
         </div>
     </div>
 
-    <!-- कार्यकारिणी -->
-    <div class="nav-item">
-        <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-            <i class="bi bi-diagram-3"></i>
-            <span class="link-text">कार्यकारिणी</span>
-        </div>
-        <div class="submenu">
-            <a href="{{ route('karyakarini.index') }}" class="nav-link">
-                <i class="bi bi-house-door"></i>
-                <span class="link-text">HOME</span>
-            </a>
-            <a href="{{ url('/shree-sangh/ex-president') }}" class="nav-link">
-                <i class="bi bi-person-check"></i>
-                <span class="link-text">पूर्व अध्यक्ष</span>
-            </a>
-            <a href="{{ url('/shree-sangh/karyakarini/pst') }}" class="nav-link">
-                <i class="bi bi-person-video2"></i>
-                <span class="link-text">PST</span>
-            </a>
-            <a href="{{ url('/vp-sec') }}" class="nav-link">
-                <i class="bi bi-person-badge"></i>
-                <span class="link-text">VP/SEC सदस्य</span>
-            </a>
-            <a href="{{ route('admin.it_cell') }}" class="nav-link">
-                <i class="bi bi-cpu"></i>
-                <span class="link-text">IT-CELL सदस्य</span>
-            </a>
-            <a href="{{ url('/pravarti-sanyojak') }}" class="nav-link">
-                <i class="bi bi-diagram-3-fill"></i>
-                <span class="link-text">प्रवर्ती संयोजक</span>
-            </a>
-            <a href="{{ url('/karyasamiti-sadasya') }}" class="nav-link">
-                <i class="bi bi-people-fill"></i>
-                <span class="link-text">कार्यसमिति सदस्य</span>
-            </a>
-            <a href="{{ url('/sthayi_sampati_sanwardhan_samiti') }}" class="nav-link">
-                <i class="bi bi-bank"></i>
-                <span class="link-text">स्थायि सम्पति संवर्द्धन समित</span>
-            </a>
-            <a href="{{ url('/sanyojan_mandal_antrastriya_sadasyata') }}" class="nav-link">
-                <i class="bi bi-globe2"></i>
-                <span class="link-text">संयोजन मंडल अंतरस्त्रिय सदस्यता</span>
-            </a>
-            <a href="{{ url('/samta_jan_kalyan_pranayash') }}" class="nav-link">
-                <i class="bi bi-activity"></i>
-                <span class="link-text">समता जन कल्याण प्राणायास</span>
-            </a>
-            <a href="{{ url('/padhadhikari_prashashan_karyashala') }}" class="nav-link">
-                <i class="bi bi-file-earmark-pdf"></i>
-                <span class="link-text">पदाधिकारी प्रशासन कार्यशाला</span>
-            </a>
-        </div>
+
+
+
+<div class="nav-item">
+    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+        <i class="bi bi-diagram-3"></i>
+        <span class="link-text">कार्यकारिणी</span>
+        <i class="bi bi-chevron-down submenu-toggle"></i>
     </div>
+    <div class="submenu">
+        <a href="{{ route('karyakarini.index') }}" class="nav-link">
+            <i class="bi bi-house-door"></i>
+            <span class="link-text">HOME</span>
+        </a>
+        <a href="{{ url('/shree-sangh/ex-president') }}" class="nav-link">
+            <i class="bi bi-person-check"></i>
+            <span class="link-text">पूर्व अध्यक्ष</span>
+        </a>
+        <a href="{{ url('/shree-sangh/karyakarini/pst') }}" class="nav-link">
+            <i class="bi bi-person-video2"></i>
+            <span class="link-text">PST</span>
+        </a>
+        <a href="{{ url('/vp-sec') }}" class="nav-link">
+            <i class="bi bi-person-badge"></i>
+            <span class="link-text">VP/SEC सदस्य</span>
+        </a>
+        <a href="{{ route('admin.it_cell') }}" class="nav-link">
+            <i class="bi bi-cpu"></i>
+            <span class="link-text">IT-CELL सदस्य</span>
+        </a>
+        <a href="{{ url('/pravarti-sanyojak') }}" class="nav-link">
+            <i class="bi bi-diagram-3-fill"></i>
+            <span class="link-text">प्रवर्ती संयोजक</span>
+        </a>
+        <a href="{{ url('/karyasamiti-sadasya') }}" class="nav-link">
+            <i class="bi bi-people-fill"></i>
+            <span class="link-text">कार्यसमिति सदस्य</span>
+        </a>
+        <a href="{{ url('/sthayi_sampati_sanwardhan_samiti') }}" class="nav-link">
+            <i class="bi bi-bank"></i>
+            <span class="link-text">स्थायि सम्पति संवर्द्धन समित</span>
+        </a>
+        <a href="{{ url('/sanyojan_mandal_antrastriya_sadasyata') }}" class="nav-link">
+            <i class="bi bi-globe2"></i>
+            <span class="link-text">संयोजन मंडल अंतरस्त्रिय सदस्यता</span>
+        </a>
+        <a href="{{ url('/samta_jan_kalyan_pranayash') }}" class="nav-link">
+            <i class="bi bi-activity"></i>
+            <span class="link-text">समता जन कल्याण प्राणायास</span>
+        </a>
+        <a href="{{ url('/padhadhikari_prashashan_karyashala') }}" class="nav-link">
+            <i class="bi bi-file-earmark-pdf"></i>
+            <span class="link-text">पदाधिकारी प्रशासन कार्यशाला</span>
+        </a>
+    </div>
+</div>
 
     <!-- Users -->
     <div class="nav-item">
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-people"></i>
-            <span class="link-text">Users</span>
+            <span class="link-text">संघ प्रवृत्तियाँ</span>
+            <i class="bi bi-chevron-down submenu-toggle"></i>
         </div>
         <div class="submenu">
-            <a href="#" class="nav-link">
-                <i class="bi bi-person"></i>
-                <span class="link-text">All Users</span>
-            </a>
+            <a href="{{ route('dharmik_pravartiya') }}" class="nav-link">
+    <i class="bi bi-person"></i>
+    <span class="link-text">धार्मिक प्रवर्तियाँ</span>
+</a>
+
             <a href="#" class="nav-link">
                 <i class="bi bi-person-plus"></i>
                 <span class="link-text">Add User</span>
@@ -366,8 +363,13 @@
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-gear"></i>
             <span class="link-text">Settings</span>
+            <i class="bi bi-chevron-down submenu-toggle"></i>
         </div>
         <div class="submenu">
+            <a href="#" class="nav-link">
+                <i class="bi bi-person-circle"></i>
+                <span class="link-text">Profile</span>
+            </a>
             <a href="#" class="nav-link">
                 <i class="bi bi-lock"></i>
                 <span class="link-text">Privacy</span>
@@ -376,12 +378,11 @@
     </div>
 
     <!-- Logout -->
-    <a href="{{ route('logout') }}" class="nav-link">
+    <a href="#" class="nav-link">
         <i class="bi bi-box-arrow-right"></i>
         <span class="link-text">Logout</span>
     </a>
 </nav>
-
 
 
         <!-- MAIN -->
@@ -454,7 +455,5 @@
             document.querySelectorAll('.submenu-toggle').forEach(i => i.classList.remove('rotate'));
         }
     </script>
-    @yield('scripts')
-
 </body>
 </html>

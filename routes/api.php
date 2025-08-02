@@ -19,6 +19,8 @@ use App\Http\Controllers\Shree_sangh\Karyakarini\PadhadhikariPrashashanKaryashal
 use App\Http\Controllers\Shree_sangh\News\NewsUpdateController;
 use App\Http\Controllers\Shree_sangh\Shivir\ShivirUpdateController;
 use App\Http\Controllers\Shree_sangh\AavedanPatra\AavedanPatraController;
+use App\Http\Controllers\ShreeSangh\SanghPravartiya\DharmikPravartiyaController;
+
 
 
 
@@ -102,7 +104,6 @@ Route::prefix('pravarti-sanyojak')->group(function () {
     Route::put('/{id}', [PravartiSanyojakController::class, 'update']); // ✅ Change this line
     Route::delete('/{id}', [PravartiSanyojakController::class, 'destroy']);
 });
-
 // -----------------pravarti_sanyojak api ------------------------------------
 
 
@@ -164,3 +165,7 @@ Route::apiResource('shivir', ShivirUpdateController::class);
 // -----------------Aavedan Patra api ------------------------------------
 Route::apiResource('aavedan-patra', AavedanPatraController::class);
 // -----------------Aavedan Patra api ------------------------------------
+
+// -----------------Dharmik Pravartiya api ------------------------------------
+Route::apiResource('dharmik-pravartiya', DharmikPravartiyaController::class);
+// -----------------Dharmik Pravartiya api ------------------------------------

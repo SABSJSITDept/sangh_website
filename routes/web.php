@@ -167,4 +167,8 @@ Route::middleware(['web', 'checkSession'])->group(function () {
       Route::get('/aavedan_patra', function () {
         return view('dashboards.shree_sangh.aavedan_patra.aavedan_patra');
     });
+
+    Route::get('/dharmik-pravartiya', function () {
+    return view('dashboards.shree_sangh.sangh_pravartiya.dharmik_pravartiya');
+})->name('dharmik_pravartiya');
 });
