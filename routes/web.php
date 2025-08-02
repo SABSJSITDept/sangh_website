@@ -196,4 +196,8 @@ Route::get('/dashboard/jsp-hindi-books', function () {
     return view('dashboards.shree_sangh.jsp.jsp_hindi_books');
 })->name('jsp-hindi-books.view');
 
+Route::get('/jsp-gujrati-books', function () {
+    return view('dashboards.shree_sangh.jsp.jsp_gujrati_books');
+})->name('jsp-gujrati-books.view');
+
 });

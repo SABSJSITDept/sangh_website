@@ -48,6 +48,18 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+    <div class="card shadow-lg border-0 h-100">
+        <div class="card-body text-center border-top border-4 border-success">
+            <h5 class="card-title text-success fw-bold">📘 JSP GUJARATI BOOKS</h5>
+            <p class="card-text">Read and manage Gujarati book PDFs.</p>
+            <a href="{{ route('jsp-gujrati-books.view') }}" class="btn btn-outline-success w-100 text-dark">View</a>
+        </div>
+    </div>
+</div>
+
+
     </div>
 </div>
 @endsection
