@@ -191,4 +191,9 @@ Route::get('/jsp-bigexam', function () {
     return view('dashboards.shree_sangh.jsp.jsp_bigexam');
 })->name('jsp-bigexam');
 
+
+Route::get('/dashboard/jsp-hindi-books', function () {
+    return view('dashboards.shree_sangh.jsp.jsp_hindi_books');
+})->name('jsp-hindi-books.view');
+
 });

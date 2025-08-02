@@ -23,6 +23,7 @@ use App\Http\Controllers\ShreeSangh\SanghPravartiya\DharmikPravartiyaController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\SpBasicController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspExamController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspBigexamController;
+use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspHindiBooksController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -182,3 +183,7 @@ Route::apiResource('jsp-exam', JspExamController::class);
 // -----------------JSP Big Exam api ------------------------------------
 Route::apiResource('jsp-bigexam', JspBigexamController::class);
 // -----------------JSP Big Exam api ------------------------------------
+
+// -----------------JSP Hindi Books api ------------------------------------
+Route::apiResource('jsp-hindi-books', JspHindiBooksController::class);
+// -----------------JSP Hindi Books api ------------------------------------
