@@ -5,7 +5,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <div class="container py-4">
-    <h2 class="mb-4">📋 JSP बेसिक (List View + Edit Modal)</h2>
+    <h2 class="mb-4">📋 JSP बेसिक </h2>
 
     <!-- List Table -->
     <div class="card shadow mb-4">
@@ -16,7 +16,7 @@
             <table class="table table-bordered align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
+                        <th>SR</th>
                         <th>Content</th>
                         <th>Image</th>
                         <th style="width: 100px;">Edit</th>

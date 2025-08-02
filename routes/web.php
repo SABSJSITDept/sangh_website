@@ -181,4 +181,8 @@ Route::get('/shree-sangh/sangh-pravartiya/jsp-basic', function () {
 })->name('jsp.basic');
 
 
+Route::get('/jsp-exam', function () {
+    return view('dashboards.shree_sangh.jsp.jsp_exam');
+})->name('jsp_exam.view');
+
 });

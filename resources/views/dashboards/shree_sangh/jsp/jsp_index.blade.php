@@ -19,15 +19,16 @@
 
 
         <!-- Card 2 -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow border-success">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-success">📚 साहित्य</h5>
-                    <p class="card-text">उपलब्ध साहित्य की सूची देखें और प्रबंध करें।</p>
-                    <a href="#" class="btn btn-success">View</a>
-                </div>
-            </div>
+       <div class="col-md-4 mb-4">
+    <div class="card shadow border-success">
+        <div class="card-body text-center">
+            <h5 class="card-title text-success">📚 साहित्य</h5>
+            <p class="card-text">उपलब्ध साहित्य की सूची देखें और प्रबंध करें।</p>
+            <a href="{{ route('jsp_exam.view') }}" class="btn btn-success">View</a>
         </div>
+    </div>
+</div>
+
 
         <!-- Card 3 -->
         <div class="col-md-4 mb-4">

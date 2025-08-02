@@ -21,8 +21,7 @@ use App\Http\Controllers\Shree_sangh\Shivir\ShivirUpdateController;
 use App\Http\Controllers\Shree_sangh\AavedanPatra\AavedanPatraController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\DharmikPravartiyaController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\SpBasicController;
-
-
+use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspExamController;
 
 
 
@@ -175,3 +174,7 @@ Route::apiResource('dharmik-pravartiya', DharmikPravartiyaController::class);
 // -----------------JSP api ------------------------------------
 Route::apiResource('jsp-basic', SpBasicController::class);
 // -----------------JSP api ------------------------------------
+
+// -----------------JSP Exam api ------------------------------------
+Route::apiResource('jsp-exam', JspExamController::class);
+// -----------------JSP Exam api ------------------------------------
