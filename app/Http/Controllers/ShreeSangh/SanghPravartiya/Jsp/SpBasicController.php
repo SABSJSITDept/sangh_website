@@ -13,41 +13,51 @@ class SpBasicController extends Controller
         return JspBasic::all();
     }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'content' => 'required|string',
-        'dtp' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required|string',
+            'dtp' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
-    $path = $request->file('dtp')->store('jsp_images', 'public');
+        $path = $request->file('dtp')->store('jsp_images', 'public');
 
-    return JspBasic::create([
-        'content' => $request->content,
-        'dtp' => $path
-    ]);
-}
-
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'content' => 'required|string',
-        'dtp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
-
-    $record = JspBasic::findOrFail($id);
-
-    $data = ['content' => $request->content];
-
-    if ($request->hasFile('dtp')) {
-        $data['dtp'] = $request->file('dtp')->store('jsp_images', 'public');
+        return JspBasic::create([
+            'content' => $request->content,
+            'dtp' => $path
+        ]);
     }
 
-    $record->update($data);
+    public function show($id)
+    {
+        $record = JspBasic::find($id);
 
-    return $record;
-}
+        if (!$record) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
 
+        return response()->json($record);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'content' => 'required|string',
+            'dtp' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $record = JspBasic::findOrFail($id);
+
+        $data = ['content' => $request->content];
+
+        if ($request->hasFile('dtp')) {
+            $data['dtp'] = $request->file('dtp')->store('jsp_images', 'public');
+        }
+
+        $record->update($data);
+
+        return $record;
+    }
 
     public function destroy($id)
     {
