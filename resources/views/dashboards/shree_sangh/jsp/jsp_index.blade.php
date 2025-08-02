@@ -49,17 +49,27 @@
             </div>
         </div>
 
+        <!-- Card 5 - JSP Gujarati Books -->
         <div class="col-md-4">
-    <div class="card shadow-lg border-0 h-100">
-        <div class="card-body text-center border-top border-4 border-success">
-            <h5 class="card-title text-success fw-bold">📘 JSP GUJARATI BOOKS</h5>
-            <p class="card-text">Read and manage Gujarati book PDFs.</p>
-            <a href="{{ route('jsp-gujrati-books.view') }}" class="btn btn-outline-success w-100 text-dark">View</a>
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body text-center border-top border-4 border-success">
+                    <h5 class="card-title text-success fw-bold">📘 JSP GUJARATI BOOKS</h5>
+                    <p class="card-text">Read and manage Gujarati book PDFs.</p>
+                    <a href="{{ route('jsp-gujrati-books.view') }}" class="btn btn-outline-success w-100 text-dark">View</a>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-
+        <!-- Card 6 - JSP Old Papers -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body text-center border-top border-4 border-primary">
+                    <h5 class="card-title text-primary fw-bold">📄 JSP OLD PAPERS</h5>
+                    <p class="card-text">Upload and manage previous year exam papers.</p>
+                    <a href="{{ route('jsp-old-papers.view') }}" class="btn btn-outline-primary w-100 text-dark">View</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

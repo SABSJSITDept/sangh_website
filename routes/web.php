@@ -200,4 +200,8 @@ Route::get('/jsp-gujrati-books', function () {
     return view('dashboards.shree_sangh.jsp.jsp_gujrati_books');
 })->name('jsp-gujrati-books.view');
 
+Route::get('/jsp-old-papers', function () {
+    return view('dashboards.shree_sangh.jsp.jsp_old_papers');
+})->name('jsp-old-papers.view');
+
 });

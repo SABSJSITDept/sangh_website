@@ -31,7 +31,7 @@
         <table class="table table-bordered align-middle text-center">
             <thead class="table-light">
                 <tr>
-                    <th>#</th>
+                    <th>SR</th>
                     <th>Book Name</th>
                     <th>Preference</th>
                     <th>PDF</th>
