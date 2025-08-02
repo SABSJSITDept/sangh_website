@@ -9,13 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up()
+   public function up()
 {
     Schema::create('jsp_bigexam', function (Blueprint $table) {
         $table->id();
         $table->string('name');
         $table->string('pdf');
-        $table->integer('priority')->default(0); // 🆕 Add this line
         $table->timestamps();
     });
 }

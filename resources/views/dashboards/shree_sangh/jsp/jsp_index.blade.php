@@ -3,15 +3,15 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2 class="mb-4 text-center">🙏 श्री संघ JSP डैशबोर्ड 🙏</h2>
+    <h2 class="mb-4 text-center">🙏  JSP डैशबोर्ड 🙏</h2>
 
     <div class="row">
         <!-- Card 1 -->
       <div class="col-md-4 mb-4">
     <div class="card shadow border-primary">
         <div class="card-body text-center">
-            <h5 class="card-title text-primary">📋 प्रवृत्तियाँ</h5>
-            <p class="card-text">संघ की सभी प्रवृत्तियों की जानकारी देखें।</p>
+            <h5 class="card-title text-primary">📋 BASIC</h5>
+            <p class="card-text">EDIT THE TEXT AND THE DTP<p>
             <a href="{{ route('jsp.basic') }}" class="btn btn-primary">View</a>
         </div>
     </div>
@@ -22,8 +22,8 @@
        <div class="col-md-4 mb-4">
     <div class="card shadow border-success">
         <div class="card-body text-center">
-            <h5 class="card-title text-success">📚 साहित्य</h5>
-            <p class="card-text">उपलब्ध साहित्य की सूची देखें और प्रबंध करें।</p>
+            <h5 class="card-title text-success">📚 JSP EXAM</h5>
+            <p class="card-text">JSP EXAM UPDATES ।</p>
             <a href="{{ route('jsp_exam.view') }}" class="btn btn-success">View</a>
         </div>
     </div>
@@ -34,8 +34,8 @@
 <div class="col-md-4 mb-4">
     <div class="card shadow border-danger">
         <div class="card-body text-center">
-            <h5 class="card-title text-danger">🧘 श्रमणोपासक</h5>
-            <p class="card-text">श्रमणोपासक से जुड़ी जानकारी प्रबंधित करें।</p>
+            <h5 class="card-title text-danger">🧘 JSP BIG EXAM </h5>
+            <p class="card-text">JSP BIG EXAM UPDATES।</p>
             <a href="{{ route('jsp-bigexam') }}" class="btn btn-danger">View</a>
         </div>
     </div>
