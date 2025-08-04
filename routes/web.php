@@ -208,4 +208,12 @@ Route::get('/shramnopasak', function () {
     return view('dashboards.sahitya.shramnopasak');
 })->name('shramnopasak.view');
 
+Route::get('/shramnopasak/all-view', function () {
+    return view('dashboards.sahitya.shramnopasak_all');
+});
+
+Route::get('/shramnopasak/all-view', function () {
+    return view('dashboards.sahitya.shramnopasak_all'); 
+});
+
 });

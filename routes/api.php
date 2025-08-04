@@ -206,3 +206,4 @@ Route::get('/shramnopasak/latest', [AddShramnopasakController::class, 'latest'])
 // -----------------Shramnopasak api ------------------------------------
 Route::apiResource('shramnopasak', AddShramnopasakController::class);
 // -----------------Shramnopasak api ------------------------------------
+

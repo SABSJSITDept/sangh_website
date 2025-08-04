@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Storage;
 
 class AddShramnopasakController extends Controller
 {
-    public function index()
-    {
-        return Shramnopasak::all();
-    }
+  public function index()
+{
+    $data = Shramnopasak::orderBy('year', 'desc')
+        ->orderByRaw("FIELD(month, 'December', 'November', 'October', 'September', 'August', 'July', 'June', 'May', 'April', 'March', 'February', 'January')")
+        ->get(); // removed pagination
+
+    return response()->json($data);
+}
+
 
     public function store(Request $request)
     {
@@ -118,5 +123,6 @@ class AddShramnopasakController extends Controller
 
     return response()->json(['status' => 'not_found', 'message' => 'No data found']);
 }
+
 
 }
