@@ -116,5 +116,17 @@ public function destroy($id)
 
     return response()->json(['message' => 'Deleted successfully']);
 }
+public function toggleHomepage($id)
+{
+    // Reset all to false first
+    Sahitya::where('show_on_homepage', true)->update(['show_on_homepage' => false]);
+
+    // Set selected to true
+    $sahitya = Sahitya::findOrFail($id);
+    $sahitya->show_on_homepage = true;
+    $sahitya->save();
+
+    return response()->json(['message' => 'Homepage book updated successfully']);
+}
 
 }
