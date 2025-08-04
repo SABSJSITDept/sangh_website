@@ -24,8 +24,8 @@ class AddShramnopasakController extends Controller
         $request->validate([
             'year' => 'required|integer',
             'month' => 'required|string',
-            'cover_photo' => 'nullable|image|max:200',
-            'pdf' => 'nullable|mimes:pdf|max:2048',
+            'cover_photo' => 'required|image|max:200',
+            'pdf' => 'required|mimes:pdf|max:2048',
         ]);
 
         $coverPhotoPath = null;
