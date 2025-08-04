@@ -42,6 +42,8 @@ Route::post('/login', function (Request $request) {
             return redirect()->route('dashboard.super_admin');
         case 'sahitya':
             return redirect()->route('dashboard.sahitya');
+        case 'sahitya_publication':
+            return redirect()->route('dashboard.sahitya_publication');
         case 'shree_sangh':
             return redirect()->route('dashboard.shree_sangh');
         case 'yuva_sangh':
@@ -72,6 +74,11 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::middleware('matchRole:sahitya')->get('/dashboard/sahitya', function () {
         return view('dashboards.sahitya.index');
     })->name('dashboard.sahitya');
+
+        // Sahitya publication Dashboard
+    Route::middleware('matchRole:sahitya_publication')->get('/dashboard/sahitya_publication', function () {
+        return view('dashboards.sahitya_publication.index');
+    })->name('dashboard.sahitya_publication');
 
     // Yuva Sangh Dashboard
     Route::middleware('matchRole:yuva_sangh')->get('/dashboard/yuva_sangh', function () {
@@ -212,8 +219,9 @@ Route::get('/shramnopasak/all-view', function () {
     return view('dashboards.sahitya.shramnopasak_all');
 });
 
-Route::get('/shramnopasak/all-view', function () {
-    return view('dashboards.sahitya.shramnopasak_all'); 
-});
+
+Route::get('/dashboard/sahitya-publication', function () {
+    return view('dashboards.sahitya_publication.sahitya_publication');
+})->name('sahitya.publication');
 
 });

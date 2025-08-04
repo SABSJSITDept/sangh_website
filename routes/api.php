@@ -27,6 +27,7 @@ use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspHindiBooksController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspGujratiBooksController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspOldPapersController;
 use App\Http\Controllers\SanghSahitya\Shramnopasak\AddShramnopasakController;
+use App\Http\Controllers\SanghSahitya\sahitya\AddSahityaController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -207,3 +208,7 @@ Route::get('/shramnopasak/latest', [AddShramnopasakController::class, 'latest'])
 Route::apiResource('shramnopasak', AddShramnopasakController::class);
 // -----------------Shramnopasak api ------------------------------------
 
+
+// -----------------Sahitya api ------------------------------------
+Route::apiResource('sahitya', AddSahityaController::class);
+// -----------------Sahitya api ------------------------------------
