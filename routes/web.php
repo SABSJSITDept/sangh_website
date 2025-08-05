@@ -96,11 +96,9 @@ Route::middleware(['web', 'checkSession'])->group(function () {
             return view('dashboards.shree_sangh.index');
         })->name('dashboard.shree_sangh');
 
-        Route::get('/dashboard/shree_sangh/daily-thoughts', [ThoughtApiController::class, 'create'])->name('daily-thoughts.create');
     });
 
     // Shared routes for any authenticated user
-    Route::get('/thoughts/list', [ThoughtApiController::class, 'index'])->name('thoughts.index');
 
     Route::get('/dashboard/vihar-sewa', function () {
         return view('dashboards.shree_sangh.vihar_sewa');
@@ -223,5 +221,9 @@ Route::get('/shramnopasak/all-view', function () {
 Route::get('/dashboard/sahitya-publication', function () {
     return view('dashboards.sahitya_publication.sahitya_publication');
 })->name('sahitya.publication');
+
+Route::get('/daily-thoughts', function () {
+    return view('dashboards.shree_sangh.daily_thoughts');
+})->name('daily.thoughts');
 
 });

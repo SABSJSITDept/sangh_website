@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <title>@yield('title', 'Admin Panel')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -254,7 +256,7 @@
                 <i class="bi bi-house"></i>
                 <span class="link-text">HOME</span>
             </a>
-            <a href="{{ url('/dashboard/shree_sangh/daily-thoughts') }}" class="nav-link">
+            <a href="{{ url('/daily-thoughts') }}" class="nav-link">
                 <i class="bi bi-lightbulb"></i>
                 <span class="link-text">आज का विचार</span>
             </a>

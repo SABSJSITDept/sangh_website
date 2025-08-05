@@ -1,244 +1,204 @@
 @extends('includes.layouts.shree_sangh')
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="container py-4">
-    <h2 class="mb-4">🧠 आज का विचार</h2>
+    <h2 class="mb-4">🧠 Daily Thoughts</h2>
 
     <div class="row">
-        {{-- Thought Form --}}
-        <div class="col-md-7">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-success text-white">नया विचार जोड़ें</div>
-                <div class="card-body">
-                    <form id="thoughtForm">
-                        <div class="mb-3">
-                            <label for="thought" class="form-label">विचार <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="thought" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="date" class="form-label">दिनांक</label>
-                            <input type="date" class="form-control" id="date" value="{{ date('Y-m-d') }}">
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">➕ सबमिट करें</button>
-                    </form>
-                </div>
-            </div>
+        <!-- 🔵 Left: Latest Thought -->
+        <div class="col-md-6 mb-3">
+            <h5>🆕 Latest Thought</h5>
+            <div id="latestThoughtBox" class="alert alert-info">Loading latest...</div>
         </div>
 
-        {{-- Latest Thought --}}
-        <div class="col-md-5">
-            <div class="card bg-light shadow-sm">
-                <div class="card-header bg-primary text-white">📌 आज का विचार</div>
-                <div class="card-body" id="latestThought">
-                    <p>🔄 लोड हो रहा है...</p>
+        <!-- 🟢 Right: Form -->
+        <div class="col-md-6 mb-3">
+            <form id="thoughtForm">
+                <div class="mb-3">
+                    <label for="thought" class="form-label">New Thought</label>
+                    <textarea class="form-control" id="thought" name="thought" required></textarea>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Thought List --}}
-    <div class="card shadow-sm">
-        <div class="card-header">📋 पिछले विचार</div>
-        <div class="table-responsive">
-            <table class="table table-striped mb-0">
-                <thead>
-                    <tr>
-                        <th>दिनांक</th>
-                        <th>विचार</th>
-                        <th class="text-center">कार्य</th>
-                    </tr>
-                </thead>
-                <tbody id="thoughtTableBody">
-                    <tr><td colspan="3">विचार लोड हो रहे हैं...</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="card-footer text-center" id="paginationLinks"></div>
-    </div>
-
-    {{-- Edit Modal --}}
-    <div class="modal fade" id="editThoughtModal" tabindex="-1" aria-labelledby="editThoughtModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="editThoughtForm" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">✏️ विचार संपादित करें</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="edit-id">
-                    <div class="mb-3">
-                        <label for="edit-thought" class="form-label">विचार</label>
-                        <textarea class="form-control" id="edit-thought" rows="3" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-date" class="form-label">दिनांक</label>
-                        <input type="date" class="form-control" id="edit-date">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">बंद करें</button>
-                    <button type="submit" class="btn btn-primary">💾 अपडेट करें</button>
-                </div>
+                <input type="hidden" id="thoughtId">
+                <button type="submit" class="btn btn-success">Save Thought</button>
             </form>
         </div>
     </div>
+
+    <hr>
+
+    <!-- 📃 All Thoughts -->
+    <div class="mt-4">
+        <h4>📜 All Thoughts</h4>
+        <ul class="list-group" id="thoughtList"></ul>
+        <div id="pagination" class="mt-3"></div>
+    </div>
 </div>
-@endsection
 
-@section('scripts')
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <script>
-document.addEventListener('DOMContentLoaded', async function () {
-    const listUrl = "{{ route('thoughts.index') }}";
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const thoughtTableBody = document.getElementById('thoughtTableBody');
-    const paginationLinks = document.getElementById('paginationLinks');
-    const latestThoughtDiv = document.getElementById('latestThought');
+const token = document.querySelector('meta[name="csrf-token"]').content;
 
-    await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
+function showToast(icon, title) {
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: title,
+        showConfirmButton: false,
+        timer: 2500
+    });
+}
 
-    function loadThoughts(page = 1) {
-        fetch(`${listUrl}?page=${page}`)
-            .then(response => response.json())
-            .then(data => {
-                thoughtTableBody.innerHTML = '';
-                if (data.data.length === 0) {
-                    thoughtTableBody.innerHTML = `<tr><td colspan="3">कोई विचार उपलब्ध नहीं है।</td></tr>`;
-                } else {
-                    data.data.forEach(item => {
-                        thoughtTableBody.innerHTML += `
-                            <tr>
-                                <td>${item.date ?? '—'}</td>
-                                <td>${item.thought}</td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-warning me-2" onclick="editThought(${item.id}, \`${item.thought}\`, '${item.date ?? ''}')">✏️</button>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteThought(${item.id})">🗑️</button>
-                                </td>
-                            </tr>`;
-                    });
-                }
-                paginationLinks.innerHTML = renderPagination(data);
-            })
-            .catch(() => {
-                thoughtTableBody.innerHTML = `<tr><td colspan="3">❌ विचार लोड करने में समस्या हुई।</td></tr>`;
+function formatDate(dateString) {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+}
+
+function fetchLatestThought() {
+    fetch('/api/latest-thought')
+        .then(res => res.json())
+        .then(latest => {
+            const box = document.getElementById('latestThoughtBox');
+            if (latest && latest.thought) {
+                const date = formatDate(latest.created_at);
+                box.innerHTML = `<strong>${latest.thought}</strong><br><small class="text-muted">${date}</small>`;
+            } else {
+                box.innerHTML = `<em>No thought found.</em>`;
+            }
+        });
+}
+
+function fetchThoughts(page = 1) {
+    fetch(`/api/thoughts?page=${page}`)
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById('thoughtList');
+            list.innerHTML = '';
+
+            data.data.forEach(thought => {
+                const date = formatDate(thought.created_at);
+                list.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div>
+                            <div>${thought.thought}</div>
+                            <small class="text-muted">${date}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-primary me-2" onclick="editThought(${thought.id}, \`${thought.thought}\`)">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteThought(${thought.id})">Delete</button>
+                        </div>
+                    </li>
+                `;
             });
-    }
 
-    function loadLatestThought() {
-        fetch('/api/latest-thought')
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.thought) {
-                    latestThoughtDiv.innerHTML = `
-                        <p><strong>🗓️ दिनांक:</strong> ${data.date ?? '—'}</p>
-                        <p><strong>💡 विचार:</strong><br>${data.thought}</p>
-                    `;
-                } else {
-                    latestThoughtDiv.innerHTML = `<p>कोई हालिया विचार नहीं मिला।</p>`;
-                }
-            })
-            .catch(() => {
-                latestThoughtDiv.innerHTML = `<p>❌ विचार लोड करने में समस्या हुई।</p>`;
-            });
-    }
+            renderPagination(data);
+        });
+}
 
-    function renderPagination(data) {
-        let buttons = '';
-        for (let i = 1; i <= data.last_page; i++) {
-            buttons += `<button class="btn btn-sm ${i === data.current_page ? 'btn-primary' : 'btn-outline-primary'} m-1" onclick="loadThoughts(${i})">${i}</button>`;
+function renderPagination(data) {
+    let html = '';
+    const pagination = document.getElementById('pagination');
+
+    if (data.last_page > 1) {
+        html += `<nav><ul class="pagination justify-content-center">`;
+
+        if (data.prev_page_url) {
+            html += `<li class="page-item"><a class="page-link" href="#" onclick="fetchThoughts(${data.current_page - 1})">Previous</a></li>`;
         }
-        return buttons;
+
+        for (let i = 1; i <= data.last_page; i++) {
+            html += `<li class="page-item ${i === data.current_page ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="fetchThoughts(${i})">${i}</a>
+                    </li>`;
+        }
+
+        if (data.next_page_url) {
+            html += `<li class="page-item"><a class="page-link" href="#" onclick="fetchThoughts(${data.current_page + 1})">Next</a></li>`;
+        }
+
+        html += `</ul></nav>`;
     }
 
-    window.editThought = function(id, thought, date) {
-        document.getElementById('edit-id').value = id;
-        document.getElementById('edit-thought').value = thought;
-        document.getElementById('edit-date').value = date;
-        new bootstrap.Modal(document.getElementById('editThoughtModal')).show();
-    };
+    pagination.innerHTML = html;
+}
 
-    window.deleteThought = function(id) {
-        if (confirm("क्या आप यह विचार हटाना चाहते हैं?")) {
+function editThought(id, text) {
+    document.getElementById('thought').value = text;
+    document.getElementById('thoughtId').value = id;
+}
+
+function deleteThought(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to delete this thought?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#aaa',
+    }).then((result) => {
+        if (result.isConfirmed) {
             fetch(`/api/thoughts/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                },
-                credentials: 'include'
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                loadThoughts();
-                loadLatestThought();
-            })
-            .catch(() => alert("❌ हटाने में समस्या हुई।"));
+                    'X-CSRF-TOKEN': token,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(() => {
+                showToast('success', 'Deleted successfully!');
+                fetchThoughts();
+                fetchLatestThought();
+            }).catch(() => {
+                showToast('error', 'Deletion failed!');
+            });
         }
-    };
-
-    document.getElementById('editThoughtForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const id = document.getElementById('edit-id').value;
-        const updatedThought = document.getElementById('edit-thought').value.trim();
-        const updatedDate = document.getElementById('edit-date').value;
-
-        if (!updatedThought) {
-            alert("कृपया विचार दर्ज करें।");
-            return;
-        }
-
-        fetch(`/api/thoughts/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            credentials: 'include',
-            body: JSON.stringify({ thought: updatedThought, date: updatedDate })
-        })
-        .then(res => res.json())
-        .then(() => {
-            alert("✅ विचार अपडेट हो गया!");
-            bootstrap.Modal.getInstance(document.getElementById('editThoughtModal')).hide();
-            loadThoughts();
-            loadLatestThought();
-        });
     });
+}
 
-    document.getElementById('thoughtForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const thought = document.getElementById('thought').value.trim();
-        const date = document.getElementById('date').value;
+document.getElementById('thoughtForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        if (!thought) {
-            alert("कृपया विचार दर्ज करें।");
-            return;
-        }
+    const id = document.getElementById('thoughtId').value;
+    const thought = document.getElementById('thought').value.trim();
 
-        fetch('/api/thoughts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            credentials: 'include',
-            body: JSON.stringify({ thought, date })
-        })
-        .then(res => res.json())
-        .then(() => {
-            alert("✅ विचार जोड़ा गया!");
-            document.getElementById('thoughtForm').reset();
-            document.getElementById('date').value = '{{ date('Y-m-d') }}';
-            loadThoughts();
-            loadLatestThought();
-        });
+    if (!thought) {
+        showToast('error', 'Thought cannot be empty!');
+        return;
+    }
+
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? `/api/thoughts/${id}` : '/api/thoughts';
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ thought })
+    })
+    .then(res => res.json())
+    .then(() => {
+        showToast('success', id ? 'Updated successfully!' : 'Added successfully!');
+        this.reset();
+        document.getElementById('thoughtId').value = '';
+        fetchThoughts();
+        fetchLatestThought();
+    })
+    .catch(() => {
+        showToast('error', 'Something went wrong!');
     });
-
-    loadThoughts();
-    loadLatestThought();
 });
+
+// Initial load
+fetchLatestThought();
+fetchThoughts();
 </script>
 @endsection

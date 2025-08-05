@@ -10,18 +10,7 @@
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
 
-        <!-- 🧠 Card 1: आज का विचार -->
-        <div class="col">
-            <div class="card h-100 border-0 shadow-lg rounded-4">
-                <div class="card-body text-center" style="background: linear-gradient(to right, #667eea, #764ba2); color: white; border-radius: 1rem 1rem 0 0;">
-                    <h5 class="card-title fs-5">🧠 आज का विचार</h5>
-                    <p class="card-text">हर दिन एक सकारात्मक सोच को अपनाएं।</p>
-                </div>
-                <div class="card-footer bg-white text-center rounded-bottom-4 py-3">
-                    <a href="{{ route('daily-thoughts.create') }}" class="btn btn-outline-primary fw-semibold">➕ जोड़ें</a>
-                </div>
-            </div>
-        </div>
+       
 
         <!-- 🚶‍♂️ Card 2: विहार जानकारी -->
         <div class="col">

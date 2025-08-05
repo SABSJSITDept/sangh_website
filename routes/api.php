@@ -31,14 +31,8 @@ use App\Http\Controllers\SanghSahitya\sahitya\AddSahityaController;
 
 
 // ------------------Thoughts api ------------------------------------
-Route::get('/latest-thought', [ThoughtApiController::class, 'latest']);
-Route::prefix('thoughts')->group(function () {
-    Route::get('/', [ThoughtApiController::class, 'index']);
-    Route::post('/', [ThoughtApiController::class, 'store']);
-    Route::get('/{id}', [ThoughtApiController::class, 'show']);
-    Route::put('/{id}', [ThoughtApiController::class, 'update']);
-    Route::delete('/{id}', [ThoughtApiController::class, 'destroy']);
-});
+Route::apiResource('thoughts', ThoughtApiController::class);
+Route::get('/latest-thought', [ThoughtApiController::class, 'latestThought']);
 // ------------------Thoughts api ------------------------------------
 
 // ------------------Vihart api ------------------------------------
