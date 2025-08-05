@@ -4,7 +4,6 @@
 <div class="container mt-5">
     <h2 class="mb-4 text-center">स्थायी संपत्ति संवर्धन समिति सदस्य जोड़ें</h2>
 
-    {{-- ✅ Form Section --}}
     <div class="card shadow-sm border-success mb-5">
         <div class="card-body">
             <form id="samitiForm" enctype="multipart/form-data">
@@ -36,7 +35,6 @@
         </div>
     </div>
 
-    {{-- ✅ List Section --}}
     <div class="card shadow-sm border-info">
         <div class="card-body">
             <h5 class="mb-3">📋 सदस्यों की सूची</h5>
@@ -58,7 +56,6 @@
     </div>
 </div>
 
-{{-- ✅ Scripts --}}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById('samitiForm');
@@ -72,9 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(data => {
                 listBody.innerHTML = '';
                 data.forEach(member => {
+                    const photoUrl = member.photo ? member.photo : 'https://via.placeholder.com/60x60?text=No+Image';
                     listBody.innerHTML += `
                         <tr>
-                            <td><img src="${member.photo ?? 'https://via.placeholder.com/60x60?text=No+Image'}" width="60" height="60" style="object-fit: cover; border-radius: 50%;"></td>
+                            <td><img src="${photoUrl}" width="60" height="60" style="object-fit: cover; border-radius: 50%;"></td>
                             <td>${member.name}</td>
                             <td>${member.city}</td>
                             <td>${member.mobile}</td>
@@ -149,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Load members initially
     fetchMembers();
 });
 </script>
