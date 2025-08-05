@@ -73,22 +73,21 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-    .book-card {
-        width: 100%;
-        max-width: 160px;
-        min-height: 280px;
-        font-size: 0.85rem;
-    }
+.book-card {
+    width: 100%;
+    max-width: 160px;
+    min-height: 280px;
+    font-size: 0.85rem;
+}
 
-    .book-img,
-    .featured-img {
+.book-img,
+.featured-img {
     height: 200px;
     width: 100%;
     object-fit: contain;
     padding: 10px;
     background-color: #f9f9f9;
 }
-
 </style>
 
 <script>
@@ -137,6 +136,7 @@ document.getElementById('sahityaForm').addEventListener('submit', async function
     const data = await res.json();
     showToast(data.message || '✔️ Operation successful');
     loadSahitya();
+    loadFeaturedOnly();
     this.reset();
     resetFormState();
 });
@@ -162,17 +162,14 @@ async function toggleHomepage(id) {
     const data = await res.json();
     showToast(data.message);
     loadSahitya();
+    loadFeaturedOnly();
 }
 
 async function loadSahitya() {
     const res = await fetch('/api/sahitya');
     const data = await res.json();
     const list = document.getElementById('sahityaList');
-    const featured = document.getElementById('featuredSahitya');
     list.innerHTML = '';
-    featured.innerHTML = '';
-
-    let featuredItem = null;
 
     Object.keys(data).forEach(category => {
         const items = data[category];
@@ -187,8 +184,6 @@ async function loadSahitya() {
         row.className = 'row row-cols-2 row-cols-sm-3 row-cols-md-6 g-3';
 
         items.forEach(item => {
-            if (item.show_on_homepage && !featuredItem) featuredItem = item;
-
             const col = document.createElement('div');
             col.className = 'col';
 
@@ -225,20 +220,28 @@ async function loadSahitya() {
 
         list.appendChild(row);
     });
+}
 
-    if (featuredItem) {
-      featured.innerHTML = `
-    <div class="card shadow-sm">
-        <img src="/storage/${featuredItem.cover_photo}" class="card-img-top featured-img" alt="${featuredItem.name}">
-        <div class="card-body">
-            <h5 class="card-title">${featuredItem.name}</h5>
-            ${featuredItem.pdf
-                ? `<a href="/storage/${featuredItem.pdf}" class="btn btn-sm btn-primary w-100" target="_blank">📄 View PDF</a>`
-                : `<button class="btn btn-sm btn-outline-secondary w-100" disabled>📄 No PDF</button>`}
-        </div>
-    </div>
-`;
+async function loadFeaturedOnly() {
+   const res = await fetch('/api/sahitya/featured');
+    const item = await res.json();
+    const featured = document.getElementById('featuredSahitya');
+    featured.innerHTML = '';
 
+    if (item) {
+        featured.innerHTML = `
+            <div class="card shadow-sm">
+                <img src="/storage/${item.cover_photo}" class="card-img-top featured-img" alt="${item.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${item.name}</h5>
+                    ${item.pdf
+                        ? `<a href="/storage/${item.pdf}" class="btn btn-sm btn-primary w-100" target="_blank">📄 View PDF</a>`
+                        : `<button class="btn btn-sm btn-outline-secondary w-100" disabled>📄 No PDF</button>`}
+                </div>
+            </div>
+        `;
+    } else {
+        featured.innerHTML = `<div class="alert alert-warning">No featured book selected.</div>`;
     }
 }
 
@@ -254,6 +257,7 @@ async function deleteSahitya(id) {
         const data = await res.json();
         showToast(data.message);
         loadSahitya();
+        loadFeaturedOnly();
     }
 }
 
@@ -275,5 +279,6 @@ async function editSahitya(id) {
 }
 
 loadSahitya();
+loadFeaturedOnly();
 </script>
 @endsection

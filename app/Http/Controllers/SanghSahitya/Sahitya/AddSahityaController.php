@@ -129,4 +129,18 @@ public function toggleHomepage($id)
     return response()->json(['message' => 'Homepage book updated successfully']);
 }
 
+public function homepageSahitya()
+{
+    $homepageItem = Sahitya::where('show_on_homepage', true)->first();
+
+    if ($homepageItem) {
+        return response()->json($homepageItem);
+    } else {
+        return response()->json(null);
+    }
+}
+
+
+
+
 }

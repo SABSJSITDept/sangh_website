@@ -206,4 +206,5 @@ Route::apiResource('shramnopasak', AddShramnopasakController::class);
 // -----------------Sahitya api ------------------------------------
 Route::apiResource('sahitya', AddSahityaController::class);
 Route::post('/sahitya/{id}/toggle-homepage', [AddSahityaController::class, 'toggleHomepage']);
+Route::get('/sahitya/featured', [AddSahityaController::class, 'homepageSahitya']);
 // -----------------Sahitya api ------------------------------------
