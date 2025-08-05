@@ -30,7 +30,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
             $photo = $request->file('photo');
             $filename = Str::uuid() . '.' . $photo->getClientOriginalExtension();
             $photo->storeAs('public/sthayi_sampati_sanwardhan_samiti', $filename);
-            $data['photo'] = "/storage/sthayi_sampati_sanwardhan_samiti/{$filename}";
+            $data['photo'] = "/sthayi_sampati_sanwardhan_samiti/{$filename}";
         }
 
         $entry = SthayiSampatiSanwardhanSamiti::create($data);
@@ -61,7 +61,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
             $photo = $request->file('photo');
             $filename = Str::uuid() . '.' . $photo->getClientOriginalExtension();
             $photo->storeAs('public/sthayi_sampati_sanwardhan_samiti', $filename);
-            $data['photo'] = "/storage/sthayi_sampati_sanwardhan_samiti/{$filename}";
+            $data['photo'] = "/sthayi_sampati_sanwardhan_samiti/{$filename}";
         }
 
         $entry->update($data);
