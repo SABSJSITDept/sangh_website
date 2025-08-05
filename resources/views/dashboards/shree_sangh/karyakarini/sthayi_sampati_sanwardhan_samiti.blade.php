@@ -36,50 +36,58 @@
         </div>
     </div>
 
-    {{-- ✅ Cards Section --}}
-    <div class="row" id="cardContainer"></div>
+    {{-- ✅ List Section --}}
+    <div class="card shadow-sm border-info">
+        <div class="card-body">
+            <h5 class="mb-3">📋 सदस्यों की सूची</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>फोटो</th>
+                            <th>नाम</th>
+                            <th>शहर</th>
+                            <th>मोबाइल</th>
+                            <th>एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{-- ✅ Scripts --}}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById('samitiForm');
-    const cardContainer = document.getElementById('cardContainer');
+    const listBody = document.getElementById('listBody');
     const submitBtn = document.getElementById('submitBtn');
     const editId = document.getElementById('editId');
 
-    // 👉 Fetch and render all members
     function fetchMembers() {
         fetch('/api/sthayi_sampati_sanwardhan_samiti')
             .then(res => res.json())
             .then(data => {
-                cardContainer.innerHTML = '';
+                listBody.innerHTML = '';
                 data.forEach(member => {
-                    cardContainer.innerHTML += `
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm border-primary">
-                                <img src="${member.photo ?? 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" height="200" style="object-fit:cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">${member.name}</h5>
-                                    <p class="card-text mb-1"><strong>City:</strong> ${member.city}</p>
-                                    <p class="card-text mb-1"><strong>Mobile:</strong> ${member.mobile}</p>
-                                </div>
-                                <div class="card-footer d-flex justify-content-between">
-                                    <button class="btn btn-sm btn-warning" onclick="editMember(${member.id})">
-                                        ✏️ Edit
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteMember(${member.id})">
-                                        🗑️ Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    listBody.innerHTML += `
+                        <tr>
+                            <td><img src="${member.photo ?? 'https://via.placeholder.com/60x60?text=No+Image'}" width="60" height="60" style="object-fit: cover; border-radius: 50%;"></td>
+                            <td>${member.name}</td>
+                            <td>${member.city}</td>
+                            <td>${member.mobile}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning me-2" onclick="editMember(${member.id})">✏️ Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteMember(${member.id})">🗑️ Delete</button>
+                            </td>
+                        </tr>
                     `;
                 });
             });
     }
 
-    // 👉 Form Submit (Add/Update)
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
         const formData = new FormData(form);
@@ -114,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 👉 Delete Member
     window.deleteMember = async (id) => {
         if (!confirm('क्या आप वाकई हटाना चाहते हैं?')) return;
         const response = await fetch(`/api/sthayi_sampati_sanwardhan_samiti/${id}`, {
@@ -130,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // 👉 Edit Member (load data to form)
     window.editMember = async (id) => {
         const response = await fetch(`/api/sthayi_sampati_sanwardhan_samiti/${id}`);
         const data = await response.json();
@@ -139,11 +145,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('mobile').value = data.mobile;
         editId.value = data.id;
         submitBtn.textContent = 'अपडेट करें';
-        document.getElementById('photo').value = ''; // Clear file input
+        document.getElementById('photo').value = ''; // Reset file input
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // ✅ Initial Load
+    // Load members initially
     fetchMembers();
 });
 </script>

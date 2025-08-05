@@ -169,29 +169,66 @@
         .sidebar.expanded ~ main.content {
             margin-left: var(--sidebar-width);
         }
-        footer.footer {
-            background: #181824;
-            padding: 10px 20px;
-            color: #999;
-            text-align: right;
-            font-size: 0.9rem;
-            border-top: 1px solid #222;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            line-height: 40px;
-            z-index: 1040;
-            margin-left: var(--sidebar-collapsed);
-            transition: margin-left 0.3s ease;
-            display: flex;
+.footer {
+    background: linear-gradient(to right, #7c3434, #c94b4b);
+    padding: 0 20px;
+    color: #fff;
+    font-size: 0.9rem;
+    border-top: 1px solid #222;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 40px;
+    line-height: 40px;
+    z-index: 1040;
+    margin-left: var(--sidebar-collapsed);
+    width: calc(100% - var(--sidebar-collapsed));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    display: flex;
     align-items: center;
-    justify-content: flex-end;
-        }
-        .sidebar.expanded ~ footer.footer {
-            margin-left: var(--sidebar-width);
-        }
+    justify-content: space-between;
+}
+
+.sidebar.expanded ~ .footer {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+
+.footer-left {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.footer-right {
+    position: relative;
+}
+
+.contact-info-icon {
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.contact-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 140%;
+    right: 0;
+    background-color: #fff;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    z-index: 1050;
+    font-size: 0.85rem;
+    min-width: 180px;
+}
+
+/* Show tooltip on hover */
+.footer-right:hover .contact-tooltip {
+    display: block;
+}
 
         /* Mobile */
         @media (max-width: 991px) {
@@ -392,12 +429,24 @@
         <main class="content">
             @yield('content')
         </main>
-    </div>
 
     <!-- FOOTER -->
-    <footer class="footer">
-        Admin Panel &copy; {{ date('Y') }} | SABSJS IT CELL
-    </footer>
+  <footer class="footer">
+    <div class="footer-left">
+        Admin Panel © {{ date('Y') }} | SABSJS IT CELL
+    </div>
+    <div class="footer-right">
+        <i class="bi bi-info-circle-fill contact-info-icon" tabindex="0"></i>
+        <div class="contact-tooltip" id="contactTooltip">
+            <strong>Contact:</strong><br>
+            Depak Acharya<br>
+            Aditya Acharya<br>
+            📞 +91-9636501008
+        </div>
+    </div>
+</footer>
+
+    </div>
 
     <!-- Scripts -->
     <script>
@@ -458,5 +507,21 @@
             document.querySelectorAll('.submenu-toggle').forEach(i => i.classList.remove('rotate'));
         }
     </script>
+    <script>
+    const infoIcon = document.querySelector('.contact-info-icon');
+    const tooltip = document.getElementById('contactTooltip');
+
+    infoIcon.addEventListener('click', () => {
+        tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Optional: Hide when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!infoIcon.contains(event.target) && !tooltip.contains(event.target)) {
+            tooltip.style.display = 'none';
+        }
+    });
+</script>
+
 </body>
 </html>
