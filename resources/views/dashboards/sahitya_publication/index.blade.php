@@ -17,7 +17,7 @@
         </div>
 
         <!-- Card 2: View All Shramnopasak Records -->
-        <div class="col-md-4 mb-4">
+        <!-- <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-success h-100">
                 <div class="card-body text-center">
                     <h5 class="card-title">📚 All Records</h5>
@@ -25,7 +25,7 @@
                     <a href="{{ url('/shramnopasak/all-view') }}" class="btn btn-success">View All</a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 @endsection

@@ -171,7 +171,7 @@
             <div class="profile">
                 <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
                 <div class="name">Hello Admin</div>
-                <div class="role">Shramnopasak Admin</div>
+                <div class="role">Sahitya Admin</div>
             </div>
 
             <a href="{{ url('dashboard/sahitya') }}" class="nav-link">
