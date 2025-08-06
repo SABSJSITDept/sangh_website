@@ -1,146 +1,113 @@
 <?php
 
-namespace App\Http\Controllers\SanghSahitya\sahitya;
+namespace App\Http\Controllers\SanghSahitya\Sahitya;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\SanghSahitya\Sahitya;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class AddSahityaController extends Controller
 {
-   public function index()
-{
-    $orderedCategories = [
-        'नानेशवाणी साहित्य',
-        'राम उवाच साहित्य',
-        'श्री राम ध्वनि',
-        'राम दर्शन',
-        'समता कथा माला',
-        'अन्य प्रकाशित साहित्य',
-    ];
-
-    $allData = Sahitya::orderBy('preference', 'asc')->get();
-
-    // Group and sort by fixed category order
-    $grouped = collect($orderedCategories)->mapWithKeys(function ($category) use ($allData) {
-        return [$category => $allData->where('category', $category)->values()];
-    });
-
-    return response()->json($grouped);
-}
-
-
+    public function index()
+    {
+        return Sahitya::orderBy('preference')->get();
+    }
 
     public function store(Request $request)
     {
         $request->validate([
-            'category' => 'required',
+            'category' => 'required|string',
             'name' => 'required|string|max:255',
-            'cover_photo' => 'required|image|max:200', // in KB
-            'pdf' => 'nullable|mimes:pdf|max:2048', // 2MB
+            'cover_photo' => 'required|image|max:200',
+            'pdf' => 'nullable|mimes:pdf|max:2048',
+            'preference' => 'required|integer',
+            'show_on_homepage' => 'required|boolean',
         ]);
 
-        $path = 'sahitya/' . Str::slug($request->category);
-        $coverPhotoPath = $request->file('cover_photo')->store($path, 'public');
-
-        $pdfPath = null;
-        if ($request->hasFile('pdf')) {
-            $pdfPath = $request->file('pdf')->store($path, 'public');
+        // ✅ Check if already a homepage book exists
+        if ($request->show_on_homepage == 1) {
+            $alreadyExists = Sahitya::where('show_on_homepage', 1)->exists();
+            if ($alreadyExists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Only one book can be marked for homepage at a time.'
+                ], 422);
+            }
         }
 
-        Sahitya::create([
+        $coverPath = $request->file('cover_photo')->store('public/sahitya/covers');
+        $pdfPath = $request->hasFile('pdf')
+            ? $request->file('pdf')->store("public/sahitya/{$request->category}")
+            : null;
+
+        $sahitya = Sahitya::create([
             'category' => $request->category,
             'name' => $request->name,
-            'cover_photo' => $coverPhotoPath,
-            'pdf' => $pdfPath,
-            'preference' => $request->preference ?? 0,
+            'cover_photo' => Storage::url($coverPath),
+            'pdf' => $pdfPath ? Storage::url($pdfPath) : null,
+            'preference' => $request->preference,
+            'show_on_homepage' => $request->show_on_homepage,
         ]);
 
-        return response()->json(['message' => 'Sahitya Added Successfully']);
+        return response()->json(['success' => true, 'data' => $sahitya], 201);
     }
 
-    public function update(Request $request, $id)
-{
-    $sahitya = Sahitya::findOrFail($id);
+    public function destroy(Sahitya $sahitya)
+    {
+        if ($sahitya->cover_photo) {
+            Storage::delete(str_replace('/storage/', 'public/', $sahitya->cover_photo));
+        }
+        if ($sahitya->pdf) {
+            Storage::delete(str_replace('/storage/', 'public/', $sahitya->pdf));
+        }
+        $sahitya->delete();
 
-    $request->validate([
-        'category' => 'required',
-        'name' => 'required|string|max:255',
-        'cover_photo' => 'nullable|image|max:200', // optional during edit
-        'pdf' => 'nullable|mimes:pdf|max:2048',
-        'preference' => 'nullable|numeric',
-    ]);
-
-    $sahitya->category = $request->category;
-    $sahitya->name = $request->name;
-    $sahitya->preference = $request->preference ?? 0;
-
-    $path = 'sahitya/' . Str::slug($request->category);
-
-    if ($request->hasFile('cover_photo')) {
-        Storage::disk('public')->delete($sahitya->cover_photo);
-        $sahitya->cover_photo = $request->file('cover_photo')->store($path, 'public');
+        return response()->json(['success' => true]);
     }
 
-    if ($request->hasFile('pdf')) {
-        Storage::disk('public')->delete($sahitya->pdf);
-        $sahitya->pdf = $request->file('pdf')->store($path, 'public');
+    // 🔁 Category-wise fetch
+    public function getByCategory($category)
+    {
+        return Sahitya::where('category', $category)
+                      ->orderBy('preference')
+                      ->get();
     }
 
-    $sahitya->save();
+    // 🏠 Homepage books fetch
+    public function getHomepageBooks()
+    {
+        try {
+            $books = Sahitya::select('id', 'category', 'name', 'cover_photo', 'pdf', 'preference', 'show_on_homepage')
+                ->where('show_on_homepage', 1)
+                ->orderBy('preference')
+                ->get();
 
-    return response()->json(['message' => 'Sahitya Updated Successfully']);
-}
-
-public function show($id)
-{
-    return response()->json(Sahitya::findOrFail($id));
-}
-
-
-public function destroy($id)
-{
-    $sahitya = Sahitya::findOrFail($id);
-
-    // Safely delete files only if not null
-    $filesToDelete = array_filter([
-        $sahitya->cover_photo,
-        $sahitya->pdf
-    ]);
-
-    Storage::disk('public')->delete($filesToDelete);
-
-    $sahitya->delete();
-
-    return response()->json(['message' => 'Deleted successfully']);
-}
-public function toggleHomepage($id)
-{
-    // Reset all to false first
-    Sahitya::where('show_on_homepage', true)->update(['show_on_homepage' => false]);
-
-    // Set selected to true
-    $sahitya = Sahitya::findOrFail($id);
-    $sahitya->show_on_homepage = true;
-    $sahitya->save();
-
-    return response()->json(['message' => 'Homepage book updated successfully']);
-}
-
-public function homepageSahitya()
-{
-    $homepageItem = Sahitya::where('show_on_homepage', true)->first();
-
-    if ($homepageItem) {
-        return response()->json($homepageItem);
-    } else {
-        return response()->json(null);
+            return response()->json($books, 200);
+        } catch (\Exception $e) {
+            Log::error('Error in getHomepageBooks: ' . $e->getMessage());
+            return response()->json(['error' => 'Server Error'], 500);
+        }
     }
-}
 
+    // 🟢 Set Homepage Book via Button
+    public function setHomepageBook($id)
+    {
+        try {
+            // Reset all books to not show on homepage
+            Sahitya::where('show_on_homepage', 1)->update(['show_on_homepage' => 0]);
 
+            // Set selected one
+            $book = Sahitya::findOrFail($id);
+            $book->show_on_homepage = 1;
+            $book->save();
 
-
+            return response()->json(['success' => true, 'message' => 'Homepage book updated successfully.']);
+        } catch (\Exception $e) {
+            Log::error('Error in setHomepageBook: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to set homepage book.'], 500);
+        }
+    }
 }

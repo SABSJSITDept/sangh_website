@@ -1,284 +1,273 @@
-@extends('includes.layouts.sahitya_publication')
+@extends('includes.layouts.shree_sangh')
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<div class="container py-4">
+<!-- ✅ Bootstrap 5 CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    .homepage-book-img {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="container my-4">
     <div class="row">
-        <!-- Form Section -->
-        <div class="col-md-7">
-            <h3 class="mb-4" id="formTitle">📚 साहित्य जोड़ें</h3>
-
-            <form id="sahityaForm" enctype="multipart/form-data">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Category</label>
-                        <select name="category" class="form-select" required>
-                            <option value="">चुनें</option>
-                            <option value="नानेशवाणी साहित्य">📖 नानेशवाणी साहित्य</option>
-                            <option value="राम उवाच साहित्य">🙏 श्री राम उवाच साहित्य</option>
-                            <option value="श्री राम ध्वनि">📚 श्री राम ध्वनि</option>
-                            <option value="राम दर्शन">🧠 राम दर्शन</option>
-                            <option value="समता कथा माला">🏳️ समता कथा माला</option>
-                            <option value="अन्य प्रकाशित साहित्य">📌 अन्य प्रकाशित साहित्य</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Name</label>
-                        <input type="text" name="name" class="form-control" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Cover Photo (max 200KB)</label>
-                        <input type="file" name="cover_photo" accept="image/*" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">PDF File (max 2MB)</label>
-                        <input type="file" name="pdf" accept="application/pdf" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Preference (1 = सबसे ऊपर)</label>
-                        <input type="number" name="preference" class="form-control" min="0" value="0" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-check-label d-block mb-2">👑 Show on Homepage</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="show_on_homepage" id="homepageCheck">
-                            <label class="form-check-label" for="homepageCheck">Yes, feature this book</label>
-                        </div>
-                    </div>
+        <!-- 📥 Left: Upload Form -->
+        <div class="col-md-8">
+            <h4 class="text-primary mb-3">📚 Add Sahitya Publication</h4>
+            <form id="sahityaForm" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-6">
+                    <label>Category</label>
+                    <select name="category" class="form-select" required>
+                        <option value="">Select Category</option>
+                        <option value="naneshvani">नानेशवाणी साहित्य</option>
+                        <option value="ram_uvach">राम उवाच साहित्य</option>
+                        <option value="shri_ram_dhwani">श्री राम ध्वनि</option>
+                        <option value="ram_darshan">राम दर्शन</option>
+                        <option value="samta_katha_mala">समता कथा माला</option>
+                        <option value="any">अन्य प्रकाशित साहित्य</option>
+                        <option value="agam">आगम, अहिंसा-समता और प्राकृत संस्थान</option>
+                    </select>
                 </div>
-
-                <div class="mt-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-success">💾 Save</button>
-                    <button type="button" class="btn btn-secondary d-none" id="cancelEditBtn" onclick="cancelEdit()">🚫 Cancel Edit</button>
+                <div class="col-md-6">
+                    <label>Book Name</label>
+                    <input type="text" name="name" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label>Cover Photo (max 200KB)</label>
+                    <input type="file" name="cover_photo" accept="image/*" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label>PDF (max 2MB, optional)</label>
+                    <input type="file" name="pdf" accept="application/pdf" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label>Preference</label>
+                    <input type="number" name="preference" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label>Show on Homepage</label>
+                    <select name="show_on_homepage" class="form-select">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">➕ Add Book</button>
                 </div>
             </form>
         </div>
 
-        <!-- Featured Book Section -->
-        <div class="col-md-5">
-            <h4 class="mb-3">👑 Homepage Featured</h4>
-            <div id="featuredSahitya"></div>
+        <!-- 🏠 Right: Homepage Book -->
+        <div class="col-md-4">
+            <h5 class="text-success">🏠 Homepage Book</h5>
+            <div id="homepageBooks"></div>
         </div>
     </div>
 
-    <div id="toast-container" class="position-fixed top-0 end-0 p-3 mt-3 me-3" style="z-index: 9999;"></div>
+    <hr class="my-4">
 
-    <hr class="my-5">
+    <!-- 📂 Category Filter -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label>Select Category to View Books</label>
+            <select id="categorySelector" class="form-select" onchange="fetchByCategory(this.value)">
+                <option value="">-- Select Category --</option>
+                <option value="naneshvani">नानेशवाणी साहित्य</option>
+                <option value="ram_uvach">राम उवाच साहित्य</option>
+                <option value="shri_ram_dhwani">श्री राम ध्वनि</option>
+                <option value="ram_darshan">राम दर्शन</option>
+                <option value="samta_katha_mala">समता कथा माला</option>
+                <option value="any">अन्य प्रकाशित साहित्य</option>
+                <option value="agam">आगम, अहिंसा-समता और प्राकृत संस्थान</option>
+            </select>
+        </div>
+    </div>
 
-    <h4 class="mb-3">📜 Saved Sahitya</h4>
-    <div id="sahityaList"></div>
+    <!-- 📖 List View -->
+    <div id="allBooks"></div>
 </div>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-.book-card {
-    width: 100%;
-    max-width: 160px;
-    min-height: 280px;
-    font-size: 0.85rem;
-}
-
-.book-img,
-.featured-img {
-    height: 200px;
-    width: 100%;
-    object-fit: contain;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-</style>
-
 <script>
-let editId = null;
+const categoryMap = {
+    'naneshvani': 'नानेशवाणी साहित्य',
+    'ram_uvach': 'राम उवाच साहित्य',
+    'shri_ram_dhwani': 'श्री राम ध्वनि',
+    'ram_darshan': 'राम दर्शन',
+    'samta_katha_mala': 'समता कथा माला',
+    'any': 'अन्य प्रकाशित साहित्य',
+    'agam': 'आगम, अहिंसा-समता और प्राकृत संस्थान'
+};
 
-function resetFormState() {
-    editId = null;
-    document.getElementById('formTitle').innerText = '📚 साहित्य जोड़ें';
-    document.getElementById('cancelEditBtn').classList.add('d-none');
-    document.getElementById('homepageCheck').checked = false;
+function renderHomepage(bookList) {
+    const box = document.getElementById('homepageBooks');
+    box.innerHTML = '';
+    if (bookList.length === 0) {
+        box.innerHTML = '<div class="text-muted">No homepage book set.</div>';
+        return;
+    }
+    const book = bookList[0];
+    box.innerHTML = `
+        <div class="card">
+            <img src="${book.cover_photo}" class="homepage-book-img" alt="Cover">
+            <div class="card-body">
+                <h6 class="fw-bold">${book.name}</h6>
+                <small>${categoryMap[book.category] || book.category}</small>
+            </div>
+        </div>
+    `;
 }
 
-function cancelEdit() {
-    document.getElementById('sahityaForm').reset();
-    resetFormState();
+function renderTable(container, books) {
+    container.innerHTML = '';
+    if (books.length === 0) {
+        container.innerHTML = '<div class="text-muted">No books found.</div>';
+        return;
+    }
+    const table = document.createElement('table');
+    table.className = 'table table-bordered';
+    table.innerHTML = `
+        <thead class="table-light">
+            <tr>
+                <th>Cover</th>
+                <th>Name</th>
+                <th>PDF</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${books.map(book => `
+                <tr>
+                    <td><img src="${book.cover_photo}" width="80" height="100" style="object-fit: cover;"></td>
+                    <td>${book.name}</td>
+                    <td>${book.pdf ? `<a href="${book.pdf}" target="_blank">View PDF</a>` : '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success me-1" onclick="setHomepageBook(${book.id})">🏠</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteBook(${book.id})">🗑️</button>
+                    </td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+    container.appendChild(table);
 }
 
-document.getElementById('sahityaForm').addEventListener('submit', async function(e) {
+document.getElementById('sahityaForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const form = new FormData(this);
+    const form = e.target;
+    const formData = new FormData(form);
 
-    const coverPhoto = form.get('cover_photo');
-    if (coverPhoto && coverPhoto.size > 200 * 1024) {
-        showToast('❌ Cover photo must be under 200KB!');
-        return;
+    try {
+        const res = await fetch('/api/sahitya', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            Swal.fire('✅ Success', 'Book added successfully.', 'success');
+            form.reset();
+            fetchHomepageBook();
+            const selected = document.getElementById('categorySelector').value;
+            if (selected) fetchByCategory(selected);
+        } else {
+            Swal.fire('❌ Error', data.message || 'Validation failed', 'error');
+        }
+    } catch (err) {
+        Swal.fire('❌ Error', 'Server error occurred', 'error');
     }
-
-    const pdf = form.get('pdf');
-    if (pdf && pdf.size > 2 * 1024 * 1024) {
-        showToast('❌ PDF must be under 2MB!');
-        return;
-    }
-
-    const method = editId ? 'POST' : 'POST';
-    const url = editId ? `/api/sahitya/${editId}?_method=PUT` : '/api/sahitya';
-
-    const res = await fetch(url, {
-        method: method,
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: form
-    });
-
-    const data = await res.json();
-    showToast(data.message || '✔️ Operation successful');
-    loadSahitya();
-    loadFeaturedOnly();
-    this.reset();
-    resetFormState();
 });
 
-function showToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'alert alert-info shadow';
-    toast.innerText = message;
-    const container = document.getElementById('toast-container');
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+async function fetchHomepageBook() {
+    const res = await fetch('/api/sahitya/homepage-books');
+    const books = await res.json();
+    renderHomepage(books);
 }
 
-async function toggleHomepage(id) {
-    const res = await fetch(`/api/sahitya/${id}/toggle-homepage`, {
-        method: 'POST',
+async function fetchByCategory(category) {
+    const container = document.getElementById('allBooks');
+    if (!category) {
+        container.innerHTML = '<div class="text-muted">Please select a category.</div>';
+        return;
+    }
+    try {
+        const res = await fetch(`/api/sahitya/category/${category}`);
+        const books = await res.json();
+        renderTable(container, books);
+    } catch {
+        container.innerHTML = '<div class="text-danger">Failed to load books.</div>';
+    }
+}
+
+async function deleteBook(id) {
+    const confirm = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'This will delete the book permanently.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!'
+    });
+    if (!confirm.isConfirmed) return;
+
+    const res = await fetch(`/api/sahitya/${id}`, {
+        method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'X-Requested-With': 'XMLHttpRequest'
         }
     });
 
-    const data = await res.json();
-    showToast(data.message);
-    loadSahitya();
-    loadFeaturedOnly();
-}
-
-async function loadSahitya() {
-    const res = await fetch('/api/sahitya');
-    const data = await res.json();
-    const list = document.getElementById('sahityaList');
-    list.innerHTML = '';
-
-    Object.keys(data).forEach(category => {
-        const items = data[category];
-        if (!items.length) return;
-
-        const header = document.createElement('h5');
-        header.className = 'mt-4 mb-2 text-primary border-bottom pb-1';
-        header.innerText = category;
-        list.appendChild(header);
-
-        const row = document.createElement('div');
-        row.className = 'row row-cols-2 row-cols-sm-3 row-cols-md-6 g-3';
-
-        items.forEach(item => {
-            const col = document.createElement('div');
-            col.className = 'col';
-
-            const card = document.createElement('div');
-            card.className = 'card book-card shadow-sm';
-
-            const img = document.createElement('img');
-            img.src = `/storage/${item.cover_photo}`;
-            img.className = 'card-img-top book-img';
-            img.alt = item.name;
-
-            const body = document.createElement('div');
-            body.className = 'card-body p-2';
-            body.innerHTML = `
-                <p class="card-title fw-bold mb-1">${item.name}</p>
-                ${item.pdf
-                    ? `<a href="/storage/${item.pdf}" target="_blank" class="btn btn-sm btn-outline-primary w-100 mb-1">📄 View PDF</a>`
-                    : `<button class="btn btn-sm btn-outline-secondary w-100 mb-1" disabled>📄 No PDF</button>`}
-                <div class="form-check form-switch mb-1 text-center">
-                    <input class="form-check-input" type="checkbox" id="toggle-${item.id}" ${item.show_on_homepage ? 'checked' : ''} onchange="toggleHomepage(${item.id})">
-                    <label class="form-check-label small" for="toggle-${item.id}">Show on Home</label>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-sm btn-warning" onclick="editSahitya(${item.id})">✏️</button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteSahitya(${item.id})">🗑️</button>
-                </div>
-            `;
-
-            card.appendChild(img);
-            card.appendChild(body);
-            col.appendChild(card);
-            row.appendChild(col);
-        });
-
-        list.appendChild(row);
-    });
-}
-
-async function loadFeaturedOnly() {
-   const res = await fetch('/api/sahitya/featured');
-    const item = await res.json();
-    const featured = document.getElementById('featuredSahitya');
-    featured.innerHTML = '';
-
-    if (item) {
-        featured.innerHTML = `
-            <div class="card shadow-sm">
-                <img src="/storage/${item.cover_photo}" class="card-img-top featured-img" alt="${item.name}">
-                <div class="card-body">
-                    <h5 class="card-title">${item.name}</h5>
-                    ${item.pdf
-                        ? `<a href="/storage/${item.pdf}" class="btn btn-sm btn-primary w-100" target="_blank">📄 View PDF</a>`
-                        : `<button class="btn btn-sm btn-outline-secondary w-100" disabled>📄 No PDF</button>`}
-                </div>
-            </div>
-        `;
+    if (res.ok) {
+        Swal.fire('✅ Deleted', 'Book removed.', 'success');
+        fetchHomepageBook();
+        const selected = document.getElementById('categorySelector').value;
+        if (selected) fetchByCategory(selected);
     } else {
-        featured.innerHTML = `<div class="alert alert-warning">No featured book selected.</div>`;
+        Swal.fire('❌ Error', 'Failed to delete.', 'error');
     }
 }
 
-async function deleteSahitya(id) {
-    if (confirm('❗ Delete this entry?')) {
-        const res = await fetch(`/api/sahitya/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        });
-        const data = await res.json();
-        showToast(data.message);
-        loadSahitya();
-        loadFeaturedOnly();
-    }
-}
+async function setHomepageBook(id) {
+    const confirm = await Swal.fire({
+        title: 'Set as homepage?',
+        text: 'This will replace the current homepage book.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, set it!'
+    });
+    if (!confirm.isConfirmed) return;
 
-async function editSahitya(id) {
-    const res = await fetch(`/api/sahitya/${id}`);
+    const res = await fetch(`/api/sahitya/set-homepage/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
     const data = await res.json();
-
-    document.querySelector('[name="category"]').value = data.category;
-    document.querySelector('[name="name"]').value = data.name;
-    document.querySelector('[name="preference"]').value = data.preference;
-    document.getElementById('homepageCheck').checked = !!data.show_on_homepage;
-
-    editId = data.id;
-    document.getElementById('formTitle').innerText = "✏️ साहित्य अपडेट करें";
-    document.getElementById('cancelEditBtn').classList.remove('d-none');
-
-    showToast("✏️ Edit Mode: " + data.name);
-    document.getElementById('sahityaForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (res.ok) {
+        Swal.fire('✅ Updated', data.message, 'success');
+        fetchHomepageBook();
+        const selected = document.getElementById('categorySelector').value;
+        if (selected) fetchByCategory(selected);
+    } else {
+        Swal.fire('❌ Error', data.message || 'Failed', 'error');
+    }
 }
 
-loadSahitya();
-loadFeaturedOnly();
+fetchHomepageBook();
 </script>
 @endsection

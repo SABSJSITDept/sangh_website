@@ -204,7 +204,11 @@ Route::apiResource('shramnopasak', AddShramnopasakController::class);
 
 
 // -----------------Sahitya api ------------------------------------
-Route::apiResource('sahitya', AddSahityaController::class);
-Route::post('/sahitya/{id}/toggle-homepage', [AddSahityaController::class, 'toggleHomepage']);
-Route::get('/sahitya/featured', [AddSahityaController::class, 'homepageSahitya']);
+Route::apiResource('sahitya', AddSahityaController::class)->except(['show']);
+Route::get('/sahitya/category/{category}', [AddSahityaController::class, 'getByCategory']);
+Route::get('/sahitya/homepage-books', [AddSahityaController::class, 'getHomepageBooks']);
+Route::post('/sahitya/set-homepage/{id}', [AddSahityaController::class, 'setHomepageBook']);
+
 // -----------------Sahitya api ------------------------------------
+
+
