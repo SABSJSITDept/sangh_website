@@ -163,7 +163,10 @@ Route::apiResource('shivir', ShivirUpdateController::class);
 // -----------------shivir api ------------------------------------
 
 // -----------------Aavedan Patra api ------------------------------------
-Route::apiResource('aavedan-patra', AavedanPatraController::class);
+Route::apiResource('aavedan-patra', AavedanPatraController::class)->except(['show']);
+Route::get('/aavedan-patra/{category}', [AavedanPatraController::class, 'getByCategory']);
+Route::get('/aavedan-patra-online', [AavedanPatraController::class, 'onlyOnline']);
+Route::get('/aavedan-patra-offline', [AavedanPatraController::class, 'onlyOffline']);
 // -----------------Aavedan Patra api ------------------------------------
 
 // -----------------Dharmik Pravartiya api ------------------------------------

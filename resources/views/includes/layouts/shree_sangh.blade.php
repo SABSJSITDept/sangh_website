@@ -418,10 +418,10 @@
     </div>
 
     <!-- Logout -->
-    <a href="#" class="nav-link">
-        <i class="bi bi-box-arrow-right"></i>
-        <span class="link-text">Logout</span>
-    </a>
+          <a href="{{ route('logout') }}" class="nav-link">
+    <i class="bi bi-box-arrow-right"></i>
+    <span class="link-text">Logout</span>
+</a>
 </nav>
 
 
@@ -439,7 +439,7 @@
         <i class="bi bi-info-circle-fill contact-info-icon" tabindex="0"></i>
         <div class="contact-tooltip" id="contactTooltip">
             <strong>Contact:</strong><br>
-            Depak Acharya<br>
+            Deepak Acharya<br>
             Aditya Acharya<br>
             📞 +91-9636501008
         </div>

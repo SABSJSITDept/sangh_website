@@ -104,17 +104,20 @@ public function store(Request $request)
 
 private function shiftPreferences($category, $newPref, $exceptId = null)
 {
-    $booksToShift = Sahitya::where('category', $category)
-        ->where('preference', '>=', $newPref)
-        ->when($exceptId, fn($q) => $q->where('id', '!=', $exceptId))
-        ->orderBy('preference', 'desc')
-        ->get();
+    while (true) {
+        $conflict = Sahitya::where('category', $category)
+            ->where('preference', $newPref)
+            ->when($exceptId, fn($q) => $q->where('id', '!=', $exceptId))
+            ->first();
 
-    foreach ($booksToShift as $book) {
-        $book->preference = $book->preference + 1;
-        $book->save();
+        if (!$conflict) break;
+
+        $newPref += 1; // push next
+        $conflict->preference = $newPref;
+        $conflict->save();
     }
 }
+
 
 
 
