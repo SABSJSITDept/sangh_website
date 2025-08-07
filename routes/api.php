@@ -29,6 +29,7 @@ use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspOldPapersController;
 use App\Http\Controllers\SanghSahitya\Shramnopasak\AddShramnopasakController;
 use App\Http\Controllers\SanghSahitya\sahitya\AddSahityaController;
 use App\Http\Controllers\SanghSahitya\ChaturmasSuchi\AddChaturmasSuchiController;
+use App\Http\Controllers\PhotoGallery\PhotoController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -219,3 +220,11 @@ Route::post('/sahitya/set-homepage/{id}', [AddSahityaController::class, 'setHome
 // -----------------Chaturmas Suchi api ------------------------------------
 Route::apiResource('chaturmas-suchi', AddChaturmasSuchiController::class);
 // -----------------Chaturmas Suchi api ------------------------------------
+
+
+
+Route::apiResource('photos', PhotoController::class)->only(['store', 'destroy']);
+
+Route::get('/photos/sangh', [PhotoController::class, 'fetchSangh']);
+Route::get('/photos/yuva', [PhotoController::class, 'fetchYuva']);
+Route::get('/photos/mahila', [PhotoController::class, 'fetchMahila']);

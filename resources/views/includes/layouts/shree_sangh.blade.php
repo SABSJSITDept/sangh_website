@@ -337,6 +337,10 @@
                 <i class="bi bi-file-earmark-text"></i>
                 <span class="link-text">आवेदन पत्र</span>
             </a>
+              <a href="{{ url('/photo_gallery') }}" class="nav-link">
+                <i class="bi bi-file-earmark-text"></i>
+                <span class="link-text">PHOTO GALLERY</span>
+            </a>
         </div>
     </div>
 

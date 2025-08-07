@@ -232,5 +232,9 @@ Route::get('/chaturmas-suchi', function () {
 })->name('chaturmas_suchi.view');
 
 
+Route::get('/photo_gallery', function () {
+    return view('dashboards.photo_gallery.add_photo');
+})->name('photio_gallery.view');
+
 });
                      
