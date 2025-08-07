@@ -28,6 +28,7 @@ use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspGujratiBooksControlle
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspOldPapersController;
 use App\Http\Controllers\SanghSahitya\Shramnopasak\AddShramnopasakController;
 use App\Http\Controllers\SanghSahitya\sahitya\AddSahityaController;
+use App\Http\Controllers\SanghSahitya\ChaturmasSuchi\AddChaturmasSuchiController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -215,3 +216,6 @@ Route::post('/sahitya/set-homepage/{id}', [AddSahityaController::class, 'setHome
 // -----------------Sahitya api ------------------------------------
 
 
+// -----------------Chaturmas Suchi api ------------------------------------
+Route::apiResource('chaturmas-suchi', AddChaturmasSuchiController::class);
+// -----------------Chaturmas Suchi api ------------------------------------

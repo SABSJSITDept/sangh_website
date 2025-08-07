@@ -10,6 +10,29 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<style>
+    /* Add spacing between sidebar items */
+    .sidebar .nav-item {
+        margin-bottom: 30px;
+    }
+
+    /* Optional: Add padding inside submenu links */
+    .sidebar .submenu .nav-link {
+        padding-left: 30px;
+    }
+
+    /* Optional: Slight background hover effect */
+    .sidebar .nav-link:hover {
+        background-color: #5391adff;
+        border-radius: 5px;
+    }
+
+    /* Optional: Add divider line between sections */
+    .sidebar .nav-item:not(:last-child) {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 8px;
+    }
+</style>
 
     <style>
         :root {
@@ -111,7 +134,7 @@
             text-decoration: none;
         }
         .nav-link:hover, .nav-link.active {
-            background: linear-gradient(90deg, #2760fe 0%, #3e85fa 100%);
+            background: linear-gradient(150deg, #2760fe 0%, #3e85fa 100%);
             color: #fff;
         }
         .nav-link span {
@@ -281,14 +304,15 @@
         <div class="role">SuperUser</div>
     </div>
 
-    <!-- Dashboard -->
+    <!-- Dashboard -->  
     <div class="nav-item">
+        
         <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
             <i class="bi bi-speedometer2"></i>
             <span class="link-text">Dashboard</span>
             <i class="bi bi-chevron-down submenu-toggle"></i>
-        </div>
-        <div class="submenu">
+           </div>
+          <div class="submenu">
             <a href="{{ url('dashboard/shree_sangh') }}" class="nav-link">
                 <i class="bi bi-house"></i>
                 <span class="link-text">HOME</span>
@@ -319,7 +343,7 @@
 
 
 
-<div class="nav-item">
+ <div class="nav-item">
     <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
         <i class="bi bi-diagram-3"></i>
         <span class="link-text">कार्यकारिणी</span>
@@ -371,7 +395,7 @@
             <span class="link-text">पदाधिकारी प्रशासन कार्यशाला</span>
         </a>
     </div>
-</div>
+ </div>
 
     <!-- Users -->
     <div class="nav-item">
@@ -384,12 +408,12 @@
             <a href="{{ route('dharmik_pravartiya') }}" class="nav-link">
     <i class="bi bi-person"></i>
     <span class="link-text">धार्मिक प्रवर्तियाँ</span>
-</a>
+   </a>
 
          <a href="{{ route('jsp.dashboard') }}" class="nav-link">
     <i class="bi bi-person-plus"></i>
     <span class="link-text">JSP</span>
-</a>
+    </a>
 
             <a href="#" class="nav-link">
                 <i class="bi bi-shield-lock"></i>
@@ -421,8 +445,8 @@
           <a href="{{ route('logout') }}" class="nav-link">
     <i class="bi bi-box-arrow-right"></i>
     <span class="link-text">Logout</span>
-</a>
-</nav>
+   </a>
+ </nav>
 
 
         <!-- MAIN -->

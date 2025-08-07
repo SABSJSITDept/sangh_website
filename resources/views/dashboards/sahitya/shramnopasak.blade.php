@@ -276,7 +276,7 @@ function fetchLatest() {
 function populateYearDropdown() {
     const yearSelect = document.getElementById("yearSelect");
     const currentYear = new Date().getFullYear();
-    for (let year = 2000; year <= currentYear + 5; year++) {
+    for (let year = 2015; year <= currentYear + 0; year++) {
         const option = document.createElement("option");
         option.value = year;
         option.textContent = year;

@@ -22,6 +22,13 @@
             color: #23262f;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        .sidebar .nav-link {
+    margin-bottom: 12px; /* Adjust spacing as needed */
+}
+.sidebar .nav-link:last-child {
+    margin-bottom: 0;
+}
+
 .main-header {
     position: fixed;             /* ADD THIS */
     top: 0;                      /* ADD THIS */
@@ -111,7 +118,7 @@
             text-decoration: none;
         }
         .nav-link:hover, .nav-link.active {
-            background: linear-gradient(90deg, #2760fe 0%, #3e85fa 100%);
+            background: linear-gradient(120deg, #2760fe 0%, #3e85fa 100%);
             color: #fff;
         }
         .nav-link span {
@@ -281,22 +288,26 @@
                 <div class="role">Shramnopasak Admin</div>
             </div>
 
-            <a href="{{ url('dashboard/sahitya') }}" class="nav-link">
-                <i class="bi bi-house-door"></i>
-                <span class="link-text">HOME</span>
-            </a>
+           <a href="{{ url('dashboard/sahitya') }}" class="nav-link mb-3">
+    <i class="bi bi-house-door"></i>
+    <span class="link-text">HOME</span>
+</a>
 
-            
-   <a href="{{ url('/shramnopasak/all-view') }}" class="nav-link d-flex align-items-center">
+<a href="{{ url('/shramnopasak/all-view') }}" class="nav-link d-flex align-items-center mb-3">
     <i class="bi bi-journal-bookmark me-2"></i>
     <span class="link-text">SHRAMNOPASAK ALL BOOKS</span>
 </a>
 
+<a href="{{ url('/chaturmas-suchi') }}" class="nav-link d-flex align-items-center mb-3">
+    <i class="bi bi-journal-bookmark me-2"></i>
+    <span class="link-text">CHATURMAS SHUCIYA</span>
+</a>
 
-           <a href="{{ route('logout') }}" class="nav-link">
+<a href="{{ route('logout') }}" class="nav-link">
     <i class="bi bi-box-arrow-right"></i>
     <span class="link-text">Logout</span>
 </a>
+
 
         </nav>
 

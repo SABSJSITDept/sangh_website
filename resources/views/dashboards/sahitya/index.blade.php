@@ -26,6 +26,14 @@
                 </div>
             </div>
         </div>
+        <!-- Card 3: Chaturmas Suchi -->
+         <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-info h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📅 Chaturmas Suchi </h5>
+                    <p class="card-text">Upload and manage Chaturmas Suchi PDF files.</p>
+                    <a href="{{ route('chaturmas_suchi.view') }}" class="btn btn-info">Go to Chaturmas Suchi</a>
+            
     </div>
 </div>
 @endsection

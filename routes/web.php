@@ -226,4 +226,11 @@ Route::get('/daily-thoughts', function () {
     return view('dashboards.shree_sangh.daily_thoughts');
 })->name('daily.thoughts');
 
+
+Route::get('/chaturmas-suchi', function () {
+    return view('dashboards.sahitya.chaturmas_suchi');
+})->name('chaturmas_suchi.view');
+
+
 });
+                     

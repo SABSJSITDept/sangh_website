@@ -1,4 +1,6 @@
 @extends('includes.layouts.shree_sangh')
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @section('content')
 <style>
@@ -219,10 +221,26 @@ document.getElementById('aavedanForm').addEventListener('submit', function(e) {
     const googleFormLink = document.getElementById('googleFormLink').value;
 
     if (fileType === 'pdf') {
-        if (!fileInput && !id) return alert("कृपया PDF चुनें");
+        if (!fileInput && !id) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'ध्यान दें!',
+        text: 'कृपया PDF चुनें।'
+    });
+    return;
+}
+
         if (fileInput) formData.append('file', fileInput);
     } else {
-        if (!googleFormLink) return alert("Google Form लिंक डालें");
+      if (!googleFormLink) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'ध्यान दें!',
+        text: 'Google Form लिंक डालें।'
+    });
+    return;
+}
+
         formData.append('file', googleFormLink);
     }
 
@@ -235,13 +253,30 @@ document.getElementById('aavedanForm').addEventListener('submit', function(e) {
     const url = id ? `/api/aavedan-patra/${id}` : '/api/aavedan-patra';
     if (id) formData.append('_method', 'PUT');
 
-    axios({ method, url, data: formData, headers }).then(() => {
-        document.getElementById('aavedanForm').reset();
-        document.getElementById('edit_id').value = '';
-        toggleFileInputs();
-        document.getElementById('filterCategory').value = ''; // reset filter
-        fetchData(); // reload all
+   axios({ method, url, data: formData, headers }).then(() => {
+    document.getElementById('aavedanForm').reset();
+    document.getElementById('edit_id').value = '';
+    toggleFileInputs();
+    document.getElementById('filterCategory').value = ''; // reset filter
+    fetchData(); // reload all
+
+    // ✅ Success Alert
+    Swal.fire({
+        icon: 'success',
+        title: 'सफलता!',
+        text: 'आवेदन पत्र सफलतापूर्वक सहेजा गया।',
+        timer: 2000,
+        showConfirmButton: false
     });
+}).catch(error => {
+    // ✅ Error Alert
+    Swal.fire({
+        icon: 'error',
+        title: 'त्रुटि!',
+        text: 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।',
+    });
+});
+
 });
 
 function editItem(id) {
@@ -347,16 +382,42 @@ function fetchData() {
 }
 
 function deleteItem(id) {
-    if (confirm("क्या आप वाकई हटाना चाहते हैं?")) {
-        axios.delete(`/api/aavedan-patra/${id}`, {
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        }).then(() => {
-            const selected = document.getElementById('filterCategory').value;
-            fetchData(selected);
-        });
-    }
+    Swal.fire({
+        title: 'क्या आप वाकई हटाना चाहते हैं?',
+        text: "यह क्रिया पूर्ववत नहीं की जा सकती!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'हाँ, हटाएं!',
+        cancelButtonText: 'नहीं'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete(`/api/aavedan-patra/${id}`, {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            }).then(() => {
+                const selected = document.getElementById('filterCategory').value;
+                fetchData(selected);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'हटा दिया गया!',
+                    text: 'आवेदन पत्र सफलतापूर्वक हटा दिया गया।',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }).catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'त्रुटि!',
+                    text: 'हटाने में समस्या आई। कृपया पुनः प्रयास करें।'
+                });
+            });
+        }
+    });
 }
+
 </script>
 @endsection
