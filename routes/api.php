@@ -29,7 +29,7 @@ use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspOldPapersController;
 use App\Http\Controllers\SanghSahitya\Shramnopasak\AddShramnopasakController;
 use App\Http\Controllers\SanghSahitya\sahitya\AddSahityaController;
 use App\Http\Controllers\SanghSahitya\ChaturmasSuchi\AddChaturmasSuchiController;
-use App\Http\Controllers\PhotoGallery\PhotoController;
+use App\Http\Controllers\PhotoGallery\AddPhotoController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -223,8 +223,11 @@ Route::apiResource('chaturmas-suchi', AddChaturmasSuchiController::class);
 
 
 
-Route::apiResource('photos', PhotoController::class)->only(['store', 'destroy']);
-
-Route::get('/photos/sangh', [PhotoController::class, 'fetchSangh']);
-Route::get('/photos/yuva', [PhotoController::class, 'fetchYuva']);
-Route::get('/photos/mahila', [PhotoController::class, 'fetchMahila']);
+Route::prefix('photo-gallery')->group(function () {
+    Route::post('/store', [AddPhotoController::class, 'store']);
+    Route::get('/fetch/{category}', [AddPhotoController::class, 'fetchByCategoryEvent']);
+    Route::delete('/delete-single/{id}', [AddPhotoController::class, 'deleteSinglePhoto']);
+    Route::post('/update/{id}', [AddPhotoController::class, 'updatePhoto']); 
+    Route::post('/update-event/{eventName}', [AddPhotoController::class, 'updateEventName']);
+    Route::delete('/delete-event/{category}/{eventName}', [AddPhotoController::class, 'deleteEvent']);
+});

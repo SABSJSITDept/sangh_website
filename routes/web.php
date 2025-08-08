@@ -236,5 +236,10 @@ Route::get('/photo_gallery', function () {
     return view('dashboards.photo_gallery.add_photo');
 })->name('photio_gallery.view');
 
+
+Route::get('/sangh_photo_gallery', function () {
+    return view('dashboards.photo_gallery.sangh');
+})->name('sangh_photo_gallery.view');
+
 });
                      

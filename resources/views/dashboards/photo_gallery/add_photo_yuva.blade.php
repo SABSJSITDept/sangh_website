@@ -1,4 +1,4 @@
-@extends('includes.layouts.shree_sangh')
+@extends('includes.layouts.yuva_sangh')
 
 @section('content')
 <div class="container mt-5">
@@ -20,10 +20,10 @@
                     <div class="mb-3">
                         <label class="form-label">Category</label>
                         <select class="form-control" name="category" required>
-                            <option value="">Select Category</option>
-                            <option value="sangh">Sangh</option>
+                            <!-- <option value="">Select Category</option> -->
+                            <!-- <option value="sangh">Sangh</option> -->
                             <option value="yuva">Yuva</option>
-                            <option value="mahila">Mahila</option>
+                            <!-- <option value="mahila">Mahila</option> -->
                         </select>
                     </div>
                     <div class="mb-3">
@@ -43,7 +43,7 @@
         <div class="col-md-8">
             <div class="row">
                 <!-- Sangh Card -->
-                <div class="col-md-4 mb-4">
+                <!-- <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='/sangh_photo_gallery'">
                         <img src="{{ asset('images/logo.jpeg') }}" class="card-img-top rounded-top-4" alt="Sangh Gallery">
                         <div class="card-body text-center">
@@ -52,7 +52,7 @@
                             <button class="btn btn-outline-primary px-4 rounded-pill">View Gallery</button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Yuva Card -->
                 <div class="col-md-4 mb-4">
@@ -67,7 +67,7 @@
                 </div>
 
                 <!-- Mahila Card -->
-                <div class="col-md-4 mb-4">
+                <!-- <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='#'">
                         <img src="{{ asset('images/mslogo.png') }}" class="card-img-top rounded-top-4" alt="Mahila Gallery">
                         <div class="card-body text-center">
@@ -76,7 +76,7 @@
                             <button class="btn btn-outline-danger px-4 rounded-pill">View Gallery</button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div> 
