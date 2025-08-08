@@ -241,5 +241,10 @@ Route::get('/sangh_photo_gallery', function () {
     return view('dashboards.photo_gallery.sangh');
 })->name('sangh_photo_gallery.view');
 
+
+Route::get('/home_slider', function () {
+    return view('dashboards.home_slider.add_home_slider');
+})->name('add_home_slider.view');
+
 });
                      

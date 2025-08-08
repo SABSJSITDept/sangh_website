@@ -104,14 +104,16 @@ function loadGallery(){
 function enableEventEdit(id, oldName) {
     let newName = prompt("Enter new event name:", oldName);
     if(newName && newName !== oldName){
-        fetch(`/api/photo-gallery/update-event/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ event_name: newName })
-        })
+       fetch(`/api/photo-gallery/update-event/${id}`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify({ event_name: newName })
+})
+
         .then(res => res.json())
         .then(data => {
             alert(data.message);

@@ -222,7 +222,7 @@ Route::apiResource('chaturmas-suchi', AddChaturmasSuchiController::class);
 // -----------------Chaturmas Suchi api ------------------------------------
 
 
-
+// -----------------Photo Gallery api ------------------------------------
 Route::prefix('photo-gallery')->group(function () {
     Route::post('/store', [AddPhotoController::class, 'store']);
     Route::get('/fetch/{category}', [AddPhotoController::class, 'fetchByCategoryEvent']);
@@ -231,3 +231,9 @@ Route::prefix('photo-gallery')->group(function () {
     Route::post('/update-event/{eventName}', [AddPhotoController::class, 'updateEventName']);
     Route::delete('/delete-event/{category}/{eventName}', [AddPhotoController::class, 'deleteEvent']);
 });
+// -----------------Photo Gallery api ------------------------------------
+
+
+// -----------------Home Slider api ------------------------------------
+Route::apiResource('home_slider', App\Http\Controllers\HomeSlider\AddHomeSlider::class);
+// -----------------Home Slider api ------------------------------------
