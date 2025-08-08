@@ -23,7 +23,7 @@
                             <option value="">Select Category</option>
                             <option value="sangh">Sangh</option>
                             <option value="yuva">Yuva</option>
-                            <option value="mahila">Mahila</option>
+                            <option value="mahila">Mahila</option   >
                         </select>
                     </div>
                     <div class="mb-3">

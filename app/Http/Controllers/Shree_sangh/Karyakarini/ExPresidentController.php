@@ -13,10 +13,13 @@ class ExPresidentController extends Controller
         return view('dashboards.shree_sangh.karyakarini.ex_president');
     }
 
-  public function all()
+public function all()
 {
-    return response()->json(ExPresident::orderBy('created_at', 'desc')->get());
+    return response()->json(
+        ExPresident::orderBy('created_at', 'asc')->get()
+    );
 }
+
 
 
     public function store(Request $request)
