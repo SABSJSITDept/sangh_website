@@ -2,16 +2,21 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <div class="container mt-4">
     <h3 class="mb-4">📋 प्रवर्ती संयोजक प्रबंधन</h3>
 
+    {{-- Info Message --}}
+    <div class="alert alert-info">
+        ⚠️ सभी फ़ील्ड अनिवार्य हैं और फोटो का आकार <strong>200 KB</strong> से अधिक नहीं होना चाहिए।
+    </div>
+
     {{-- 🔹 FORM --}}
     <div class="card shadow-sm p-4 mb-4 rounded-4 border-start border-success border-3">
         <form id="pravartiSanyojakForm" enctype="multipart/form-data">
-            @csrf {{-- ✅ Required for Laravel protection --}}
+            @csrf
             <input type="hidden" id="editId" name="editId">
 
             <div class="row mb-3">
@@ -63,8 +68,30 @@
     <div id="pravartiSanyojakList"></div>
 </div>
 
+{{-- Toast Container --}}
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+    <div id="toastBox"></div>
+</div>
+
 <script>
 const csrf = document.querySelector('meta[name="csrf-token"]').content;
+
+// Toast Function
+function showToast(message, type = 'success') {
+    const bg = type === 'success' ? 'bg-success' : 'bg-danger';
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white ${bg} border-0 show mb-2`;
+    toast.role = 'alert';
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
+        </div>
+    `;
+    document.getElementById('toastBox').appendChild(toast);
+    toast.querySelector('.btn-close').onclick = () => toast.remove();
+    setTimeout(() => toast.remove(), 3000);
+}
 
 // 🔹 Dropdown Load
 fetch("/api/pravarti")
@@ -80,6 +107,12 @@ fetch("/api/pravarti")
 document.getElementById("photo").addEventListener("change", function () {
     const file = this.files[0];
     if (file && file.type.startsWith("image/")) {
+        if (file.size > 200 * 1024) {
+            showToast("❌ फोटो का आकार 200KB से अधिक नहीं होना चाहिए!", 'error');
+            this.value = '';
+            document.getElementById("preview").innerHTML = '';
+            return;
+        }
         const reader = new FileReader();
         reader.onload = function (e) {
             document.getElementById("preview").innerHTML = `<img src="${e.target.result}" class="img-thumbnail" width="100">`;
@@ -104,26 +137,23 @@ document.getElementById("pravartiSanyojakForm").addEventListener("submit", async
     try {
         const res = await fetch(url, {
             method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
+            headers: { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest' },
             body: formData
         });
 
         const result = await res.json();
         if (!res.ok) {
-            alert(result.error || "❌ कोई त्रुटि हुई।");
+            showToast(result.error || "❌ कोई त्रुटि हुई।", 'error');
             return;
         }
 
-        alert("✅ सफलतापूर्वक सहेजा गया!");
+        showToast("✅ सफलतापूर्वक सहेजा गया!");
         loadData();
         this.reset();
         document.getElementById('editId').value = '';
         document.getElementById('preview').innerHTML = '';
     } catch {
-        alert("❌ नेटवर्क या सर्वर की समस्या है।");
+        showToast("❌ नेटवर्क या सर्वर की समस्या है।", 'error');
     }
 });
 
@@ -204,11 +234,16 @@ function deleteEntry(id) {
 
     fetch(`/api/pravarti-sanyojak/${id}`, {
         method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': csrf,
-            'X-Requested-With': 'XMLHttpRequest'
+        headers: { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => {
+        if (res.ok) {
+            showToast("✅ सफलतापूर्वक हटाया गया!");
+            loadData();
+        } else {
+            showToast("❌ हटाने में समस्या आई", 'error');
         }
-    }).then(() => loadData());
+    });
 }
 
 // 🔹 Init

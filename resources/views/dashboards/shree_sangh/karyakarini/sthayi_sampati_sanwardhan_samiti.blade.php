@@ -1,153 +1,174 @@
 @extends('includes.layouts.shree_sangh')
 
 @section('content')
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">स्थायी संपत्ति संवर्धन समिति सदस्य जोड़ें</h2>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <div class="card shadow-sm border-success mb-5">
-        <div class="card-body">
-            <form id="samitiForm" enctype="multipart/form-data">
-                <input type="hidden" id="editId" value="">
-                <div class="row">
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">नाम</label>
-                        <input type="text" name="name" id="name" class="form-control" required>
-                    </div>
+<style>
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+</style>
 
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">शहर</label>
-                        <input type="text" name="city" id="city" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">मोबाइल</label>
-                        <input type="text" name="mobile" id="mobile" class="form-control" required maxlength="10">
-                    </div>
-
-                    <div class="mb-3 col-md-6">
-                        <label class="form-label">फोटो</label>
-                        <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-success w-100" id="submitBtn">सदस्य जोड़ें</button>
-            </form>
-        </div>
+<div class="container mt-4">
+    <!-- Instruction Message -->
+    <div class="alert alert-info">
+        <strong>Note:</strong> All fields are compulsory & image size should not exceed 200 KB.
     </div>
 
-    <div class="card shadow-sm border-info">
-        <div class="card-body">
-            <h5 class="mb-3">📋 सदस्यों की सूची</h5>
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle text-center">
-                    <thead class="table-light">
-                        <tr>
-                            <th>फोटो</th>
-                            <th>नाम</th>
-                            <th>शहर</th>
-                            <th>मोबाइल</th>
-                            <th>एक्शन</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listBody"></tbody>
-                </table>
+    <form id="memberForm" enctype="multipart/form-data">
+        <input type="hidden" name="id" id="member_id">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Name:</label>
+                <input type="text" name="name" id="name" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>City:</label>
+                <input type="text" name="city" id="city" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Mobile:</label>
+                <input type="text" name="mobile" id="mobile" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Photo:</label>
+                <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
             </div>
         </div>
-    </div>
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+
+    <hr>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Mobile</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="listBody"></tbody>
+    </table>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById('samitiForm');
-    const listBody = document.getElementById('listBody');
-    const submitBtn = document.getElementById('submitBtn');
-    const editId = document.getElementById('editId');
+<!-- Toast -->
+<div class="toast-container"></div>
 
-    function fetchMembers() {
-        fetch('/api/sthayi_sampati_sanwardhan_samiti')
-            .then(res => res.json())
-            .then(data => {
-                listBody.innerHTML = '';
-                data.forEach(member => {
-                    const photoUrl = member.photo ? member.photo : 'https://via.placeholder.com/60x60?text=No+Image';
-                    listBody.innerHTML += `
-                        <tr>
-                            <td><img src="${photoUrl}" width="60" height="60" style="object-fit: cover; border-radius: 50%;"></td>
-                            <td>${member.name}</td>
-                            <td>${member.city}</td>
-                            <td>${member.mobile}</td>
-                            <td>
-                                <button class="btn btn-sm btn-warning me-2" onclick="editMember(${member.id})">✏️ Edit</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteMember(${member.id})">🗑️ Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            });
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showToast(message, type = 'success') {
+    let toastId = 'toast-' + Date.now();
+    let bgClass = type === 'success' ? 'bg-success' : 'bg-danger';
+
+    document.querySelector('.toast-container').innerHTML += `
+        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0 mb-2" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+
+    new bootstrap.Toast(document.getElementById(toastId)).show();
+}
+
+document.getElementById('memberForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Image size check
+    let photo = document.getElementById('photo').files[0];
+    if (photo && photo.size > 200 * 1024) {
+        showToast('Image size should not exceed 200 KB', 'error');
+        return;
     }
 
-    form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const formData = new FormData(form);
-        let url = '/api/sthayi_sampati_sanwardhan_samiti';
-        let method = 'POST';
+    let formData = new FormData(this);
+    let id = document.getElementById('member_id').value;
+    let url = id ? `/sthayi-sampati/${id}` : '/sthayi-sampati';
+    let method = 'POST';
 
-        if (editId.value) {
-            url += '/' + editId.value;
-            method = 'POST';
-            formData.append('_method', 'PUT');
-        }
+    if (id) formData.append('_method', 'PUT');
 
-        const response = await fetch(url, {
-            method,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: formData
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert(editId.value ? 'Updated successfully' : 'Saved successfully');
-            form.reset();
-            editId.value = '';
-            submitBtn.textContent = 'सदस्य जोड़ें';
+    fetch(url, {
+        method: method,
+        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message);
+            this.reset();
+            document.getElementById('member_id').value = '';
             fetchMembers();
         } else {
-            alert("त्रुटि: " + JSON.stringify(data.errors));
+            showToast(data.message || 'Something went wrong', 'error');
         }
-    });
-
-    window.deleteMember = async (id) => {
-        if (!confirm('क्या आप वाकई हटाना चाहते हैं?')) return;
-        const response = await fetch(`/api/sthayi_sampati_sanwardhan_samiti/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        });
-        if (response.ok) {
-            alert('हटा दिया गया');
-            fetchMembers();
-        }
-    };
-
-    window.editMember = async (id) => {
-        const response = await fetch(`/api/sthayi_sampati_sanwardhan_samiti/${id}`);
-        const data = await response.json();
-        document.getElementById('name').value = data.name;
-        document.getElementById('city').value = data.city;
-        document.getElementById('mobile').value = data.mobile;
-        editId.value = data.id;
-        submitBtn.textContent = 'अपडेट करें';
-        document.getElementById('photo').value = ''; // Reset file input
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    fetchMembers();
+    })
+    .catch(() => showToast('Server error', 'error'));
 });
+
+function fetchMembers() {
+    fetch('/api/sthayi_sampati_sanwardhan_samiti')
+        .then(res => res.json())
+        .then(data => {
+            listBody.innerHTML = '';
+            data.forEach(member => {
+                let photoUrl = member.photo 
+                    ? member.photo 
+                    : 'https://via.placeholder.com/60x60?text=No+Image';
+                listBody.innerHTML += `
+                    <tr>
+                        <td><img src="${photoUrl}" width="60" height="60" style="object-fit:cover;border-radius:50%;"></td>
+                        <td>${member.name}</td>
+                        <td>${member.city}</td>
+                        <td>${member.mobile}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editMember(${member.id})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+}
+
+function editMember(id) {
+    fetch(`/sthayi-sampati/${id}/edit`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('member_id').value = data.id;
+            document.getElementById('name').value = data.name;
+            document.getElementById('city').value = data.city;
+            document.getElementById('mobile').value = data.mobile;
+        });
+}
+
+function deleteMember(id) {
+    if (!confirm('Are you sure?')) return;
+
+    fetch(`/sthayi-sampati/${id}`, {
+        method: 'DELETE',
+        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message);
+            fetchMembers();
+        } else {
+            showToast('Failed to delete', 'error');
+        }
+    })
+    .catch(() => showToast('Server error', 'error'));
+}
+
+fetchMembers();
 </script>
 @endsection

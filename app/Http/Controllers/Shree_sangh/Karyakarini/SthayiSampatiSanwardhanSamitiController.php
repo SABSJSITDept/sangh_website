@@ -27,14 +27,14 @@ public function store(Request $request)
     $data = $request->only('name', 'city', 'mobile');
 
     if ($request->hasFile('photo')) {
-        // ✅ Ensure directory exists
-        Storage::makeDirectory('public/sthayi_sampati_sanwardhan_samiti');
+        // Ensure directory exists
+        Storage::makeDirectory('public/sthayi_sampati');
 
         $photo = $request->file('photo');
         $name  = Str::uuid() . '.' . $photo->getClientOriginalExtension();
-        $photo->storeAs('public/sthayi_sampati_sanwardhan_samiti', $name);
-        $data['photo'] = '/storage/sthayi_sampati_sanwardhan_samiti/' . $name;
+        $photo->storeAs('public/sthayi_sampati', $name);
 
+        $data['photo'] = '/storage/sthayi_sampati/' . $name;
     }
 
     $entry = SthayiSampatiSanwardhanSamiti::create($data);
@@ -55,18 +55,19 @@ public function update(Request $request, $id)
     $data = $request->only('name', 'city', 'mobile');
 
     if ($request->hasFile('photo')) {
-        // ✅ Delete old photo if exists
+        // Delete old photo if exists
         if ($entry->photo && Storage::exists(str_replace('storage/', 'public/', $entry->photo))) {
             Storage::delete(str_replace('storage/', 'public/', $entry->photo));
         }
 
-        // ✅ Ensure directory exists
-        Storage::makeDirectory('public/sthayi_sampati_sanwardhan_samiti');
+        // Ensure directory exists
+        Storage::makeDirectory('public/sthayi_sampati');
 
         $photo = $request->file('photo');
         $name  = Str::uuid() . '.' . $photo->getClientOriginalExtension();
-        $photo->storeAs('public/sthayi_sampati_sanwardhan_samiti', $name);
-      $data['photo'] = '/storage/sthayi_sampati_sanwardhan_samiti/' . $name;
+        $photo->storeAs('public/sthayi_sampati', $name);
+
+        $data['photo'] = '/storage/sthayi_sampati/' . $name;
     }
 
     $entry->update($data);
