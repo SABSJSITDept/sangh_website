@@ -21,7 +21,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'post' => 'required|string|in:President,Secretary,Member',
+            'post' => 'required|string|in:sanyojak,seh sanyojak,sanyojan mandal sadasy',
             'city' => 'required|string|max:255',
             'mobile_number' => 'required|digits:10',
             'photo' => 'required|image|mimes:jpg,jpeg,png|max:200', // 200KB
@@ -50,7 +50,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'post' => 'required|string|in:President,Secretary,Member',
+            'post' => 'required|string|in:sanyojak,seh sanyojak,sanyojan mandal sadasy',
             'city' => 'required|string|max:255',
             'mobile_number' => 'required|digits:10',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:200',
