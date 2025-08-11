@@ -23,7 +23,7 @@ class AddHomeSlider extends Controller
     }
 
     $request->validate([
-        'photo' => 'required|image|mimes:jpeg,png,jpg|max:300|dimensions:width=1280,height=520',
+        'photo' => 'required|image|mimes:jpeg,png,jpg|max:300',
     ]);
 
     $path = $request->file('photo')->store('public/home_slider');
@@ -40,7 +40,7 @@ class AddHomeSlider extends Controller
         $slider = HomeSlider::findOrFail($id);
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg|max:300|dimensions:width=1280,height=520',
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:300',
         ]);
 
         // Delete old file

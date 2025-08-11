@@ -9,24 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up()
+  public function up()
 {
-    Schema::create('sthayi_sampati_sanwardhan_samitis', function (Blueprint $table) {
+    Schema::create('sthayi_sampati_sanwardhan_samiti', function (Blueprint $table) {
         $table->id();
         $table->string('name');
+        $table->string('post');
         $table->string('city');
-        $table->string('mobile');
-        $table->string('photo')->nullable();
+        $table->string('mobile_number', 15);
+        $table->string('photo');
         $table->timestamps();
     });
 }
 
+public function down()
+{
+    Schema::dropIfExists('sthayi_sampati_sanwardhan_samiti');
+}
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('sthayi_sampati_sanwardhan_samitis');
-    }
 };

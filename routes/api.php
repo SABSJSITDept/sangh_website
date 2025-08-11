@@ -127,7 +127,7 @@ Route::apiResource('karyasamiti_sadasya', KaryasamitiSadasyaController::class);
 
 
 // -----------------Sthayi Sampati Sanwardhan Samiti api ------------------------------------
-Route::apiResource('sthayi_sampati_sanwardhan_samiti', SthayiSampatiSanwardhanSamitiController::class);
+Route::apiResource('sthayi-sampati', SthayiSampatiSanwardhanSamitiController::class);
 // -----------------Sthayi Sampati Sanwardhan Samiti api ------------------------------------
 
 

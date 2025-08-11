@@ -6,86 +6,82 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ShreeSangh\Karyakarini\SthayiSampatiSanwardhanSamiti;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class SthayiSampatiSanwardhanSamitiController extends Controller
 {
     public function index()
-    {
-        return response()->json(SthayiSampatiSanwardhanSamiti::all());
-    }
-
-public function store(Request $request)
 {
-    $request->validate([
-        'name'   => ['required', 'regex:/^[\p{L}\s]+$/u'],
-        'city'   => ['required', 'regex:/^[\p{L}\s]+$/u'],
-        'mobile' => ['required', 'digits:10'],
-        'photo'  => ['nullable', 'image', 'max:200'], // max:200 KB
-    ]);
-
-    $data = $request->only('name', 'city', 'mobile');
-
-    if ($request->hasFile('photo')) {
-        // Ensure directory exists
-        Storage::makeDirectory('public/sthayi_sampati');
-
-        $photo = $request->file('photo');
-        $name  = Str::uuid() . '.' . $photo->getClientOriginalExtension();
-        $photo->storeAs('public/sthayi_sampati', $name);
-
-        $data['photo'] = '/storage/sthayi_sampati/' . $name;
-    }
-
-    $entry = SthayiSampatiSanwardhanSamiti::create($data);
-    return response()->json($entry, 201);
+    return SthayiSampatiSanwardhanSamiti::orderByRaw("
+        FIELD(post, 'Sanyojak', 'Seh Sanyojak', 'Sanyojan Mandal Sadasy')
+    ")->get();
 }
 
-public function update(Request $request, $id)
-{
-    $entry = SthayiSampatiSanwardhanSamiti::findOrFail($id);
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'post' => 'required|string|in:President,Secretary,Member',
+            'city' => 'required|string|max:255',
+            'mobile_number' => 'required|digits:10',
+            'photo' => 'required|image|mimes:jpg,jpeg,png|max:200', // 200KB
+        ]);
 
-    $request->validate([
-        'name'   => ['required', 'regex:/^[\p{L}\s]+$/u'],
-        'city'   => ['required', 'regex:/^[\p{L}\s]+$/u'],
-        'mobile' => ['required', 'digits:10'],
-        'photo'  => ['nullable', 'image', 'max:200'], // max:200 KB
-    ]);
-
-    $data = $request->only('name', 'city', 'mobile');
-
-    if ($request->hasFile('photo')) {
-        // Delete old photo if exists
-        if ($entry->photo && Storage::exists(str_replace('storage/', 'public/', $entry->photo))) {
-            Storage::delete(str_replace('storage/', 'public/', $entry->photo));
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Ensure directory exists
-        Storage::makeDirectory('public/sthayi_sampati');
+        $photoPath = $request->file('photo')->store('sthayi_sampati', 'public');
 
-        $photo = $request->file('photo');
-        $name  = Str::uuid() . '.' . $photo->getClientOriginalExtension();
-        $photo->storeAs('public/sthayi_sampati', $name);
+        $data = SthayiSampatiSanwardhanSamiti::create([
+            'name' => $request->name,
+            'post' => $request->post,
+            'city' => $request->city,
+            'mobile_number' => $request->mobile_number,
+            'photo' => '/storage/' . $photoPath,
+        ]);
 
-        $data['photo'] = '/storage/sthayi_sampati/' . $name;
+        return response()->json($data, 201);
     }
 
-    $entry->update($data);
-    return response()->json($entry);
-}
+    public function update(Request $request, $id)
+    {
+        $item = SthayiSampatiSanwardhanSamiti::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'post' => 'required|string|in:President,Secretary,Member',
+            'city' => 'required|string|max:255',
+            'mobile_number' => 'required|digits:10',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:200',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        if ($request->hasFile('photo')) {
+            if ($item->photo && file_exists(public_path($item->photo))) {
+                unlink(public_path($item->photo));
+            }
+            $photoPath = $request->file('photo')->store('sthayi_sampati', 'public');
+            $item->photo = '/storage/' . $photoPath;
+        }
+
+        $item->update($request->only(['name', 'post', 'city', 'mobile_number']));
+
+        return response()->json($item);
+    }
 
     public function destroy($id)
     {
-        $entry = SthayiSampatiSanwardhanSamiti::findOrFail($id);
-        if ($entry->photo) {
-            Storage::delete(str_replace('storage/', 'public/', $entry->photo));
-        }
-        $entry->delete();
-        return response()->json(['message' => 'Deleted']);
-    }
+        $item = SthayiSampatiSanwardhanSamiti::findOrFail($id);
 
-    public function show($id)
-    {
-        return response()->json(SthayiSampatiSanwardhanSamiti::findOrFail($id));
+        if ($item->photo && file_exists(public_path($item->photo))) {
+            unlink(public_path($item->photo));
+        }
+
+        $item->delete();
+        return response()->json(['message' => 'Deleted Successfully']);
     }
 }
