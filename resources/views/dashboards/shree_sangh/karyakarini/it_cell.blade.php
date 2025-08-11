@@ -2,14 +2,20 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <div class="container mt-4">
     <h3>📋 IT CELL प्रबंधन</h3>
+
+    {{-- ℹ️ Note Message --}}
+    <div class="alert alert-info">
+        ⚠️ सभी फ़ील्ड अनिवार्य हैं और फोटो का आकार <strong>200 KB</strong> से अधिक नहीं होना चाहिए।
+    </div>
 
     {{-- ✅ FORM --}}
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <form id="itCellForm" enctype="multipart/form-data">
-                <input type="hidden" id="formMethod" value="POST">
                 <input type="hidden" id="editId">
 
                 <div class="row">
@@ -68,27 +74,42 @@
     </div>
 </div>
 
+{{-- Toast Container --}}
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+    <div id="toastBox"></div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('itCellForm');
     const list = document.getElementById('itCellList');
+    const toastBox = document.getElementById('toastBox');
+
+    const showToast = (message, type = 'success') => {
+        const bg = type === 'success' ? 'bg-success' : 'bg-danger';
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white ${bg} border-0 show mb-2`;
+        toast.role = 'alert';
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        toastBox.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    };
 
     const fetchList = () => {
         fetch('/api/it-cell')
             .then(res => res.json())
             .then(data => {
                 list.innerHTML = '';
-                data.sort((a, b) => a.priority - b.priority); // Priority sorting
-
+                data.sort((a, b) => a.priority - b.priority);
                 data.forEach(item => {
                     const row = document.createElement('tr');
-
                     row.innerHTML = `
-                        <td>
-                            ${item.photo 
-                                ? `<img src="/storage/${item.photo}" style="height:60px; width:auto;" class="rounded">`
-                                : '❌'}
-                        </td>
+                        <td>${item.photo ? `<img src="/storage/${item.photo}" style="height:60px;" class="rounded">` : '❌'}</td>
                         <td>${item.name}</td>
                         <td>${item.post}</td>
                         <td>${item.city}</td>
@@ -99,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button onclick="deleteItem(${item.id})" class="btn btn-sm btn-danger">🗑</button>
                         </td>
                     `;
-
                     list.appendChild(row);
                 });
             });
@@ -108,24 +128,41 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', e => {
         e.preventDefault();
 
+        // Frontend validation
+        const photo = form.photo.files[0];
+        if (photo && photo.size > 200 * 1024) {
+            showToast('फोटो का आकार 200KB से अधिक नहीं होना चाहिए!', 'error');
+            return;
+        }
+
         const formData = new FormData(form);
         const id = document.getElementById('editId').value;
-        const method = id ? `/api/it-cell/${id}` : '/api/it-cell';
+        const url = id ? `/api/it-cell/${id}` : '/api/it-cell';
 
-        fetch(method, {
+        fetch(url, {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: formData
         })
-        .then(res => res.json())
-        .then(() => {
-            form.reset();
-            document.getElementById('editId').value = '';
-            fetchList();
-        });
+        .then(async res => {
+            if (!res.ok) {
+                const errorData = await res.json();
+                showToast(errorData.message || 'कुछ गलती हुई है', 'error');
+                return;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data) {
+                form.reset();
+                document.getElementById('editId').value = '';
+                fetchList();
+                showToast('सफलतापूर्वक सहेजा गया!');
+            }
+        })
+        .catch(() => showToast('नेटवर्क त्रुटि!', 'error'));
     });
 
     window.editItem = id => {
@@ -140,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.mobile.value = item.mobile;
                     form.priority.value = item.priority;
                     document.getElementById('editId').value = item.id;
-
                     form.scrollIntoView({ behavior: 'smooth' });
                 }
             });
@@ -151,11 +187,17 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(`/api/it-cell/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 }
             })
-            .then(() => fetchList());
+            .then(res => {
+                if (res.ok) {
+                    fetchList();
+                    showToast('सफलतापूर्वक हटाया गया!');
+                } else {
+                    showToast('हटाने में समस्या आई', 'error');
+                }
+            });
         }
     };
 
