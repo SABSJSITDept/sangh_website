@@ -13,9 +13,10 @@ use Illuminate\Support\Str;
 class ShivirUpdateController extends Controller
 {
     public function index()
-    {
-        return Shivir::all();
-    }
+{
+    return Shivir::latest()->get(); 
+}
+
 
     public function store(Request $request)
     {

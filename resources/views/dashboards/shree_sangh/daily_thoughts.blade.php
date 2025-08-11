@@ -131,7 +131,17 @@ function renderPagination(data) {
 function editThought(id, text) {
     document.getElementById('thought').value = text;
     document.getElementById('thoughtId').value = id;
+
+    // 🔽 Smooth scroll to form
+    document.getElementById('thoughtForm').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+
+    // Optionally focus the textarea
+    document.getElementById('thought').focus();
 }
+    
 
 function deleteThought(id) {
     Swal.fire({

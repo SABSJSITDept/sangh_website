@@ -56,8 +56,8 @@ class AavedanPatraController extends Controller
         'category' => 'required|string|max:255',
         'preference' => 'nullable|integer|min:0',
         'file' => $request->file_type === 'pdf'
-            ? 'required|mimes:pdf|max:2048'
-            : 'required|string',
+            ? 'required|mimes:pdf|max:3072'
+                        : 'required|string',
     ]);
 
     if ($request->file_type === 'pdf' && $request->hasFile('file')) {
@@ -89,7 +89,7 @@ public function update(Request $request, $id)
         'category' => 'required|string|max:255',
         'preference' => 'nullable|integer|min:0',
         'file' => $request->file_type === 'pdf'
-            ? 'nullable|mimes:pdf|max:2048'
+            ? 'nullable|mimes:pdf|max:3072'
             : 'required|string',
     ]);
 
