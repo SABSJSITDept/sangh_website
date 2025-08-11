@@ -178,6 +178,7 @@ function fetchData(category = '') {
             rows += `
                 <tr>
                     <td>${item.name}</td>
+                    <td>${item.category ?? '—'}</td> <!-- यहाँ category जोड़ी गई -->
                     <td>${item.file_type}</td>
                     <td>${fileLink}</td>
                     <td>${item.preference}</td>
@@ -189,10 +190,11 @@ function fetchData(category = '') {
         });
 
         container.innerHTML = `
-            <table class="table table-bordered align-middle text-center">
-                <thead class="table-light">
+            <table class="table table-striped table-hover align-middle text-center">
+                <thead class="table-primary">
                     <tr>
                         <th>नाम</th>
+                        <th>कैटेगरी</th>
                         <th>प्रकार</th>
                         <th>फ़ाइल</th>
                         <th>प्राथमिकता</th>
@@ -205,6 +207,7 @@ function fetchData(category = '') {
             </table>`;
     });
 }
+
 
 document.getElementById('aavedanForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -297,6 +300,15 @@ function editItem(id) {
         }
 
         toggleFileInputs();
+
+        // ⬇ फॉर्म तक स्मूथ स्क्रॉल और फोकस
+        const formElement = document.getElementById('aavedanForm'); // अपने फॉर्म का ID यहाँ डालें
+        if (formElement) {
+            formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                document.getElementById('name').focus();
+            }, 500);
+        }
     });
 }
 document.addEventListener('DOMContentLoaded', () => {
@@ -315,6 +327,26 @@ document.addEventListener('DOMContentLoaded', () => {
 function fetchData() {
     const selectedCategory = document.getElementById('filterCategory').value;
     const selectedFileType = document.getElementById('filterFileType').value;
+
+    // English → Hindi category mapping
+    const categoryMap = {
+        sangh_membership: "संघ सदस्यता आवेदन-पत्र",
+        vishisht_membership: "अन्य विशिष्ट सदस्यता आवेदन-पत्र",
+        anya_membership: "अन्य सदस्यता आवेदन-पत्र",
+        pathshala: "पाठशाला आवेदन-पत्र",
+        shivir: "शिविर आवेदन-पत्र",
+        swadhyayee_registration: "स्वाध्यायी पंजीकरण आवेदन-पत्र",
+        ganesh_jain_hostel: "गणेश जैन छात्रावास",
+        samata_trust: "श्री समता जनकल्याण प्रन्यास",
+        samata_scholarship: "समता छात्रवृत्ति आवेदन-पत्र",
+        acharya_shrilal_yojana: "पूज्य आचार्य श्री श्रीलाल उच्च शिक्षा योजना आवेदन-पत्र",
+        acharya_nanesh_award: "आचार्य श्री नानेश समता पुरस्कार हेतु प्रविष्टियाँ आमंत्रित",
+        champalal_award: "सेठ श्री चम्पालाल सांड स्मृति उच्च प्रशासनिक पुरस्कार",
+        pradeep_rampuria_award: "स्व. श्री प्रदीप कुमार रामपुरिया स्मृति साहित्य पुरस्कार प्रतियोगिता आवेदन प्रपत्र",
+        exam: "परीक्षा आवेदन-पत्र",
+        other: "अन्य आवेदन-पत्र",
+        report: "प्रतिवेदन"
+    };
 
     let url = '/api/aavedan-patra';
 
@@ -350,9 +382,13 @@ function fetchData() {
                 ? `<a href="/storage/aavedan_patra/${item.file}" target="_blank">📎 PDF</a>`
                 : `<a href="${item.file}" target="_blank">🔗 Google Form</a>`;
 
+            // English category को Hindi में बदलना
+            const categoryHindi = categoryMap[item.category] || item.category || "—";
+
             rows += `
                 <tr>
                     <td>${item.name}</td>
+                    <td>${categoryHindi}</td>
                     <td>${item.file_type}</td>
                     <td>${fileLink}</td>
                     <td>${item.preference}</td>
@@ -364,10 +400,11 @@ function fetchData() {
         });
 
         container.innerHTML = `
-            <table class="table table-bordered align-middle text-center">
+            <table class="table table-striped table-hover align-middle text-center">
                 <thead class="table-light">
                     <tr>
                         <th>नाम</th>
+                        <th>कैटेगरी</th>
                         <th>प्रकार</th>
                         <th>फ़ाइल</th>
                         <th>प्राथमिकता</th>
@@ -380,6 +417,8 @@ function fetchData() {
             </table>`;
     });
 }
+
+
 
 function deleteItem(id) {
     Swal.fire({
