@@ -291,7 +291,7 @@
     form.addEventListener('submit', async e => {
         e.preventDefault();
 
-        const { category, name, file_type, cover_photo, pdf, drive_link } = form;
+        const { category, file_type, cover_photo, pdf, drive_link } = form;
         const coverFile = cover_photo.files[0];
         const pdfFile = pdf.files[0];
 
