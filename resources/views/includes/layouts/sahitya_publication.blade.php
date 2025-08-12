@@ -6,28 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
-    <style>
-        :root {
-            --sidebar-width: 220px;
-            --sidebar-collapsed: 70px;
-        }
-        body {
-            margin: 0;
-            background: #fff;
-            color: #23262f;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+
+<style>
+/* ==== YOUR CSS EXACTLY AS GIVEN ==== */
+:root {
+    --sidebar-width: 220px;
+    --sidebar-collapsed: 100px;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    color: #23262f;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
 .main-header {
-    position: fixed;             /* ADD THIS */
-    top: 0;                      /* ADD THIS */
-    left: 0;                     /* ADD THIS */
-    right: 0;                    /* ADD THIS */
-   background: linear-gradient(to right, #ff6a00, #ee0979);
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-collapsed);
+    right: 0;
+    background: linear-gradient(to right, #ff6a00, #ee0979);
     color: #fff;
     padding: 7px 1rem;
     display: flex;
@@ -35,140 +39,235 @@
     justify-content: space-between;
     height: 50px;
     z-index: 1040;
+    transition: left 0.3s ease, width 0.3s ease;
+    width: calc(100% - var(--sidebar-collapsed));
+    box-sizing: border-box; /* ✅ Width overflow fix */
 }
 
-        .main-header .sidebar-toggle {
-            background: none;
-            color: #fff;
-            font-size: 1.5rem;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-        .main-header b {
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .main-header img {
-            border-radius: 50%;
-            border: 2px solid #356ef9;
-            width: 32px;
-            height: 32px;
-            object-fit: cover;
-        }
-        .layout {
+/* When sidebar expanded */
+.sidebar.expanded ~ .main-header {
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+
+/* Mobile view: header full width */
+
+.main-header .sidebar-toggle {
+    background: none;
+    color: #fff;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+.main-header b {
+    font-size: 1.2rem;
     display: flex;
-    padding-top: 50px; /* ADD THIS to push content below fixed header */
+    align-items: center;
+    gap: 8px;
+}
+.main-header img {
+    border-radius: 50%;
+    border: 2px solid #356ef9;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
 }
 
-        .sidebar {
-            width: var(--sidebar-collapsed);
-            background: #181824;
-            color: white;
-            transition: width 0.3s ease;
-            height: calc(100vh - 50px);
-            position: fixed;
-            top: 50px;
-            left: 0;
-            overflow-y: auto;
-            z-index: 1030;
-        }
-        .sidebar.expanded {
-            width: var(--sidebar-width);
-        }
-        .sidebar .profile {
-            text-align: center;
-            padding: 20px 0;
-        }
-        .sidebar .profile img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #356ef9;
-            margin-bottom: 5px;
-        }
-        .sidebar .profile .name,
-        .sidebar .profile .role {
-            display: none;
-        }
-        .sidebar.expanded .profile .name,
-        .sidebar.expanded .profile .role {
-            display: block;
-            color: #9aa0b9;
-            margin: 2px 0;
-            font-size: 0.9rem;
-        }
-        .nav-link {
-            color: #b6bbc7;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-radius: 6px;
-            margin: 5px 8px;
-            text-decoration: none;
-        }
-        .nav-link:hover, .nav-link.active {
-            background: linear-gradient(90deg, #2760fe 0%, #3e85fa 100%);
-            color: #fff;
-        }
-        .nav-link span {
-            display: none;
-        }
-        .sidebar.expanded .nav-link span {
-            display: inline;
-        }
-        .nav-item {
-            width: 100%;
-        }
-        .nav-link.menu-item {
-            background: none;
-            cursor: pointer;
-            justify-content: space-between;
-        }
-        .nav-link.menu-item span {
-            display: inline;
-        }
-        .submenu {
-            display: none;
-            flex-direction: column;
-            padding-left: 20px;
-        }
-        .submenu .nav-link i {
-    font-size: 1rem;
+/* Layout wrapper */
+.layout {
+    display: flex;
+    padding-top: 50px; /* push content below fixed header */
 }
- .sidebar:not(.expanded) .link-text {
-        display: none !important;
-    }
-        .sidebar.expanded .submenu.show {
-            display: flex;
-        }
-        .sidebar.expanded .submenu .nav-link {
-            font-size: 0.9rem;
-            padding: 7px 8px;
-            color: #aab0c7;
-        }
-        .submenu-toggle {
-            margin-left: auto;
-            transition: transform 0.3s ease;
-            font-size: 1rem;
-        }
-        .submenu-toggle.rotate {
-            transform: rotate(180deg);
-        }
-        main.content {
-            margin-left: var(--sidebar-collapsed);
-            padding: 20px;
-            transition: margin-left 0.3s ease;
-            width: 100%;
-            min-height: calc(100vh - 90px);
-             padding-bottom: 60px;
-        }
-        .sidebar.expanded ~ main.content {
-            margin-left: var(--sidebar-width);
-        }
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-collapsed, 80px);
+    background: #1e1e2d;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+}
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 3px;
+}
+.sidebar.expanded {
+    width: var(--sidebar-width);
+}
+.sidebar .nav-link span {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.2;
+}
+
+.sidebar .profile {
+    text-align: center;
+    padding: 15px 0;
+}
+.sidebar .profile img {
+    width: 50px;    
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #00d1ff;
+    /* margin-bottom: 5px; */
+}
+.sidebar .profile .name,
+.sidebar .profile .role {
+    display: none;
+}
+.sidebar.expanded .profile .name,
+.sidebar.expanded .profile .role {
+    display: block;
+    color: #9aa0b9;
+    margin: 2px 0;
+    font-size: 0.8rem;
+    /* user-select: none; */
+    margin-top: 5px;
+}
+
+/* Nav items spacing */
+.sidebar .nav-item {
+    margin: 4px 0;
+}
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ccc;
+    text-decoration: none;
+    padding-top: 25px;
+    padding-left:13px;
+    border-radius: 6px;
+    margin: 0 8px;
+    transition: background 0.2s, color 0.2s;
+}
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+/* Nav links */
+.nav-link {
+    min-height: 40px; 
+    line-height: 40px; 
+    color: #b6bbc7;
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    margin: 2px 6px;
+    text-decoration: none;
+    user-select: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: calc(100% - 12px);
+}
+
+/* Hover/active */
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background: #2a2a40;
+    color: #fff;
+}
+/* Hide text collapsed */
+.nav-link span {
+    display: none;
+}
+.sidebar.expanded .nav-link span {
+    display: inline;
+}
+
+/* Menu items with submenus */
+.nav-link.menu-item {
+    background: none;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+/* Icons alignment collapsed */
+.sidebar:not(.expanded) .nav-link {
+    justify-content: center;
+    gap: 15;
+    padding: 10px 20px;
+}
+.sidebar:not(.expanded) .submenu-toggle {
+    display: none;
+}
+.sidebar.expanded .nav-link {
+    justify-content: flex-start;
+    gap: 10px;
+}
+.sidebar:not(.expanded) .submenu .nav-link {
+    justify-content: center !important;
+    padding: 15px 20px !important;
+}
+
+/* Submenu */
+.submenu {
+    display: none;
+    flex-direction: column;
+    padding-left: 20px;
+    gap: 4px;
+}
+.sidebar.expanded .submenu.show {
+    display: flex;
+}
+.submenu .nav-link {
+    font-size: 0.9rem;
+    padding: 3px 6px;
+    color: #aab0c7;
+    border-radius: 4px;
+    min-height: 36px;
+    line-height: 36px;
+    margin: 2px 6px;
+    width: calc(100% - 12px);
+}
+
+/* Icons */
+.nav-link i {
+    min-width: 15px;
+    font-size: 1.2rem;
+}
+
+/* Submenu toggle arrow */
+.submenu-toggle {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    font-size: 1rem;
+    user-select: none;
+}
+.submenu-toggle.rotate {
+    transform: rotate(180deg);
+}
+
+/* Main content */
+main.content {
+    margin-left: var(--sidebar-collapsed);
+    padding: 20px;
+    padding-top: 70px; /* ✅ Header ke neeche space */
+    transition: margin-left 0.3s ease;
+    min-height: calc(100vh - 90px);
+    padding-bottom: 60px;
+    background: #f8f9fa;
+    overflow-x: hidden; /* ✅ Horizontal scroll remove */
+}
+.sidebar.expanded ~ main.content {
+    margin-left: var(--sidebar-width);
+}
+
+/* Footer */
 .footer {
     background: linear-gradient(to right, #7c3434, #c94b4b);
     padding: 0 20px;
@@ -187,8 +286,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow-x: hidden;
 }
-
 .sidebar.expanded ~ .footer {
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
@@ -199,16 +298,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .footer-right {
     position: relative;
 }
-
 .contact-info-icon {
     cursor: pointer;
     font-size: 1.2rem;
 }
-
 .contact-tooltip {
     display: none;
     position: absolute;
@@ -224,89 +320,137 @@
     font-size: 0.85rem;
     min-width: 180px;
 }
+.main-header .btn-logout {
+    background-color: #343a40 !important;
+    border: none;
+    color: #fff !important;
+    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 4px;
+}
+.main-header .btn-logout:hover {
+    background-color: #23272b !important;
+}
 
-/* Show tooltip on hover */
+/* Tooltip hover */
 .footer-right:hover .contact-tooltip {
     display: block;
 }
+.layout.expanded .main-header {
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+.layout.expanded .footer {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+.layout.expanded main.content {
+    margin-left: var(--sidebar-width);
+}
 
-        /* Mobile */
-        @media (max-width: 991px) {
-            .sidebar {
-                left: -100%;
-                width: var(--sidebar-width);
-                position: fixed;
-            }
-            .sidebar.mobile-show {
-                left: 0;
-            }
-            main.content, footer.footer {
-                margin-left: 0 !important;
-            }
-            .backdrop {
-                display: none;
-                position: fixed;
-                top: 50px;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.4);
-                z-index: 1020;
-            }
-            .backdrop.show {
-                display: block;
-            }
-        }
-    </style>
+
+/* Mobile */
+@media (max-width: 991px) {
+    .sidebar {
+        left: -100%;
+        width: var(--sidebar-width);
+        position: fixed;
+        overflow-y: auto;
+    }
+    .sidebar.mobile-show {
+        left: 0;
+    }
+    main.content,
+    .footer {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    .backdrop {
+        display: none;
+        position: fixed;
+        top: 50px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 1020;
+    }
+    .backdrop.show {
+        display: block;
+    }
+}
+</style>
+
+
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="main-header">
-        <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
-        <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन संघ </b>
-        <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="admin" />
-    </header>
+ 
+
+
 
     <!-- BACKDROP for mobile -->
     <div class="backdrop" id="sidebarBackdrop"></div>
 
     <!-- LAYOUT -->
-    <div class="layout">
+    <!-- <div class="layout"> -->
         <!-- SIDEBAR -->
-<!-- SIDEBAR -->
-        <nav class="sidebar" id="sidebarMenu">
-            <div class="profile">
-                <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
-                <div class="name">Hello Admin</div>
-                <div class="role">Shramnopasak Admin</div>
-            </div>
+        <nav class="sidebar expanded" id="sidebarMenu">
 
-<a href="{{ url('dashboard/sahitya_publication') }}" class="nav-link">
+            <div>
+                <div class="profile">
+                    <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
+                    <div class="name">Hello Admin</div>
+                    <div class="role">SuperUser</div>
+                </div>
+
+                <!-- Dashboard button without submenu -->
+                <div class="nav-item">
+                     <a href="{{ url('dashboard/sahitya_publication') }}" class="nav-link">
                 <i class="bi bi-house-door"></i>
                 <span class="link-text">HOME</span>
             </a>
+                </div>
+
+               <div class="nav-item">
+                     <a href="{{ url('/dashboard/sahitya-publication') }}"  class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="link-text">ADD SAHITYA</span>
+                    </a>
+                </div>
+             
+              
+
             
-   <a href="{{ url('/shramnopasak/all-view') }}" class="nav-link d-flex align-items-center">
-    <i class="bi bi-journal-bookmark me-2"></i>
-    <span class="link-text">SHRAMNOPASAK ALL BOOKS</span>
-</a>
 
+                    <!-- Logout as last menu item -->
+   <div class="nav-item">
+    <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+    </a>
+   </div>
 
-           <a href="{{ route('logout') }}" class="nav-link">
-    <i class="bi bi-box-arrow-right"></i>
-    <span class="link-text">Logout</span>
-</a>
+                </div>
+            </div>
 
+            <!-- Logout fixed at bottom -->
+           
         </nav>
-
+<header class="main-header">
+    <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन संघ </b>
+    <button class="btn btn-logout" onclick="window.location.href='/logout'">
+        Logout
+    </button>
+</header>
 
         <!-- MAIN -->
         <main class="content">
             @yield('content')
         </main>
 
-    <!-- FOOTER -->
-  <footer class="footer">
+        <!-- FOOTER -->
+        <footer class="footer">
     <div class="footer-left">
         Admin Panel © {{ date('Y') }} | SABSJS IT CELL
     </div>
@@ -319,84 +463,114 @@
             📞 +91-9636501008
         </div>
     </div>
-</footer>
+    </footer>
 
-    </div>
 
     <!-- Scripts -->
-    <script>
-        const sidebar = document.getElementById('sidebarMenu');
-        const toggleBtn = document.getElementById('sidebarToggle');
-        const backdrop = document.getElementById('sidebarBackdrop');
+<script>
+const sidebar = document.getElementById('sidebarMenu');
+const toggleBtn = document.getElementById('sidebarToggle');
+const backdrop = document.getElementById('sidebarBackdrop');
 
-        toggleBtn.addEventListener('click', () => {
-            const isMobile = window.innerWidth <= 991;
-            if (isMobile) {
-                sidebar.classList.toggle('mobile-show');
-                backdrop.classList.toggle('show');
-            } else {
-                sidebar.classList.toggle('expanded');
-                if (!sidebar.classList.contains('expanded')) {
-                    closeAllSubmenus();
-                }
-            }
-        });
+// ✅ Toggle sidebar on desktop/mobile
+toggleBtn.addEventListener('click', () => { 
+    const isMobile = window.innerWidth <= 991;
 
-        backdrop.addEventListener('click', () => {
-            sidebar.classList.remove('mobile-show');
-            backdrop.classList.remove('show');
-        });
+    if (isMobile) {
+        sidebar.classList.toggle('mobile-show');
+        backdrop.classList.toggle('show');
+    } else {
+        sidebar.classList.toggle('expanded');
 
-        function toggleSubmenu(element) {
-            const submenu = element.nextElementSibling;
-            const arrow = element.querySelector('.submenu-toggle');
-            const isOpen = submenu.classList.contains('show');
-            const isCollapsed = !sidebar.classList.contains('expanded');
-            const isMobile = window.innerWidth <= 991;
-
-            if (isCollapsed && !isMobile) {
-                sidebar.classList.add('expanded');
-                setTimeout(() => openSubmenu(submenu, arrow), 300);
-                return;
-            }
-
-            if (!isCollapsed) {
-                isOpen ? closeSubmenu(submenu, arrow) : openSubmenu(submenu, arrow);
-            }
+        // ✅ Add layout class toggle here
+        if (sidebar.classList.contains('expanded')) {
+            document.querySelector('.layout').classList.add('expanded');
+        } else {
+            document.querySelector('.layout').classList.remove('expanded');
         }
 
-        function openSubmenu(submenu, arrow) {
-            document.querySelectorAll('.submenu').forEach(s => s !== submenu && s.classList.remove('show'));
-            document.querySelectorAll('.submenu-toggle').forEach(i => i !== arrow && i.classList.remove('rotate'));
-            submenu.classList.add('show');
-            arrow.classList.add('rotate');
+        if (!sidebar.classList.contains('expanded')) {
+            closeAllSubmenus();
         }
+    }
+});
 
-        function closeSubmenu(submenu, arrow) {
-            submenu.classList.remove('show');
-            arrow.classList.remove('rotate');
-        }
 
-        function closeAllSubmenus() {
-            document.querySelectorAll('.submenu').forEach(s => s.classList.remove('show'));
-            document.querySelectorAll('.submenu-toggle').forEach(i => i.classList.remove('rotate'));
-        }
-    </script>
-    <script>
-    const infoIcon = document.querySelector('.contact-info-icon');
-    const tooltip = document.getElementById('contactTooltip');
+// ✅ Click on backdrop closes mobile sidebar
+backdrop.addEventListener('click', closeMobileSidebar);
 
+function closeMobileSidebar() {
+    sidebar.classList.remove('mobile-show');
+    backdrop.classList.remove('show');
+}
+
+// ✅ Toggle submenu when menu item is clicked
+function toggleSubmenu(element) {
+    const submenu = element.nextElementSibling;
+    const arrow = element.querySelector('.submenu-toggle');
+    const isOpen = submenu.classList.contains('show');
+    const isCollapsed = !sidebar.classList.contains('expanded');
+    const isMobile = window.innerWidth <= 991;
+
+    if (isCollapsed && !isMobile) {
+        sidebar.classList.add('expanded');
+        setTimeout(() => openSubmenu(submenu, arrow), 300);
+        return;
+    }
+
+    if (isOpen) {
+        closeSubmenu(submenu, arrow);
+    } else {
+        openSubmenu(submenu, arrow);
+    }
+}
+
+// ✅ Open submenu
+function openSubmenu(submenu, arrow) {
+    submenu.classList.add('show');
+    if (arrow) arrow.classList.add('rotate');
+}
+
+// ✅ Close submenu
+function closeSubmenu(submenu, arrow) {
+    submenu.classList.remove('show');
+    if (arrow) arrow.classList.remove('rotate');
+}
+
+// ✅ Close all submenus
+function closeAllSubmenus() {
+    document.querySelectorAll('.submenu').forEach(s => s.classList.remove('show'));
+    document.querySelectorAll('.submenu-toggle').forEach(i => i.classList.remove('rotate'));
+}
+
+// ✅ Logout button action
+function logoutFunction() {
+    window.location.href = "{{ route('logout') }}";
+}
+
+// ✅ Tooltip logic for contact info icon
+const infoIcon = document.querySelector('.contact-info-icon');
+const tooltip = document.getElementById('contactTooltip');
+
+if (infoIcon && tooltip) {
     infoIcon.addEventListener('click', () => {
         tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
     });
 
-    // Optional: Hide when clicking outside
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', (event) => {
         if (!infoIcon.contains(event.target) && !tooltip.contains(event.target)) {
             tooltip.style.display = 'none';
         }
     });
+}
+
+// ✅ Auto-close mobile sidebar if window resized to desktop
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 991) {
+        closeMobileSidebar();
+    }
+});
 </script>
 
 </body>
-</html>
+</html> 
