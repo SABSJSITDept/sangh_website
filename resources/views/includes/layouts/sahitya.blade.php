@@ -41,6 +41,7 @@ body {
     z-index: 1040;
     transition: left 0.3s ease, width 0.3s ease;
     width: calc(100% - var(--sidebar-collapsed));
+    box-sizing: border-box; /* ✅ Width overflow fix */
 }
 
 /* When sidebar expanded */
@@ -254,11 +255,12 @@ body {
 main.content {
     margin-left: var(--sidebar-collapsed);
     padding: 20px;
+    padding-top: 70px; /* ✅ Header ke neeche space */
     transition: margin-left 0.3s ease;
-    width: 100%;
     min-height: calc(100vh - 90px);
     padding-bottom: 60px;
     background: #f8f9fa;
+    overflow-x: hidden; /* ✅ Horizontal scroll remove */
 }
 .sidebar.expanded ~ main.content {
     margin-left: var(--sidebar-width);
@@ -283,6 +285,7 @@ main.content {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow-x: hidden;
 }
 .sidebar.expanded ~ .footer {
     margin-left: var(--sidebar-width);
@@ -332,6 +335,18 @@ main.content {
 .footer-right:hover .contact-tooltip {
     display: block;
 }
+.layout.expanded .main-header {
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+.layout.expanded .footer {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+.layout.expanded main.content {
+    margin-left: var(--sidebar-width);
+}
+
 
 /* Mobile */
 @media (max-width: 991px) {
@@ -376,7 +391,7 @@ main.content {
     <div class="backdrop" id="sidebarBackdrop"></div>
 
     <!-- LAYOUT -->
-    <div class="layout">
+    <!-- <div class="layout"> -->
         <!-- SIDEBAR -->
         <nav class="sidebar expanded" id="sidebarMenu">
 
@@ -409,20 +424,15 @@ main.content {
                     </a>
                 </div>
 
-                <div class="nav-item">
-                     <a href="{{ url('/shramnopasak/all-view') }}"  class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span class="link-text">HOME</span>
-                    </a>
-                </div>
+            
 
                     <!-- Logout as last menu item -->
-<div class="nav-item">
+   <div class="nav-item">
     <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">
         <i class="bi bi-box-arrow-right"></i>
         <span>Logout</span>
     </a>
-</div>
+   </div>
 
                 </div>
             </div>
@@ -457,8 +467,8 @@ main.content {
             📞 +91-9636501008
         </div>
     </div>
-</footer>
-    </div>
+    </footer>
+
 
     <!-- Scripts -->
 <script>
@@ -476,11 +486,19 @@ toggleBtn.addEventListener('click', () => {
     } else {
         sidebar.classList.toggle('expanded');
 
+        // ✅ Add layout class toggle here
+        if (sidebar.classList.contains('expanded')) {
+            document.querySelector('.layout').classList.add('expanded');
+        } else {
+            document.querySelector('.layout').classList.remove('expanded');
+        }
+
         if (!sidebar.classList.contains('expanded')) {
             closeAllSubmenus();
         }
     }
 });
+
 
 // ✅ Click on backdrop closes mobile sidebar
 backdrop.addEventListener('click', closeMobileSidebar);
