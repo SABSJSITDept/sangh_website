@@ -29,7 +29,7 @@ body {
 .main-header {
     position: fixed;
     top: 0;
-    left: 0;
+    left: var(--sidebar-collapsed);
     right: 0;
     background: linear-gradient(to right, #ff6a00, #ee0979);
     color: #fff;
@@ -39,7 +39,18 @@ body {
     justify-content: space-between;
     height: 50px;
     z-index: 1040;
+    transition: left 0.3s ease, width 0.3s ease;
+    width: calc(100% - var(--sidebar-collapsed));
 }
+
+/* When sidebar expanded */
+.sidebar.expanded ~ .main-header {
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+
+/* Mobile view: header full width */
+
 .main-header .sidebar-toggle {
     background: none;
     color: #fff;
@@ -74,12 +85,12 @@ body {
     background: #1e1e2d;
     color: #fff;
     position: fixed;
-    top: 50px;
+    top: 0;
     left: 0;
-    height: calc(100vh - 50px);
+    height: 100vh;
     transition: width 0.3s ease;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     justify-content: space-between;
     overflow-y: auto;
     scrollbar-width: thin;
@@ -359,13 +370,6 @@ main.content {
 <body>
  
 
-<header class="main-header">
-    <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
-    <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन संघ </b>
-    <button class="btn btn-logout" onclick="window.location.href='/logout'">
-        Logout
-    </button>
-</header>
 
 
     <!-- BACKDROP for mobile -->
@@ -527,6 +531,13 @@ main.content {
             <!-- Logout fixed at bottom -->
            
         </nav>
+<header class="main-header">
+    <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन संघ </b>
+    <button class="btn btn-logout" onclick="window.location.href='/logout'">
+        Logout
+    </button>
+</header>
 
         <!-- MAIN -->
         <main class="content">
