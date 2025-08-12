@@ -295,9 +295,7 @@
         const coverFile = cover_photo.files[0];
         const pdfFile = pdf.files[0];
 
-        if (!category.value.trim() || !name.value.trim()) {
-            return Swal.fire('⚠️ Required', 'Please fill all required fields.', 'warning');
-        }
+        
         if (coverFile && coverFile.size > 200 * 1024) {
             return Swal.fire('⚠️ File too large', 'Cover photo must be less than 200KB.', 'warning');
         }
