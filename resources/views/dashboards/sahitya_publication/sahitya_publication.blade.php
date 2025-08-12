@@ -22,6 +22,7 @@
             <h4 class="mb-3 text-primary">📚 Add / Edit Sahitya</h4>
             <form id="sahityaForm" enctype="multipart/form-data" class="row g-3">
                 <input type="hidden" name="edit_id" id="edit_id" />
+
                 <div class="col-md-4">
                     <label>Category</label>
                     <select name="category" class="form-select" required>
@@ -35,22 +36,43 @@
                         <option value="agam">आगम, अहिंसा-समता एवं प्राकृत संस्थान</option>
                     </select>
                 </div>
+
                 <div class="col-md-4">
                     <label>Book Name</label>
                     <input type="text" name="name" class="form-control" required />
                 </div>
+
                 <div class="col-md-4">
                     <label>Cover Photo (max 200KB)</label>
                     <input type="file" name="cover_photo" accept="image/*" class="form-control" />
                 </div>
-                <div class="col-md-6">
-                    <label>PDF (max 2MB, optional)</label>
+
+                <!-- File Type Selection -->
+                <div class="col-md-4">
+                    <label>File Type</label>
+                    <select name="file_type" id="file_type" class="form-select" required onchange="toggleFileType()">
+                        <option value="pdf">PDF Upload</option>
+                        <option value="drive">Google Drive Link</option>
+                    </select>
+                </div>
+
+                <!-- PDF Upload -->
+                <div class="col-md-6 file-input">
+                    <label>PDF (max 2MB)</label>
                     <input type="file" name="pdf" accept="application/pdf" class="form-control" />
                 </div>
+
+                <!-- Drive Link Input -->
+                <div class="col-md-6 drive-input" style="display:none;">
+                    <label>Google Drive Link</label>
+                    <input type="url" name="drive_link" class="form-control" placeholder="https://drive.google.com/..." />
+                </div>
+
                 <div class="col-md-3">
                     <label>Preference</label>
                     <input type="number" name="preference" class="form-control" required />
                 </div>
+
                 <div class="col-md-3">
                     <label>Show on Homepage</label>
                     <select name="show_on_homepage" class="form-select">
@@ -58,6 +80,7 @@
                         <option value="1">Yes</option>
                     </select>
                 </div>
+
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">💾 Save</button>
                 </div>
@@ -105,6 +128,12 @@ const categoryMap = {
     'agam': 'आगम, अहिंसा-समता एवं प्राकृत संस्थान',
 };
 
+function toggleFileType() {
+    const type = document.getElementById('file_type').value;
+    document.querySelector('.file-input').style.display = type === 'pdf' ? 'block' : 'none';
+    document.querySelector('.drive-input').style.display = type === 'drive' ? 'block' : 'none';
+}
+
 function renderHomepage(books) {
     const container = document.getElementById('homepageBooks');
     container.innerHTML = '';
@@ -120,10 +149,11 @@ function renderHomepage(books) {
         `;
     });
 }
+
 function renderBooksTable(books) {
     const container = document.getElementById('allBooks');
     if (books.length === 0) return container.innerHTML = '<p class="text-muted">No books available.</p>';
-    let table = `<table class="table table-bordered"><thead><tr><th>Image</th><th>Name & Category</th><th>PDF</th><th>Actions</th></tr></thead><tbody>`;
+    let table = `<table class="table table-bordered"><thead><tr><th>Image</th><th>Name & Category</th><th>File</th><th>Actions</th></tr></thead><tbody>`;
     books.forEach(book => {
         table += `<tr>
             <td><img src="${book.cover_photo}" width="80"></td>
@@ -132,7 +162,13 @@ function renderBooksTable(books) {
                 <small>${categoryMap[book.category]}</small><br>
                 <small class="text-secondary">Preference: ${book.preference}</small>
             </td>
-            <td>${book.pdf ? `<a href="${book.pdf}" target="_blank">View PDF</a>` : 'N/A'}</td>
+            <td>${
+                book.file_type === 'pdf' && book.pdf
+                ? `<a href="${book.pdf}" target="_blank">View PDF</a>`
+                : (book.file_type === 'drive' && book.drive_link
+                    ? `<a href="${book.drive_link}" target="_blank">Drive Link</a>`
+                    : 'N/A')
+            }</td>
             <td>
                 <button class="btn btn-sm btn-info" onclick='editBook(${JSON.stringify(book)})'>✏️ Edit</button>
                 <button class="btn btn-sm btn-success" onclick="setHomepageBook(${book.id})">🏠</button>
@@ -143,7 +179,6 @@ function renderBooksTable(books) {
     table += '</tbody></table>';
     container.innerHTML = table;
 }
-
 
 async function fetchHomepageBook() {
     const res = await fetch('/api/sahitya/homepage-books');
@@ -163,6 +198,11 @@ function editBook(book) {
     document.querySelector('[name="name"]').value = book.name;
     document.querySelector('[name="preference"]').value = book.preference;
     document.querySelector('[name="show_on_homepage"]').value = book.show_on_homepage;
+    document.querySelector('[name="file_type"]').value = book.file_type || 'pdf';
+    toggleFileType();
+    if (book.file_type === 'drive') {
+        document.querySelector('[name="drive_link"]').value = book.drive_link || '';
+    }
     document.getElementById('edit_id').value = book.id;
     document.getElementById('sahityaForm').scrollIntoView({ behavior: 'smooth' });
     setTimeout(() => document.querySelector('[name="name"]').focus(), 500);
@@ -196,7 +236,6 @@ async function setHomepageBook(id) {
 }
 
 // Handle Form Submit
-
 const form = document.getElementById('sahityaForm');
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -218,6 +257,7 @@ form.addEventListener('submit', async (e) => {
         Swal.fire('✅ Success', editId ? 'Updated successfully' : 'Book added', 'success');
         form.reset();
         document.getElementById('edit_id').value = '';
+        toggleFileType();
         fetchHomepageBook();
         fetchByCategory(document.getElementById('categorySelector').value);
     } else {

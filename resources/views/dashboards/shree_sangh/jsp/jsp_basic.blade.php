@@ -7,10 +7,10 @@
 <div class="container py-4">
     <h2 class="mb-4">📋 JSP बेसिक</h2>
 
-    <!-- Add Button -->
+    <!-- Add Button
     <div class="mb-3 text-end">
         <button class="btn btn-primary" onclick="openAddModal()">➕ Add New</button>
-    </div>
+    </div> -->
 
     <!-- List Table -->
     <div class="card shadow mb-4">
@@ -36,20 +36,22 @@
 <!-- Add Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form id="addJspForm" enctype="multipart/form-data">
+    <form id="addJspForm" enctype="multipart/form-data" novalidate>
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Add JSP Record</h5>
+                <h5 class="modal-title">Add JSP Record</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="add_content" class="form-label">Content</label>
+                    <label class="form-label">Content</label>
                     <textarea id="add_content" class="form-control" rows="3" required></textarea>
+                    <div class="invalid-feedback">Please enter content.</div>
                 </div>
                 <div class="mb-3">
-                    <label for="add_dtp" class="form-label">Image</label>
+                    <label class="form-label">Image</label>
                     <input type="file" id="add_dtp" class="form-control" accept="image/*" required>
+                    <div class="invalid-feedback">Please select an image file.</div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -64,7 +66,7 @@
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1">
   <div class="modal-dialog">
-    <form id="jspForm" enctype="multipart/form-data">
+    <form id="jspForm" enctype="multipart/form-data" novalidate>
         <input type="hidden" id="recordId">
         <div class="modal-content">
             <div class="modal-header">
@@ -73,12 +75,14 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="content" class="form-label">Content</label>
+                    <label class="form-label">Content</label>
                     <textarea id="content" class="form-control" rows="3" required></textarea>
+                    <div class="invalid-feedback">Please enter content.</div>
                 </div>
                 <div class="mb-3">
-                    <label for="dtp" class="form-label">Change Image (optional)</label>
+                    <label class="form-label">Change Image (optional)</label>
                     <input type="file" id="dtp" class="form-control" accept="image/*">
+                    <div class="invalid-feedback">Please select a valid image file.</div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -128,20 +132,41 @@
 
     function openAddModal() {
         document.getElementById('addJspForm').reset();
+        document.querySelectorAll('#addJspForm .is-invalid').forEach(el => el.classList.remove('is-invalid'));
         addModal.show();
     }
 
+    // Validate & Add
     document.getElementById('addJspForm').addEventListener('submit', function (e) {
         e.preventDefault();
+        let valid = true;
+
+        const content = document.getElementById('add_content');
+        const dtp = document.getElementById('add_dtp');
+
+        if (!content.value.trim()) {
+            content.classList.add('is-invalid');
+            valid = false;
+        } else {
+            content.classList.remove('is-invalid');
+        }
+
+        if (!dtp.files.length) {
+            dtp.classList.add('is-invalid');
+            valid = false;
+        } else {
+            dtp.classList.remove('is-invalid');
+        }
+
+        if (!valid) return;
+
         const formData = new FormData();
-        formData.append('content', document.getElementById('add_content').value);
-        formData.append('dtp', document.getElementById('add_dtp').files[0]);
+        formData.append('content', content.value);
+        formData.append('dtp', dtp.files[0]);
 
         fetch(apiUrl, {
             method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
+            headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
             body: formData
         }).then(res => {
             if (!res.ok) throw new Error('Add failed');
@@ -155,6 +180,7 @@
         });
     });
 
+    // Edit Record
     function editRecord(id) {
         fetch(`${apiUrl}/${id}`)
             .then(res => res.json())
@@ -162,16 +188,30 @@
                 document.getElementById('recordId').value = data.id;
                 document.getElementById('content').value = data.content;
                 document.getElementById('dtp').value = '';
+                document.querySelectorAll('#jspForm .is-invalid').forEach(el => el.classList.remove('is-invalid'));
                 editModal.show();
             })
             .catch(err => console.error(err));
     }
 
+    // Validate & Update
     document.getElementById('jspForm').addEventListener('submit', function (e) {
         e.preventDefault();
+        let valid = true;
+
+        const content = document.getElementById('content');
+        if (!content.value.trim()) {
+            content.classList.add('is-invalid');
+            valid = false;
+        } else {
+            content.classList.remove('is-invalid');
+        }
+
+        if (!valid) return;
+
         const id = document.getElementById('recordId').value;
         const formData = new FormData();
-        formData.append('content', document.getElementById('content').value);
+        formData.append('content', content.value);
         const file = document.getElementById('dtp').files[0];
         if (file) formData.append('dtp', file);
 
