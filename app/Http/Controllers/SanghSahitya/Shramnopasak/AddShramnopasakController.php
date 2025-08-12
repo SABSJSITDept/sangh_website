@@ -20,62 +20,75 @@ class AddShramnopasakController extends Controller
 
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'year' => 'required|integer',
-            'month' => 'required|string',
-            'cover_photo' => 'required|image|max:200',
-            'pdf' => 'required|mimes:pdf|max:2048',
-        ]);
+{
+    $request->validate([
+        'year' => 'required|integer',
+        'month' => 'required|string',
+        'file_type' => 'required|in:pdf,drive',
+        'cover_photo' => 'required|image|max:200',
+        'pdf' => 'required_if:file_type,pdf|mimes:pdf|max:2048',
+        'drive_link' => 'nullable|required_if:file_type,drive|url',
+    ]);
 
-        $coverPhotoPath = null;
-        if ($request->hasFile('cover_photo')) {
-            $coverPhotoPath = $request->file('cover_photo')->store('shramnopasak/cover_photos', 'public');
-        }
+    $coverPhotoPath = $request->file('cover_photo')
+        ? $request->file('cover_photo')->store('shramnopasak/cover_photos', 'public')
+        : null;
 
-        $pdfPath = null;
-        if ($request->hasFile('pdf')) {
-            $pdfPath = $request->file('pdf')->store("shramnopasak/{$request->year}", 'public');
-        }
-
-        $data = Shramnopasak::create([
-            'year' => $request->year,
-            'month' => $request->month,
-            'cover_photo' => $coverPhotoPath,
-            'pdf' => $pdfPath,
-        ]);
-
-        return response()->json(['status' => 'success', 'data' => $data]);
+    $pdfPath = null;
+    if ($request->file_type === 'pdf' && $request->hasFile('pdf')) {
+        $pdfPath = $request->file('pdf')->store("shramnopasak/{$request->year}", 'public');
     }
 
-    public function update(Request $request, $id)
-    {
-        $shram = Shramnopasak::findOrFail($id);
+    $data = Shramnopasak::create([
+        'year' => $request->year,
+        'month' => $request->month,
+        'file_type' => $request->file_type,
+        'cover_photo' => $coverPhotoPath,
+        'pdf' => $pdfPath,
+        'drive_link' => $request->file_type === 'drive' ? $request->drive_link : null,
+    ]);
 
-        $request->validate([
-            'year' => 'required|integer',
-            'month' => 'required|string',
-            'cover_photo' => 'nullable|image|max:200',
-            'pdf' => 'nullable|mimes:pdf|max:2048',
-        ]);
+    return response()->json(['status' => 'success', 'data' => $data]);
+}
 
-        // Delete old files if new ones are uploaded
-        if ($request->hasFile('cover_photo')) {
-            if ($shram->cover_photo) Storage::disk('public')->delete($shram->cover_photo);
-            $shram->cover_photo = $request->file('cover_photo')->store('shramnopasak/cover_photos', 'public');
-        }
 
-        if ($request->hasFile('pdf')) {
-            if ($shram->pdf) Storage::disk('public')->delete($shram->pdf);
-            $shram->pdf = $request->file('pdf')->store("shramnopasak/{$request->year}", 'public');
-        }
+   public function update(Request $request, $id)
+{
+    $shram = Shramnopasak::findOrFail($id);
 
-        $shram->year = $request->year;
-        $shram->month = $request->month;
-        $shram->save();
+    $request->validate([
+        'year' => 'required|integer',
+        'month' => 'required|string',
+        'file_type' => 'required|in:pdf,drive',
+        'cover_photo' => 'nullable|image|max:200',
+        'pdf' => 'required_if:file_type,pdf|mimes:pdf|max:2048',
+        'drive_link' => 'nullable|required_if:file_type,drive|url',
+    ]);
 
-        return response()->json(['status' => 'success', 'data' => $shram]);
+    if ($request->hasFile('cover_photo')) {
+        if ($shram->cover_photo) Storage::disk('public')->delete($shram->cover_photo);
+        $shram->cover_photo = $request->file('cover_photo')->store('shramnopasak/cover_photos', 'public');
     }
+
+    if ($request->file_type === 'pdf' && $request->hasFile('pdf')) {
+        if ($shram->pdf) Storage::disk('public')->delete($shram->pdf);
+        $shram->pdf = $request->file('pdf')->store("shramnopasak/{$request->year}", 'public');
+        $shram->drive_link = null;
+    }
+
+    if ($request->file_type === 'drive') {
+        if ($shram->pdf) Storage::disk('public')->delete($shram->pdf);
+        $shram->pdf = null;
+        $shram->drive_link = $request->drive_link;
+    }
+
+    $shram->file_type = $request->file_type;
+    $shram->year = $request->year;
+    $shram->month = $request->month;
+    $shram->save();
+
+    return response()->json(['status' => 'success', 'data' => $shram]);
+}
 
     public function destroy($id)
     {

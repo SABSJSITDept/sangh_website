@@ -62,13 +62,16 @@
     <h2 class="mb-4 text-center">📘 श्रमणोपासक</h2>
 
     <div class="row mb-5">
+        <!-- Form -->
         <div class="col-md-5">
             <form id="shramForm" enctype="multipart/form-data" class="border p-3 rounded shadow-sm">
                 <input type="hidden" id="editId">
+
                 <div class="mb-3">
                     <label class="form-label">Year</label>
                     <select name="year" class="form-select" required id="yearSelect"></select>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Month</label>
                     <select name="month" class="form-select" required id="monthSelect">
@@ -78,19 +81,34 @@
                         @endforeach
                     </select>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Cover Photo (Max 200KB)</label>
                     <input type="file" name="cover_photo" class="form-control" accept="image/*">
                 </div>
+
                 <div class="mb-3">
+                    <label class="form-label">File Type</label><br>
+                    <input type="radio" name="file_type" value="pdf" checked onchange="toggleFileType('pdf')"> PDF
+                    <input type="radio" name="file_type" value="drive" class="ms-3" onchange="toggleFileType('drive')"> Google Drive Link
+                </div>
+
+                <div class="mb-3" id="pdfUploadField">
                     <label class="form-label">PDF (Max 2MB)</label>
                     <input type="file" name="pdf" class="form-control" accept="application/pdf">
                 </div>
+
+                <div class="mb-3 d-none" id="driveLinkField">
+                    <label class="form-label">Google Drive Link</label>
+                    <input type="url" name="drive_link" class="form-control" placeholder="https://drive.google.com/...">
+                </div>
+
                 <button class="btn btn-primary" type="submit" id="submitBtn">Upload</button>
                 <button type="button" class="btn btn-secondary ms-2 d-none" id="cancelEdit" onclick="cancelEdit()">Cancel</button>
             </form>
         </div>
 
+        <!-- Latest Entry -->
         <div class="col-md-7 d-flex align-items-center justify-content-center">
             <div class="card shadow-sm p-3 w-100" style="max-width: 360px;">
                 <div class="text-center">
@@ -103,6 +121,7 @@
         </div>
     </div>
 
+    <!-- Cards -->
     <div class="shram-container" id="shramCards"></div>
     <div class="pagination-container" id="paginationControls"></div>
 </div>
@@ -112,6 +131,13 @@ let allData = [];
 let currentPage = 1;
 const perPage = 12;
 
+// Toggle PDF / Drive fields
+function toggleFileType(type) {
+    document.getElementById('pdfUploadField').classList.toggle('d-none', type !== 'pdf');
+    document.getElementById('driveLinkField').classList.toggle('d-none', type !== 'drive');
+}
+
+// Handle form submit
 document.getElementById('shramForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -121,24 +147,34 @@ document.getElementById('shramForm').addEventListener('submit', async function (
     const url = id ? `/api/shramnopasak/${id}` : '/api/shramnopasak';
     if (id) formData.append('_method', 'PUT');
 
+    const year = formData.get('year');
+    const month = formData.get('month');
+    const fileType = formData.get('file_type');
     const cover = formData.get('cover_photo');
     const pdf = formData.get('pdf');
+    const driveLink = formData.get('drive_link');
 
-    if (!formData.get('year') || !formData.get('month')) {
-        return Swal.fire('Error', 'All fields are required', 'error');
+    // Frontend validation with SweetAlert
+    if (!year || !month) return Swal.fire('Error', 'Year and Month are required', 'error');
+    if (!id && (!cover || cover.size === 0)) return Swal.fire('Error', 'Cover photo is required', 'error');
+    if (cover && cover.size > 200 * 1024) return Swal.fire('Error', 'Cover photo must be less than 200KB', 'error');
+
+    if (fileType === 'pdf') {
+        if (!id && (!pdf || pdf.size === 0)) return Swal.fire('Error', 'PDF file is required', 'error');
+        if (pdf && pdf.size > 2 * 1024 * 1024) return Swal.fire('Error', 'PDF must be less than 2MB', 'error');
     }
-    if (!id && (!cover || cover.size === 0)) {
-        return Swal.fire('Error', 'Cover photo is required', 'error');
+    if (fileType === 'drive') {
+        if (!driveLink) return Swal.fire('Error', 'Google Drive link is required', 'error');
+        const urlPattern = /^https?:\/\/(drive\.google\.com|docs\.google\.com)\/.+$/;
+        if (!urlPattern.test(driveLink)) return Swal.fire('Error', 'Invalid Google Drive link', 'error');
     }
-    if (!id && (!pdf || pdf.size === 0)) {
-        return Swal.fire('Error', 'PDF is required', 'error');
-    }
-    if (cover && cover.size > 200 * 1024) {
-        return Swal.fire('Error', 'Cover photo must be less than 200KB', 'error');
-    }
-    if (pdf && pdf.size > 2 * 1024 * 1024) {
-        return Swal.fire('Error', 'PDF must be less than 2MB', 'error');
-    }
+
+    Swal.fire({
+        title: 'Uploading...',
+        text: 'Please wait while we upload your file.',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+    });
 
     const res = await fetch(url, {
         method: 'POST',
@@ -150,12 +186,15 @@ document.getElementById('shramForm').addEventListener('submit', async function (
     });
     const result = await res.json();
 
+    Swal.close();
+
     if (result.status === 'success') {
         Swal.fire('Success', id ? 'Updated Successfully' : 'Uploaded Successfully', 'success');
         form.reset();
         cancelEdit();
         fetchAllShramData();
         fetchLatest();
+        toggleFileType('pdf'); // reset
     } else {
         Swal.fire('Error', 'Something went wrong', 'error');
     }
@@ -182,8 +221,10 @@ function renderPage(page) {
         <div class="shram-card" id="shram-card-${item.id}">
             <img src="${item.cover_photo ? '/storage/' + item.cover_photo : 'https://via.placeholder.com/150'}" class="shram-thumb" />
             <div class="month-year">${item.month} ${item.year}</div>
-            ${item.pdf ? `<a href="/storage/${item.pdf}" target="_blank" class="btn btn-sm btn-outline-primary w-100">📄 Read</a>` : `<div class="text-muted">No PDF</div>`}
-            <button onclick="editItem(${encodeURIComponent(JSON.stringify(item))})" class="btn btn-sm btn-warning mt-2 w-100">✏️ Edit</button>
+            ${item.file_type === 'pdf'
+                ? (item.pdf ? `<a href="/storage/${item.pdf}" target="_blank" class="btn btn-sm btn-outline-primary w-100">📄 Read</a>` : `<div class="text-muted">No PDF</div>`)
+                : (item.drive_link ? `<a href="${item.drive_link}" target="_blank" class="btn btn-sm btn-outline-primary w-100">🔗 View Drive</a>` : `<div class="text-muted">No Link</div>`)}
+            <button onclick='editItem(${JSON.stringify(item)})' class="btn btn-sm btn-warning mt-2 w-100">✏️ Edit</button>
             <button onclick="confirmDelete(${item.id})" class="btn btn-sm btn-danger mt-1 w-100">🗑️ Delete</button>
         </div>`;
     });
@@ -214,11 +255,15 @@ function cancelEdit() {
     document.getElementById('cancelEdit').classList.add('d-none');
 }
 
-function editItem(rawItem) {
-    const item = JSON.parse(decodeURIComponent(rawItem));
+function editItem(item) {
     document.getElementById('editId').value = item.id;
     document.getElementById('yearSelect').value = item.year;
     document.getElementById('monthSelect').value = item.month;
+    document.querySelector(`input[name="file_type"][value="${item.file_type}"]`).checked = true;
+    toggleFileType(item.file_type);
+    if (item.file_type === 'drive') {
+        document.querySelector('input[name="drive_link"]').value = item.drive_link || '';
+    }
     document.getElementById('submitBtn').innerText = 'Update';
     document.getElementById('cancelEdit').classList.remove('d-none');
 }
@@ -267,8 +312,15 @@ function fetchLatest() {
                     ? `<img src="/storage/${item.cover_photo}" class="img-fluid rounded shadow-sm" style="max-height:180px;">`
                     : `<div class="text-muted">No Cover</div>`;
                 dateEl.innerText = `${item.month} ${item.year}`;
-                readBtn.href = `/storage/${item.pdf}`;
-                readBtn.classList.remove("d-none");
+                if (item.file_type === 'pdf' && item.pdf) {
+                    readBtn.href = `/storage/${item.pdf}`;
+                    readBtn.classList.remove("d-none");
+                } else if (item.file_type === 'drive' && item.drive_link) {
+                    readBtn.href = item.drive_link;
+                    readBtn.classList.remove("d-none");
+                } else {
+                    readBtn.classList.add("d-none");
+                }
             }
         });
 }
@@ -276,7 +328,7 @@ function fetchLatest() {
 function populateYearDropdown() {
     const yearSelect = document.getElementById("yearSelect");
     const currentYear = new Date().getFullYear();
-    for (let year = 2015; year <= currentYear + 0; year++) {
+    for (let year = 2015; year <= currentYear; year++) {
         const option = document.createElement("option");
         option.value = year;
         option.textContent = year;
