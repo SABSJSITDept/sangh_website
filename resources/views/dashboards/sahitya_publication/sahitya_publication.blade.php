@@ -39,7 +39,7 @@
 
                 <div class="col-md-4">
                     <label>Book Name</label>
-                    <input type="text" name="name" class="form-control" required />
+                    <input type="text" name="name" class="form-control"  />
                 </div>
 
                 <div class="col-md-4">
@@ -58,7 +58,7 @@
 
                 <!-- PDF Upload -->
                 <div class="col-md-6 file-input">
-                    <label>PDF (max 2MB)</label>
+                    <label>PDF (max 20MB)</label>
                     <input type="file" name="pdf" accept="application/pdf" class="form-control" />
                 </div>
 
@@ -70,7 +70,7 @@
 
                 <div class="col-md-3">
                     <label>Preference</label>
-                    <input type="number" name="preference" class="form-control" required />
+                    <input type="number" name="preference" class="form-control"  />
                 </div>
 
                 <div class="col-md-3">
