@@ -56,7 +56,7 @@
 
                 <!-- Yuva Card -->
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='#'">
+                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='yuva_photo_gallery'">
                         <img src="{{ asset('images/yuva.png') }}" class="card-img-top rounded-top-4" alt="Yuva Gallery">
                         <div class="card-body text-center">
                             <h5 class="card-title fw-bold text-success">💪 युवा</h5>
@@ -68,7 +68,7 @@
 
                 <!-- Mahila Card -->
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='#'">
+                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='mahila_photo_gallery'">
                         <img src="{{ asset('images/mslogo.png') }}" class="card-img-top rounded-top-4" alt="Mahila Gallery">
                         <div class="card-body text-center">
                             <h5 class="card-title fw-bold text-danger">🌸 महिला</h5>

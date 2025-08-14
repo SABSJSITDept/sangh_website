@@ -246,5 +246,14 @@ Route::get('/home_slider', function () {
     return view('dashboards.home_slider.add_home_slider');
 })->name('add_home_slider.view');
 
+
+Route::get('/yuva_photo_gallery', function () {
+    return view('dashboards.photo_gallery.yuva_sangh');
+})->name('yuva_photo_gallery.view');
+
+Route::get('/mahila_photo_gallery', function () {
+    return view('dashboards.photo_gallery.mahila_samiti');
+})->name('mahila_photo_gallery.view');
+
 });
                      
