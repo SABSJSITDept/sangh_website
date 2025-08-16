@@ -74,7 +74,7 @@ if ($request->post === 'संयोजक' || $request->post === 'संयो�
     return response()->json(['success' => true]);
 }
 
-   public function update(Request $request, $id)
+public function update(Request $request, $id)
 {
     $data = PravartiSanyojak::findOrFail($id);
 
@@ -91,31 +91,33 @@ if ($request->post === 'संयोजक' || $request->post === 'संयो�
         return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    // ❗ Check for duplicate संयोजक (excluding current ID)
-   // ❗ Check for existing संयोजक / संयोजिका in same प्रवर्ती
-if ($request->post === 'संयोजक' || $request->post === 'संयोजिका') {
-    $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
-        ->whereIn('post', ['संयोजक', 'संयोजिका'])
-        ->exists();
+    // ❗ Check for existing संयोजक / संयोजिका in same प्रवर्ती (excluding current record)
+    if (in_array($request->post, ['संयोजक', 'संयोजिका'])) {
+        $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
+            ->whereIn('post', ['संयोजक', 'संयोजिका'])
+            ->where('id', '!=', $id) // exclude current record
+            ->exists();
 
-    if ($exists) {
-        return response()->json([
-            'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक/संयोजिका मौजूद है।'
-        ], 422);
+        if ($exists) {
+            return response()->json([
+                'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक/संयोजिका मौजूद है।'
+            ], 422);
+        }
     }
-}
 
     // Update photo if new one uploaded
     if ($request->hasFile('photo')) {
-        Storage::disk('public')->delete($data->photo);
+        if ($data->photo) {
+            Storage::disk('public')->delete($data->photo);
+        }
         $data->photo = $request->file('photo')->store('pravarti_sanyojak', 'public');
     }
 
     $data->update($request->only(['name', 'post', 'city', 'pravarti_id', 'mobile']));
-    $data->save();
 
     return response()->json(['success' => true]);
 }
+
 
     public function destroy($id)
     {
