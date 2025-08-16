@@ -13,7 +13,7 @@ class PravartiSanyojakController extends Controller
 {
 public function index()
 {
-    $postPriority = ['संयोजक', 'सह संयोजक', 'संयोजन मण्डल सदस्य'];
+    $postPriority = ['संयोजक', 'संयोजिका', 'सह संयोजक', 'संयोजन मण्डल सदस्य'];
 
     // Fetch all with relation
     $data = PravartiSanyojak::with('pravarti')->get();
@@ -51,18 +51,19 @@ public function store(Request $request)
         return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    // ❗ Check for existing संयोजक in same प्रवर्ती
-    if ($request->post === 'संयोजक') {
-        $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
-            ->where('post', 'संयोजक')
-            ->exists();
+   // ❗ Check for existing संयोजक / संयोजिका in same प्रवर्ती
+if ($request->post === 'संयोजक' || $request->post === 'संयोजिका') {
+    $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
+        ->whereIn('post', ['संयोजक', 'संयोजिका'])
+        ->exists();
 
-        if ($exists) {
-            return response()->json([
-                'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक मौजूद है।'
-            ], 422);
-        }
+    if ($exists) {
+        return response()->json([
+            'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक/संयोजिका मौजूद है।'
+        ], 422);
     }
+}
+
 
     $path = $request->file('photo')->store('pravarti_sanyojak', 'public');
 
@@ -91,18 +92,18 @@ public function store(Request $request)
     }
 
     // ❗ Check for duplicate संयोजक (excluding current ID)
-    if ($request->post === 'संयोजक') {
-        $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
-            ->where('post', 'संयोजक')
-            ->where('id', '!=', $id)
-            ->exists();
+   // ❗ Check for existing संयोजक / संयोजिका in same प्रवर्ती
+if ($request->post === 'संयोजक' || $request->post === 'संयोजिका') {
+    $exists = PravartiSanyojak::where('pravarti_id', $request->pravarti_id)
+        ->whereIn('post', ['संयोजक', 'संयोजिका'])
+        ->exists();
 
-        if ($exists) {
-            return response()->json([
-                'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक मौजूद है।'
-            ], 422);
-        }
+    if ($exists) {
+        return response()->json([
+            'error' => '❌ इस प्रवर्ती के लिए पहले से संयोजक/संयोजिका मौजूद है।'
+        ], 422);
     }
+}
 
     // Update photo if new one uploaded
     if ($request->hasFile('photo')) {

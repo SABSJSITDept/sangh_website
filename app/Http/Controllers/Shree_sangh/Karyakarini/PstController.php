@@ -32,7 +32,7 @@ public function store(Request $request)
     $validator = Validator::make($request->all(), [
         'name' => 'required|string|max:255',
         'post' => 'required|string|in:अध्यक्ष,महामंत्री,कोषाध्यक्ष,सह कोषाध्यक्ष',
-        'photo' => 'nullable|image|max:200', // 200KB
+        'photo' => 'required|image|max:200', // 200KB
     ]);
 
     if ($validator->fails()) {
@@ -59,7 +59,7 @@ public function store(Request $request)
     $validator = Validator::make($request->all(), [
         'name' => 'required|string|max:255',
         'post' => 'required|string|max:255',
-        'photo' => 'nullable|image|max:200', // 200KB
+        'photo' => 'required|image|max:200', // 200KB
     ]);
 
     if ($validator->fails()) {

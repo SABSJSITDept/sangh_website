@@ -14,14 +14,14 @@
     <h4 class="mb-4">पूर्व अध्यक्ष (Ex Presidents)</h4>
 
     <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 2000">
-        <div id="toastMsg" class="toast align-items-center text-bg-primary border-0" role="alert">
-            <div class="d-flex">
-                <div class="toast-body" id="toastBody">Message here</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
+<div class="toast-container position-fixed end-0 p-3" style="z-index:2000; top:70px;">
+    <div id="toastMsg" class="toast align-items-center text-bg-primary border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="toastBody">Message here</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
         </div>
     </div>
+</div>
 
     <!-- Form Card -->
     <div class="card shadow-sm border-0 mb-4">

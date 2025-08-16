@@ -14,9 +14,20 @@
         vertical-align: middle !important;
     }
 </style>
-
 <div class="container mt-4">
     <h4 class="mb-4 text-center">📋 आवेदन पत्र</h4>
+
+    <!-- ✅ Instructions Message -->
+    <div class="p-3 mb-3 border rounded bg-light">
+        <p class="mb-1">📌 <strong>ध्यान दें:</strong></p>
+        <ul class="mb-0">
+            <li>PDF फ़ाइल का अधिकतम साइज <strong>3 MB</strong> होना चाहिए।</li>
+            <li><strong>नाम, कैटेगरी, प्रकार</strong> अनिवार्य हैं।</li>
+            <li>कृपया <strong>कैटेगरी सही से चुनें</strong>।</li>
+        </ul>
+    </div>
+
+<div class="container mt-4">
 
     <!-- 🔽 Add/Edit Form -->
     <div class="card mb-4">
@@ -213,37 +224,60 @@ document.getElementById('aavedanForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const id = document.getElementById('edit_id').value;
+    const name = document.getElementById('name').value.trim();
+    const category = document.getElementById('category').value;
     const fileType = document.querySelector('input[name="file_type"]:checked').value;
+    const fileInput = document.getElementById('fileInput').files[0];
+    const googleFormLink = document.getElementById('googleFormLink').value.trim();
+
+    // 🔴 Required Fields Validation
+    if (!name || !category || !fileType) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'ध्यान दें!',
+            text: 'कृपया सभी अनिवार्य फ़ील्ड्स (नाम, कैटेगरी, प्रकार) भरें।'
+        });
+        return;
+    }
+
+    // 🔴 PDF Size Validation (max 3MB)
+    if (fileType === 'pdf' && fileInput) {
+        const maxSize = 3 * 1024 * 1024; // 3 MB
+        if (fileInput.size > maxSize) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'फ़ाइल बहुत बड़ी है!',
+                text: 'PDF फ़ाइल का साइज 3 MB से अधिक नहीं होना चाहिए।'
+            });
+            return;
+        }
+    }
+
     const formData = new FormData();
-    formData.append('name', document.getElementById('name').value);
-    formData.append('category', document.getElementById('category').value);
+    formData.append('name', name);
+    formData.append('category', category);
     formData.append('preference', document.getElementById('preference').value || 0);
     formData.append('file_type', fileType);
 
-    const fileInput = document.getElementById('fileInput').files[0];
-    const googleFormLink = document.getElementById('googleFormLink').value;
-
     if (fileType === 'pdf') {
         if (!fileInput && !id) {
-    Swal.fire({
-        icon: 'warning',
-        title: 'ध्यान दें!',
-        text: 'कृपया PDF चुनें।'
-    });
-    return;
-}
-
+            Swal.fire({
+                icon: 'warning',
+                title: 'ध्यान दें!',
+                text: 'कृपया PDF चुनें।'
+            });
+            return;
+        }
         if (fileInput) formData.append('file', fileInput);
     } else {
-      if (!googleFormLink) {
-    Swal.fire({
-        icon: 'warning',
-        title: 'ध्यान दें!',
-        text: 'Google Form लिंक डालें।'
-    });
-    return;
-}
-
+        if (!googleFormLink) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'ध्यान दें!',
+                text: 'Google Form लिंक डालें।'
+            });
+            return;
+        }
         formData.append('file', googleFormLink);
     }
 
@@ -256,31 +290,31 @@ document.getElementById('aavedanForm').addEventListener('submit', function(e) {
     const url = id ? `/api/aavedan-patra/${id}` : '/api/aavedan-patra';
     if (id) formData.append('_method', 'PUT');
 
-   axios({ method, url, data: formData, headers }).then(() => {
-    document.getElementById('aavedanForm').reset();
-    document.getElementById('edit_id').value = '';
-    toggleFileInputs();
-    document.getElementById('filterCategory').value = ''; // reset filter
-    fetchData(); // reload all
+    axios({ method, url, data: formData, headers }).then(() => {
+        document.getElementById('aavedanForm').reset();
+        document.getElementById('edit_id').value = '';
+        toggleFileInputs();
+        document.getElementById('filterCategory').value = ''; // reset filter
+        fetchData(); // reload all
 
-    // ✅ Success Alert
-    Swal.fire({
-        icon: 'success',
-        title: 'सफलता!',
-        text: 'आवेदन पत्र सफलतापूर्वक सहेजा गया।',
-        timer: 2000,
-        showConfirmButton: false
-    });
-}).catch(error => {
-    // ✅ Error Alert
-    Swal.fire({
-        icon: 'error',
-        title: 'त्रुटि!',
-        text: 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।',
+        // ✅ Success Alert
+        Swal.fire({
+            icon: 'success',
+            title: 'सफलता!',
+            text: 'आवेदन पत्र सफलतापूर्वक सहेजा गया।',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }).catch(error => {
+        // ✅ Error Alert
+        Swal.fire({
+            icon: 'error',
+            title: 'त्रुटि!',
+            text: 'कुछ गलत हो गया। कृपया पुनः प्रयास करें।',
+        });
     });
 });
 
-});
 
 function editItem(id) {
     axios.get('/api/aavedan-patra').then(res => {
@@ -302,7 +336,7 @@ function editItem(id) {
         toggleFileInputs();
 
         // ⬇ फॉर्म तक स्मूथ स्क्रॉल और फोकस
-        const formElement = document.getElementById('aavedanForm'); // अपने फॉर्म का ID यहाँ डालें
+        const formElement = document.getElementById('aavedanForm'); 
         if (formElement) {
             formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             setTimeout(() => {
@@ -311,18 +345,32 @@ function editItem(id) {
         }
     });
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     toggleFileInputs();
     fetchData();
 
     document.getElementById('filterCategory').addEventListener('change', function() {
         fetchData();
+
+        // ⬇ फॉर्म तक स्मूथ स्क्रॉल (जब filter बदले)
+        const formElement = document.getElementById('aavedanForm');
+        if (formElement) {
+            formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     });
 
     document.getElementById('filterFileType').addEventListener('change', function() {
         fetchData();
+
+        // ⬇ फॉर्म तक स्मूथ स्क्रॉल (जब filter बदले)
+        const formElement = document.getElementById('aavedanForm');
+        if (formElement) {
+            formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     });
 });
+
 
 function fetchData() {
     const selectedCategory = document.getElementById('filterCategory').value;

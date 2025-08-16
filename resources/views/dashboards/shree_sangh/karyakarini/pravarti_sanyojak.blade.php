@@ -29,6 +29,7 @@
                     <select class="form-control" id="post" name="post" required>
                         <option value="">चयन करें</option>
                         <option value="संयोजक">संयोजक</option>
+                        <option value="संयोजिका">संयोजिका</option>
                         <option value="सह संयोजक">सह संयोजक</option>
                         <option value="संयोजन मण्डल सदस्य">संयोजन मण्डल सदस्य</option>
                     </select>

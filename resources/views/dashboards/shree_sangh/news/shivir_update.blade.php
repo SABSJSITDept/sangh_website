@@ -9,6 +9,16 @@
 
 
 <div class="container py-4">
+
+    <!-- Alert Message -->
+    <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        <div>
+            🖼 Photo size 200 KB से ज़्यादा नहीं होना चाहिए। <br>
+            📌 सभी fields भरना अनिवार्य है।
+        </div>
+    </div>
+
     <h2 class="mb-4">शिविर सूची</h2>
 
     <button class="btn btn-success mb-3" onclick="openAddModal()">
@@ -87,6 +97,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (id) {
             formData.append('_method', 'PUT');
+        }
+
+        // Photo size validation
+        const photo = formData.get('photo');
+        if (photo && photo.size > 204800) {
+            showToast("Photo must be under 200 KB!", "error");
+            return;
         }
 
         fetch(url, {

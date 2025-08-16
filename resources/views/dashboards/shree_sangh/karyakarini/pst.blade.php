@@ -84,6 +84,13 @@ document.getElementById('pstForm').addEventListener('submit', async function(e) 
     const url = id ? `/api/pst/${id}` : '/api/pst';
     if (id) formData.append('_method', 'PUT');
 
+    // 🔹 Photo compulsory check
+    const photoInput = document.getElementById('photo');
+    if (photoInput && photoInput.files.length === 0 && !id) {
+        showToast("📷 फोटो अनिवार्य है!", "danger");
+        return;
+    }
+
     try {
         const res = await fetch(url, {
             method: 'POST',
@@ -101,20 +108,15 @@ document.getElementById('pstForm').addEventListener('submit', async function(e) 
         }
 
         if (!res.ok) {
-            // 🔹 Custom business rules (403 errors)
             if (data.error) {
                 showToast(data.error, "danger");
                 return;
             }
-
-            // 🔹 Laravel validation errors (422)
             if (data.errors) {
                 const errors = Object.values(data.errors).flat().join(" | ");
                 showToast("⚠️ " + errors, "danger");
                 return;
             }
-
-            // 🔹 Unknown error
             showToast("❌ कोई त्रुटि हुई", "danger");
             return;
         }
@@ -131,6 +133,7 @@ document.getElementById('pstForm').addEventListener('submit', async function(e) 
         showToast("❌ सर्वर से संपर्क नहीं हो सका", "danger");
     }
 });
+
 });
 
 // ✅ Toast Alert Function

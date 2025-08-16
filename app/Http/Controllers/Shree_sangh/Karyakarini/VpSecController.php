@@ -50,7 +50,7 @@ class VpSecController extends Controller
             'city'   => 'required',
             'aanchal'=> 'nullable',
             'mobile' => 'required',
-            'photo'  => 'nullable|image',
+            'photo'  => 'nullable|image|max:250',
         ]);
 
         if ($validator->fails()) {
@@ -98,7 +98,7 @@ class VpSecController extends Controller
             'city'   => 'required',
             'aanchal'=> 'nullable',
             'mobile' => 'required',
-            'photo'  => 'nullable|image',
+            'photo'  => 'nullable|image|max:250',
         ]);
 
         if ($validator->fails()) {

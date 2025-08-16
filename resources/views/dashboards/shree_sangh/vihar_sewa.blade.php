@@ -100,7 +100,7 @@
 </div>
 
 {{-- ✅ Toast Notification --}}
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 60px;">
   <div id="toastAlert" class="toast align-items-center text-bg-success border-0" role="alert">
     <div class="d-flex">
       <div class="toast-body" id="toastMessage">सफलतापूर्वक जोड़ा गया!</div>
@@ -108,6 +108,7 @@
     </div>
   </div>
 </div>
+
 
 {{-- 🔄 Script --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -129,7 +130,7 @@ function fetchVihar() {
             let rows = '';
             data.forEach((item) => {
                 rows += `
-                    <tr>
+                    <tr>    
                         <td>${item.formatted_date ?? ''}</td>
                         <td>${item.aadi_thana}</td>
                         <td>${item.location}</td>            

@@ -62,14 +62,19 @@ class NewsUpdateController extends Controller
 }
 
 
-    public function destroy($id)
-    {
-        $news = News::findOrFail($id);
-        Storage::disk('public')->delete($news->photo);
-        $news->delete();
+   public function destroy($id)
+{
+    $news = News::findOrFail($id);
 
-        return response()->json(['message' => 'Deleted']);
+    if (!empty($news->photo) && Storage::disk('public')->exists($news->photo)) {
+        Storage::disk('public')->delete($news->photo);
     }
+
+    $news->delete();
+
+    return response()->json(['message' => 'Deleted']);
+}
+
 
     public function show($id)
     {

@@ -26,7 +26,7 @@
         </div>
 
    <!-- 🔍 Card 3: Vir Pariwar -->
-<div class="col">
+<!-- <div class="col">
     <div class="card h-100 border-0 shadow-lg rounded-4">
         <div class="card-body text-center" style="background: linear-gradient(to right, #56ccf2, #2f80ed); color: white; border-radius: 1rem 1rem 0 0;">
             <h5 class="card-title fs-5">Pravarti</h5>
@@ -36,7 +36,7 @@
             <a href="{{ url('/pravarti') }}" class="btn btn-outline-info fw-semibold">📂 Go</a>
         </div>
     </div>
-</div>
+</div> -->
 
 <div class="col">
     <div class="card h-100 border-0 shadow-lg rounded-4">
@@ -49,6 +49,19 @@
         </div>
     </div>
 </div>
+
+  <div class="col">
+            <div class="card h-100 border-0 shadow-lg rounded-4">
+                <div class="card-body text-center" style="background: linear-gradient(to right, #ff9966, #ff5e62); color: white; border-radius: 1rem 1rem 0 0;">
+            <h5 class="card-title fs-5">विचार</h5>
+                        <p class="card-text">View, Edit Or Add a New Thoughts.</p>
+
+                </div>
+                <div class="card-footer bg-white text-center rounded-bottom-4 py-3">
+                    <a href="{{ route('daily.thoughts') }}" class="btn btn-outline-danger fw-semibold">👁️ देखें</a>
+                </div>
+            </div>
+        </div>
 
         <!-- Add more cards here with same structure -->
 

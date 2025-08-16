@@ -7,14 +7,24 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container py-4">
-    <h2 class="mb-4">📰 न्यूज़ अपडेट</h2>
+    
+    <!-- Alert Message -->
+    <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        <div>
+            ⚠️ IMAGE size 200 KB से ज़्यादा नहीं होना चाहिए। <br>
+            📝 Title और Description डालना अनिवार्य है।
+        </div>
+    </div>
+
+    <h4 class="mb-3">📰 न्यूज़ अपडेट</h4>
 
     <!-- News Form -->
-    <form id="newsForm" enctype="multipart/form-data" class="row g-3">
+    <form id="newsForm" enctype="multipart/form-data" class="row g-2">
         <input type="hidden" name="news_id" id="news_id">
 
         <div class="col-md-6">
-            <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+            <input type="text" class="form-control" name="title" id="title" placeholder="Title (Required)">
         </div>
 
         <div class="col-md-3">
@@ -35,16 +45,18 @@
         </div>
 
         <div class="col-12">
-            <textarea class="form-control" name="description" id="description" placeholder="Description" rows="3"></textarea>
+            <textarea class="form-control" name="description" id="description" placeholder="Description (Required)" rows="2"></textarea>
         </div>
 
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary" id="submitBtn">Add News</button>
+        <div class="col-12 text-end">
+            <button type="submit" class="btn btn-sm btn-primary" id="submitBtn">
+                <i class="bi bi-plus-circle"></i> Add News
+            </button>
         </div>
     </form>
 
     <!-- News List -->
-    <div class="mt-5" id="newsList"></div>
+    <div class="mt-4" id="newsList"></div>
 </div>
 
 <script>
@@ -60,49 +72,39 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 newsList.innerHTML = '';
                 if (!data.length) {
-                    newsList.innerHTML = `<div class="text-center text-muted">No news available</div>`;
+                    newsList.innerHTML = `<div class="text-center text-muted">कोई न्यूज़ उपलब्ध नहीं है</div>`;
                     return;
                 }
 
                 data.forEach(item => {
                     newsList.innerHTML += `
-                        <div class="card mb-3 shadow-sm border-0">
-                            <div class="row g-0 align-items-center">
+                        <div class="border rounded p-2 mb-2 d-flex align-items-center justify-content-between shadow-sm">
+                            <div class="d-flex align-items-center">
                                 <!-- Photo -->
-                                <div class="col-md-2">
-                                    <img src="/storage/${item.photo}" class="img-fluid rounded-start" 
-                                         style="height:120px; width:100%; object-fit:cover;">
-                                </div>
-
+                                <img src="/storage/${item.photo}" 
+                                     class="rounded me-2" 
+                                     style="height:60px; width:60px; object-fit:cover;">
+                                
                                 <!-- Details -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <h5 class="card-title fw-bold text-primary mb-1">${item.title}</h5>
-                                        
-                                        <!-- Date, Time, Location -->
-                                        <p class="mb-1 text-muted">
-                                            <i class="bi bi-calendar-event"></i> ${item.date ?? '-'}  
-                                            ${item.time ? ` | <i class="bi bi-clock"></i> ${item.time}` : ''}
-                                            ${item.location ? ` | <i class="bi bi-geo-alt"></i> ${item.location}` : ''}
-                                        </p>
-
-                                        <!-- Description -->
-                                        <p class="card-text">
-                                            ${item.description ?? ''}
-                                        </p>
-                                    </div>
+                                <div>
+                                    <h6 class="mb-1 text-primary fw-bold">${item.title}</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar-event"></i> ${item.date ?? '-'}  
+                                        ${item.time ? ` | <i class="bi bi-clock"></i> ${item.time}` : ''}
+                                        ${item.location ? ` | <i class="bi bi-geo-alt"></i> ${item.location}` : ''}
+                                    </small>
+                                    <p class="mb-0 small">${item.description ?? ''}</p>
                                 </div>
+                            </div>
 
-                                <!-- Actions -->
-                                <div class="col-md-2 text-end pe-3">
-                                    <button class="btn btn-sm btn-warning mb-2 w-100" onclick='editNews(${JSON.stringify(item)})'>
-                                        <i class="bi bi-pencil-square"></i> Edit
-                                    </button>
-                                    <button class="btn btn-sm btn-danger w-100" onclick="deleteNews(${item.id})">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </button>
-                                </div>
+                            <!-- Actions -->
+                            <div class="ms-2 text-end">
+                                <button class="btn btn-sm btn-outline-warning me-1" onclick='editNews(${JSON.stringify(item)})'>
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteNews(${item.id})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </div>
                         </div>
                     `;
@@ -117,6 +119,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new FormData(form);
         const photo = formData.get('photo');
         const newsId = document.getElementById('news_id').value;
+
+        if (!formData.get('title') || !formData.get('description')) {
+            Swal.fire('Error', 'Title और Description डालना ज़रूरी है!', 'error');
+            return;
+        }
 
         if (photo && photo.size > 204800) {
             Swal.fire('Error', 'Image must be under 200KB!', 'error');
@@ -165,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
             Swal.fire('Success', newsId ? 'News updated successfully!' : 'News added successfully!', 'success');
             form.reset();
             document.getElementById('news_id').value = '';
-            submitBtn.innerText = 'Add News';
+            submitBtn.innerHTML = `<i class="bi bi-plus-circle"></i> Add News`;
             fetchNews();
         })
         .catch(err => console.error(err));
@@ -179,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('time').value = data.time;
         document.getElementById('location').value = data.location;
         document.getElementById('description').value = data.description;
-        submitBtn.innerText = 'Update News';
+        submitBtn.innerHTML = `<i class="bi bi-arrow-repeat"></i> Update News`;
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 

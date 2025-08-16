@@ -266,7 +266,14 @@ function editItem(item) {
     }
     document.getElementById('submitBtn').innerText = 'Update';
     document.getElementById('cancelEdit').classList.remove('d-none');
+
+    // ✅ Scroll to form
+    document.getElementById('shramForm').scrollIntoView({
+        behavior: 'smooth',   // smooth scroll
+        block: 'start'        // form top se align ho
+    });
 }
+
 
 function confirmDelete(id) {
     Swal.fire({

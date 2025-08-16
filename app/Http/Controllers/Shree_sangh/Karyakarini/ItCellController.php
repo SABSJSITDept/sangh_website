@@ -17,7 +17,9 @@ class ItCellController extends Controller
 
     }
 
-   public function store(Request $request)
+   // app/Http/Controllers/ShreeSangh/Karyakarini/ItCellController.php
+
+public function store(Request $request)
 {
     $request->validate([
         'name'     => 'required|string|max:255',
@@ -27,6 +29,10 @@ class ItCellController extends Controller
         'priority' => 'required|integer|min:1',
         'photo'    => 'nullable|image|max:200',
     ]);
+
+    // 📌 Priority Adjustment: shift existing priorities
+    ItCell::where('priority', '>=', $request->priority)
+          ->increment('priority');
 
     $photoPath = null;
     if ($request->hasFile('photo')) {
@@ -46,7 +52,7 @@ class ItCellController extends Controller
 }
 
 
-  public function update(Request $request, $id)
+public function update(Request $request, $id)
 {
     $entry = ItCell::findOrFail($id);
 
@@ -58,6 +64,21 @@ class ItCellController extends Controller
         'priority' => 'required|integer|min:1',
         'photo'    => 'nullable|image|max:200',
     ]);
+
+    // अगर priority change हो रही है तभी shifting करना है
+    if ($request->priority != $entry->priority) {
+        if ($request->priority < $entry->priority) {
+            // 📌 ऊपर की तरफ shift → बीच वालों की priority +1
+            ItCell::where('priority', '>=', $request->priority)
+                  ->where('priority', '<', $entry->priority)
+                  ->increment('priority');
+        } else {
+            // 📌 नीचे की तरफ shift → बीच वालों की priority -1
+            ItCell::where('priority', '<=', $request->priority)
+                  ->where('priority', '>', $entry->priority)
+                  ->decrement('priority');
+        }
+    }
 
     if ($request->hasFile('photo')) {
         if ($entry->photo) {
@@ -76,6 +97,7 @@ class ItCellController extends Controller
 
     return response()->json($entry);
 }
+
 
     public function destroy($id)
     {
