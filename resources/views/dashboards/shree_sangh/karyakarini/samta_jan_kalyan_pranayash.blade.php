@@ -3,49 +3,95 @@
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
+/* 🔹 Toast container */
 .toast-container {
     position: fixed;
     top: 80px;
     right: 20px;
     z-index: 1055;
 }
+
+/* 🔹 Form styling */
+#addForm input.form-control {
+    border: 2px solid #343a40; /* dark border */
+    background-color: #f8f9fa; /* subtle background */
+    color: #212529;
+    transition: all 0.3s ease;
+}
+
+#addForm input.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+}
+
+/* 🔹 Buttons */
+#addForm button {
+    font-weight: 600;
+}
+
+/* 🔹 Table styling */
+.table {
+    border: 2px solid #343a40;
+}
+
+.table th, .table td {
+    vertical-align: middle !important;
+    border: 1px solid #343a40;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* 🔹 Icons inside table */
+.table td button i {
+    margin-right: 4px;
+}
+
+/* 🔹 Small notes */
+.text-muted {
+    font-size: 0.85rem;
+}
 </style>
 
-<div class="container py-4">
-    <h2 class="mb-4">समता जन कल्याण प्रणयाश</h2>
+<div class="container py-4 shadow rounded border border-dark">
+    <h2 class="mb-4 text-center text-primary"><i class="bi bi-people-fill"></i> समता जन कल्याण प्रणयाश</h2>
 
     {{-- 🔹 FORM --}}
-    <form id="addForm" enctype="multipart/form-data" class="row g-3">
+    <form id="addForm" enctype="multipart/form-data" class="row g-3 p-3 bg-white rounded border border-dark">
+        <input type="hidden" id="editId" value="">
         <div class="col-md-6">
-            <label class="form-label">नाम</label>
-            <input type="text" name="name" class="form-control" required />
+            <label class="form-label"><i class="bi bi-person-fill"></i> नाम</label>
+            <input type="text" id="name" name="name" class="form-control border border-dark" required />
         </div>
         <div class="col-md-6">
-            <label class="form-label">शहर</label>
-            <input type="text" name="city" class="form-control" required />
+            <label class="form-label"><i class="bi bi-geo-alt-fill"></i> शहर</label>
+            <input type="text" id="city" name="city" class="form-control border border-dark" required />
         </div>
         <div class="col-md-6">
-            <label class="form-label">मोबाइल</label>
-            <input type="text" name="mobile" class="form-control" required maxlength="10" />
+            <label class="form-label"><i class="bi bi-telephone-fill"></i> मोबाइल</label>
+            <input type="text" id="mobile" name="mobile" class="form-control border border-dark" maxlength="10" required />
         </div>
         <div class="col-md-6">
-            <label class="form-label">फोटो</label>
-            <input type="file" name="photo" accept="image/*" class="form-control" />
+            <label class="form-label"><i class="bi bi-image-fill"></i> फोटो</label>
+            <input type="file" id="photo" name="photo" accept="image/*" class="form-control border border-dark" />
+            <small class="text-muted">* नई फ़ोटो चुनें यदि अपडेट करना हो (max 200 KB)</small>
         </div>
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary">सेव करें</button>
-            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display:none;">रद्द करें</button>
+        <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> सेव करें</button>
+            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display:none;"><i class="bi bi-x-circle"></i> रद्द करें</button>
         </div>
     </form>
 
-    <hr>
+    <hr class="my-4">
 
     {{-- 🔹 DATA TABLE --}}
-    <div class="table-responsive mt-4">
-        <table class="table table-bordered align-middle text-center">
-            <thead class="table-primary">
+    <div class="table-responsive border border-dark rounded shadow-sm p-2">
+        <table class="table table-hover align-middle text-center">
+            <thead class="table-dark">
                 <tr>
                     <th>📸 फोटो</th>
                     <th>नाम</th>
@@ -75,6 +121,8 @@
     </div>
 </div>
 
+
+
 {{-- Bootstrap JS --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -92,8 +140,32 @@ function showToast(type, message) {
 document.getElementById('addForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const form = e.target;
-    const formData = new FormData(form);
 
+    const name = document.getElementById('name').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const photoInput = document.getElementById('photo');
+    const photoFile = photoInput.files[0];
+
+    // ✅ Client-side validation
+    if (!name || !city || !mobile) {
+        showToast('error', 'कृपया सभी आवश्यक फ़ील्ड्स भरें।');
+        return;
+    }
+
+    // Photo required check for create mode
+    if (!isEditMode && !photoFile) {
+        showToast('error', 'कृपया फ़ोटो चुनें।');
+        return;
+    }
+
+    // Photo size check
+    if (photoFile && photoFile.size > 200 * 1024) { // 200 KB
+        showToast('error', 'फ़ोटो का आकार 200 KB से अधिक नहीं होना चाहिए।');
+        return;
+    }
+
+    const formData = new FormData(form);
     const url = isEditMode 
         ? `/api/samta-jan-kalyan-pranayash/${editId}`
         : `/api/samta-jan-kalyan-pranayash`;

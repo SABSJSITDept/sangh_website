@@ -539,6 +539,8 @@ main.content {
     </button>
 </header>
 
+@yield('jsp-header')
+
         <!-- MAIN -->
         <main class="content">
             @yield('content')

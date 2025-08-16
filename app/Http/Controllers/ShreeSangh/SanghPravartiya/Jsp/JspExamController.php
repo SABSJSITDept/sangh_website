@@ -16,11 +16,11 @@ class JspExamController extends Controller
     }
 
 
-public function store(Request $request)
+        public function store(Request $request)
 {
     $request->validate([
         'name' => 'required|string',
-        'pdf' => 'nullable|file|mimes:pdf',
+        'pdf' => 'nullable|file|mimes:pdf|max:2048', // 2MB max
         'google_form_link' => 'nullable|string',
     ]);
 
@@ -44,7 +44,7 @@ public function update(Request $request, $id)
 
     $request->validate([
         'name' => 'required|string',
-        'pdf' => 'nullable|file|mimes:pdf',
+        'pdf' => 'nullable|file|mimes:pdf|max:2048', // 2MB max
         'google_form_link' => 'nullable|string',
     ]);
 
@@ -62,7 +62,8 @@ public function update(Request $request, $id)
 
     $exam->update($data);
     return response()->json($exam);
-}   
+}
+
     public function destroy($id)
     {
         JspExam::findOrFail($id)->delete();

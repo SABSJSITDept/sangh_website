@@ -5,45 +5,89 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
+    /* Toast container */
     .toast-container {
         position: fixed;
-        top: 80px;
+        top: 100px;
         right: 20px;
-        z-index: 1055;
+        z-index: 1100;
+    }
+
+    /* Form card */
+    .form-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    /* Table hover effect */
+    table tbody tr:hover {
+        background-color: #f1f7ff;
+    }
+
+    /* Action buttons */
+    .btn-action {
+        min-width: 40px;
+    }
+
+    /* Floating label spacing */
+    .form-floating>.form-control {
+        height: 50px;
+    }
+
+    /* Small helper text */
+    .form-text-small {
+        font-size: 0.85rem;
+        color: #6c757d;
     }
 </style>
 
 <div class="container py-4">
-    <h2 class="mb-4">संचोजन मंडल - अंतरराष्ट्रीय सदस्यता</h2>
+    <h2 class="mb-4 text-center display-6 fw-bold">संचोजन मंडल - अंतरराष्ट्रीय सदस्यता</h2>
+
+    {{-- 🔹 INFO ALERT --}}
+    <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>कृपया सभी फ़ील्ड्स भरें। फ़ोटो का आकार 200 KB से अधिक नहीं होना चाहिए।</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
     {{-- 🔹 FORM --}}
-    <form id="addForm" enctype="multipart/form-data" class="row g-3">
-        <input type="hidden" name="edit_id" id="edit_id">
+    <div class="form-card">
+        <form id="addForm" enctype="multipart/form-data" class="row g-3">
+            <input type="hidden" name="edit_id" id="edit_id">
 
-        <div class="col-md-6">
-            <input type="text" name="name" id="name" class="form-control" placeholder="नाम" required>
-        </div>
-        <div class="col-md-6">
-            <input type="text" name="city" id="city" class="form-control" placeholder="शहर" required>
-        </div>
-        <div class="col-md-6">
-            <input type="text" name="mobile" id="mobile" class="form-control" placeholder="मोबाइल" required>
-        </div>
-        <div class="col-md-6">
-            <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
-            <small class="text-muted">* नई फ़ोटो चुनें यदि अपडेट करना हो</small>
-        </div>
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary" id="submitBtn">जमा करें</button>
-        </div>
-    </form>
+            <div class="col-md-6 form-floating">
+                <input type="text" name="name" id="name" class="form-control" placeholder="नाम" required>
+                <label for="name">नाम</label>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input type="text" name="city" id="city" class="form-control" placeholder="शहर" required>
+                <label for="city">शहर</label>
+            </div>
+            <div class="col-md-6 form-floating">
+                <input type="text" name="mobile" id="mobile" class="form-control" placeholder="मोबाइल" required>
+                <label for="mobile">मोबाइल</label>
+            </div>
+            <div class="col-md-6">
+                <label for="photo" class="form-label">फ़ोटो (200 KB Max)</label>
+                <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
+                <div class="form-text form-text-small">* नई फ़ोटो चुनें यदि अपडेट करना हो</div>
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary px-4" id="submitBtn">जमा करें</button>
+            </div>
+        </form>
+    </div>
 
     <hr>
 
     {{-- 🔹 DATA TABLE --}}
     <div class="table-responsive mt-4">
-        <table class="table table-bordered align-middle text-center">
-            <thead class="table-primary">
+        <table class="table table-bordered table-striped align-middle text-center">
+            <thead class="table-primary text-center">
                 <tr>
                     <th>📸 फोटो</th>
                     <th>🙍 नाम</th>
@@ -72,6 +116,12 @@
         </div>
     </div>
 </div>
+
+{{-- Bootstrap JS & Icons --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+{{-- 🔹 JS Logic (existing) --}}
 
 <script>
     const apiUrl = "/api/sanyojan-mandal-antrastriya-sadasyata";
@@ -113,39 +163,58 @@
     fetchAll();
 
     document.getElementById('addForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const form = new FormData(this);
-        const id = document.getElementById('edit_id').value;
-        const method = 'POST';
-        const url = id ? `${apiUrl}/${id}` : apiUrl;
+    e.preventDefault();
 
-        if (id) {
-            form.append('_method', 'PUT');
-        }
+    const name = document.getElementById('name').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const photoInput = document.getElementById('photo');
+    const photoFile = photoInput.files[0];
 
-        fetch(url, {
-            method,
-            headers,
-            body: form
-        }).then(async res => {
-            const data = await res.json();
-            if (res.ok) {
-                this.reset();
-                document.getElementById('submitBtn').innerText = 'जमा करें';
-                document.getElementById('edit_id').value = '';
-                fetchAll();
-                showToast('success', id ? 'डेटा सफलतापूर्वक अपडेट हुआ!' : 'डेटा सफलतापूर्वक जोड़ा गया!');
-            } else {
-                let message = data.message || 'कुछ गलत हुआ।';
-                if (data.errors) {
-                    message = Object.values(data.errors).flat().join(', ');
-                }
-                showToast('error', message);
+    // Client-side validation
+    if (!name || !city || !mobile) {
+        showToast('error', 'कृपया सभी आवश्यक फ़ील्ड्स भरें।');
+        return;
+    }
+
+    if (photoFile && photoFile.size > 200 * 1024) { // 200 KB
+        showToast('error', 'फ़ोटो का आकार 200 KB से अधिक नहीं होना चाहिए।');
+        return;
+    }
+
+    const form = new FormData(this);
+    const id = document.getElementById('edit_id').value;
+    const method = 'POST';
+    const url = id ? `${apiUrl}/${id}` : apiUrl;
+
+    if (id) {
+        form.append('_method', 'PUT');
+    }
+
+    fetch(url, {
+        method,
+        headers,
+        body: form
+    }).then(async res => {
+        const data = await res.json();
+        if (res.ok) {
+            this.reset();
+            document.getElementById('submitBtn').innerText = 'जमा करें';
+            document.getElementById('edit_id').value = '';
+            fetchAll();
+            showToast('success', id ? 'डेटा सफलतापूर्वक अपडेट हुआ!' : 'डेटा सफलतापूर्वक जोड़ा गया!');
+        } else {
+            let message = data.message || 'कुछ गलत हुआ।';
+            if (data.errors) {
+                message = Object.values(data.errors).flat().join(', ');
             }
-        }).catch(() => {
-            showToast('error', 'नेटवर्क त्रुटि। कृपया पुनः प्रयास करें।');
-        });
+            showToast('error', message);
+        }
+    }).catch(() => {
+        showToast('error', 'नेटवर्क त्रुटि। कृपया पुनः प्रयास करें।');
     });
+});
+
 
     function del(id) {
         if (confirm("क्या आप वाकई इसे हटाना चाहते हैं?")) {

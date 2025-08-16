@@ -17,6 +17,10 @@
 
 
 <div class="container py-4">
+      <!-- ⚠️ Static Message -->
+    <div class="alert alert-warning mb-4 shadow-sm" role="alert">
+        ⚠️ सभी फ़ील्ड भरना आवश्यक है और फोटो 200KB से बड़ी नहीं हो सकती।
+    </div>
     <div class="card shadow-lg rounded-4 border-0">
         <div class="card-header bg-primary text-white fw-semibold rounded-top-4">
             <h5 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>कार्यसमिति सदस्य फ़ॉर्म</h5>
@@ -146,30 +150,59 @@
     }
 
     document.getElementById('karyasamitiForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        let formData = new FormData(this);
-        let id = document.getElementById('editId').value;
-        let url = id ? `/api/karyasamiti_sadasya/${id}?_method=PUT` : '/api/karyasamiti_sadasya';
+    let form = this;
+    let formData = new FormData(form);
+    let id = document.getElementById('editId').value;
+    let url = id ? `/api/karyasamiti_sadasya/${id}?_method=PUT` : '/api/karyasamiti_sadasya';
 
-        let res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': token,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: formData
-        });
+    // ✅ Client-side Validation
+    let name    = document.getElementById('name').value.trim();
+    let city    = document.getElementById('city').value.trim();
+    let aanchal = document.getElementById('aanchal_id').value.trim();
+    let mobile  = document.getElementById('mobile').value.trim();
+    let photo   = document.getElementById('photo').files[0];
 
-        if (res.ok) {
-            this.reset();
-            document.getElementById('editId').value = '';
-            loadData();
-            showToast('Success', 'डेटा सफलतापूर्वक सेव हो गया', 'success');
-        } else {
-            showToast('Error', 'कुछ गड़बड़ हो गई', 'danger');
-        }
+    // Required fields
+    if (!name || !city || !aanchal || !mobile) {
+        showToast('Error', 'कृपया सभी आवश्यक फ़ील्ड भरें!', 'danger');
+        return;
+    }
+
+    // Mobile length check
+    if (!/^\d{10}$/.test(mobile)) {
+        showToast('Error', 'कृपया 10 अंकों का सही मोबाइल नंबर डालें!', 'danger');
+        return;
+    }
+
+    // Photo size check
+    if (photo && photo.size > 200 * 1024) {
+        showToast('Error', 'फोटो 200KB से बड़ी नहीं हो सकती!', 'danger');
+        return;
+    }
+
+    // ✅ Server Request
+    let res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
     });
+
+    if (res.ok) {
+        form.reset();
+        document.getElementById('editId').value = '';
+        loadData();
+        showToast('Success', 'डेटा सफलतापूर्वक सेव हो गया', 'success');
+    } else {
+        let errText = await res.text();
+        showToast('Error', errText || 'कुछ गड़बड़ हो गई', 'danger');
+    }
+});
+
 
     async function deleteData(id) {
         if (!confirm('क्या आप वाकई इसे हटाना चाहते हैं?')) return;

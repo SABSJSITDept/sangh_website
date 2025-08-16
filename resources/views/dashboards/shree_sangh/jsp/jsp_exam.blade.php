@@ -72,6 +72,9 @@
     </div>
 </div>
 
+ 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 const headers = {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -116,7 +119,14 @@ function editRow(id, name, pdf, googleForm) {
         toggleInputs('form');
         document.getElementById('google_form_link').value = googleForm;
     }
+
+    // Scroll to the form smoothly
+    const formElement = document.getElementById('examForm');
+    if (formElement) {
+        formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
+
 
 function deleteRow(id) {
     if (confirm("Are you sure you want to delete this exam?")) {
@@ -140,19 +150,73 @@ function toggleInputs(type) {
 
 document.getElementById('examForm').addEventListener('submit', function (e) {
     e.preventDefault();
+
     const id = document.getElementById('exam_id').value;
     const selectedType = document.querySelector('input[name="type"]:checked').value;
+    const name = document.getElementById('name').value.trim();
+
+    // ===== Client-side validation =====
+    if (!name) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Name is required.',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        return;
+    }
 
     const formData = new FormData();
-    formData.append('name', document.getElementById('name').value);
+    formData.append('name', name);
 
     if (selectedType === 'pdf') {
         const pdfFile = document.getElementById('pdf').files[0];
-        if (pdfFile) formData.append('pdf', pdfFile);
+
+        if (!pdfFile) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Please select a PDF file.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return;
+        }
+
+        // Check PDF file size (2MB = 2 * 1024 * 1024 bytes)
+        if (pdfFile.size > 2 * 1024 * 1024) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'PDF size cannot exceed 2 MB.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return;
+        }
+
+        formData.append('pdf', pdfFile);
     } else {
-        formData.append('google_form_link', document.getElementById('google_form_link').value);
+        const googleLink = document.getElementById('google_form_link').value.trim();
+        if (!googleLink) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Google Form link is required.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return;
+        }
+        formData.append('google_form_link', googleLink);
     }
 
+    // ===== Submit =====
     const url = id ? `${apiUrl}/${id}` : apiUrl;
     if (id) formData.append('_method', 'PUT');
 
@@ -160,13 +224,37 @@ document.getElementById('examForm').addEventListener('submit', function (e) {
         method: "POST",
         headers,
         body: formData
-    }).then(() => {
+    })
+    .then(res => res.json())
+    .then(() => {
         this.reset();
         document.getElementById('exam_id').value = "";
-        toggleInputs('pdf');
-        fetchData();
+        toggleInputs('pdf'); // reset input type view
+        fetchData();         // refresh table/list
+
+        // Success toast
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: id ? 'Exam updated successfully!' : 'Exam added successfully!',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    })
+    .catch(err => {
+        console.error(err);
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Something went wrong!',
+            showConfirmButton: false,
+            timer: 3000
+        });
     });
 });
+
 
 fetchData();
 </script>

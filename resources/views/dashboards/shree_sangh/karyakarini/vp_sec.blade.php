@@ -5,61 +5,64 @@
     <h3 class="mb-4 fw-bold text-primary">📋 VP/SEC सदस्य प्रबंधन</h3>
 
     {{-- 🔹 FORM --}}
-    <div class="card shadow-sm border border-primary mb-4">
-        <div class="card-body">
-            <form id="vpSecForm" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" id="formMethod" value="POST">
-                <input type="hidden" id="editId">
+{{-- 🔹 FORM --}}
+<div class="card shadow-sm border border-primary mb-4">
+    <div class="card-body">
 
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label>नाम</label>
-                        <input type="text" name="name" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label>पद</label>
-                        <select name="post" class="form-select" required>
-                            <option value="">चुनें</option>
-                            <option value="उपाध्यक्ष">उपाध्यक्ष</option>
-                            <option value="मंत्री">मंत्री</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label>शहर</label>
-                        <input type="text" name="city" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label>मोबाइल</label>
-                        <input type="text" name="mobile" class="form-control"
-                               required maxlength="10" pattern="[0-9]{10}"
-                               title="10 अंकों का मोबाइल नंबर डालें"
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label>अंचल</label>
-                        <select name="aanchal" class="form-select" id="aanchalDropdown" required>
-                            <option value="">चुनें</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label>फोटो (200KB तक)</label>
-                        <input type="file" name="photo" class="form-control" accept="image/*" id="photoInput">
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-success" id="submitBtn">➕ जोड़ें</button>
-                    <button type="reset" class="btn btn-secondary" onclick="resetForm()">🔄 रीसेट</button>
-                </div>
-            </form>
+        <!-- Validation Info -->
+        <div class="alert alert-info text-center">
+            सभी फ़ील्ड अनिवार्य हैं और फोटो का आकार 200 KB से अधिक नहीं होना चाहिए। कृपया सही अंचल चुनें।
         </div>
+
+        <form id="vpSecForm" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" id="formMethod" value="POST">
+            <input type="hidden" id="editId">
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label>नाम</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label>पद</label>
+                    <select name="post" class="form-select" required>
+                        <option value="">चुनें</option>
+                        <option value="उपाध्यक्ष">उपाध्यक्ष</option>
+                        <option value="मंत्री">मंत्री</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>शहर</label>
+                    <input type="text" name="city" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label>मोबाइल</label>
+                    <input type="text" name="mobile" class="form-control"
+                           required maxlength="10" pattern="[0-9]{10}"
+                           title="10 अंकों का मोबाइल नंबर डालें"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+                <div class="col-md-4">
+                    <label>अंचल</label>
+                    <select name="aanchal" class="form-select" id="aanchalDropdown" required>
+                        <option value="">चुनें</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>फोटो (200KB तक)</label>
+                    <input type="file" name="photo" class="form-control" accept="image/*" id="photoInput">
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success" id="submitBtn">➕ जोड़ें</button>
+                <button type="reset" class="btn btn-secondary" onclick="resetForm()">🔄 रीसेट</button>
+            </div>
+        </form>
     </div>
+</div>
+
 
     {{-- 🔹 FILTER --}}
     <div class="mb-3">
