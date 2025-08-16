@@ -16,7 +16,7 @@
 <body class="bg-light p-4">
 
 <div class="container">
-    <h2 class="mb-4 text-center text-primary fw-bold">📘 पाखी का पन्ना</h2>
+    <h2 class="mb-4 text-center text-primary fw-bold">📄 पक्खी का पाना </h2>
 
     <!-- Form Card -->
     <div class="card shadow-lg mb-4">

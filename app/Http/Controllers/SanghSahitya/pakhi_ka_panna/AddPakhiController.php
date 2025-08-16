@@ -46,7 +46,7 @@ class AddPakhiController extends Controller
     if ($request->hasFile('pdf')) {
         if ($pakhi->pdf) {
             $filePath = str_replace('/storage/', '', $pakhi->pdf);
-            \Storage::disk('public')->delete($filePath);
+            Storage::disk('public')->delete($filePath);
         }
         $pdfPath = $request->file('pdf')->store('pakhi', 'public');
         $pakhi->pdf = '/storage/' . $pdfPath;

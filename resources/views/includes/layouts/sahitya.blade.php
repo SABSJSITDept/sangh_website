@@ -424,7 +424,12 @@ main.content {
                     </a>
                 </div>
 
-            
+               <div class="nav-item">
+                     <a href="{{ url('/pakhi') }}"  class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="link-text">Pakhi Ka paana</span>
+                    </a>
+                </div>
 
                     <!-- Logout as last menu item -->
    <div class="nav-item">
