@@ -30,6 +30,7 @@ use App\Http\Controllers\SanghSahitya\Shramnopasak\AddShramnopasakController;
 use App\Http\Controllers\SanghSahitya\sahitya\AddSahityaController;
 use App\Http\Controllers\SanghSahitya\ChaturmasSuchi\AddChaturmasSuchiController;
 use App\Http\Controllers\PhotoGallery\AddPhotoController;
+use App\Http\Controllers\SanghSahitya\pakhi_ka_panna\AddPakhiController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -237,3 +238,8 @@ Route::prefix('photo-gallery')->group(function () {
 // -----------------Home Slider api ------------------------------------
 Route::apiResource('home_slider', App\Http\Controllers\HomeSlider\AddHomeSlider::class);
 // -----------------Home Slider api ------------------------------------
+
+
+// -----------------Pakhi Ka Panna api ------------------------------------
+Route::apiResource('pakhi', AddPakhiController::class);
+// -----------------Pakhi Ka Panna api ------------------------------------

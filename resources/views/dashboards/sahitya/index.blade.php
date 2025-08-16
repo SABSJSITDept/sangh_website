@@ -36,4 +36,15 @@
             
     </div>
 </div>
+</div>
+
+  <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-success h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📚 Pakhi Ka paana</h5>
+                    <p class="card-text">Add Edit Or Delete Pakhi Ka Panna.</p>
+                    <a href="{{ route('pakhi.view') }}" class="btn btn-info">Pakhi</a>
+                </div>
+            </div>
+        </div>
 @endsection

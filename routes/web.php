@@ -231,6 +231,9 @@ Route::get('/chaturmas-suchi', function () {
     return view('dashboards.sahitya.chaturmas_suchi');
 })->name('chaturmas_suchi.view');
 
+Route::get('/pakhi', function () {
+    return view('dashboards.sahitya.pakhi');
+})->name('pakhi.view');
 
 Route::get('/photo_gallery', function () {
     return view('dashboards.photo_gallery.add_photo');
