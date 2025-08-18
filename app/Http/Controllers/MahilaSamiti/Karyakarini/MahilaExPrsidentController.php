@@ -21,7 +21,7 @@ class MahilaExPrsidentController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'karyakal' => 'required|string',
+            'karyakal' => 'nullable|string',
             'place' => 'required|string',
             'photo' => 'required|image|max:200', // 200 KB
         ]);
@@ -45,7 +45,7 @@ class MahilaExPrsidentController extends Controller
 
         $request->validate([
             'name' => 'required|string',
-            'karyakal' => 'required|string',
+            'karyakal' => 'nullable|string',
             'place' => 'required|string',
             'photo' => 'nullable|image|max:200',
         ]);

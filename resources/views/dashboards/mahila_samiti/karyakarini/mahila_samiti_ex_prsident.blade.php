@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">कार्यकाल</label>
-                    <input type="text" class="form-control" id="karyakal" placeholder="कार्यकाल" required>
+                    <input type="text" class="form-control" id="karyakal" placeholder="कार्यकाल" >
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Place</label>
