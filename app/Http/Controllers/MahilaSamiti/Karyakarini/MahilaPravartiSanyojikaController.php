@@ -20,7 +20,7 @@ class MahilaPravartiSanyojikaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'      => 'required|string|max:255',
-            'city'      => 'required|string|max:255',
+            'city'      => 'nullable|string|max:255',
             'post'      => 'required|string',
             'pravarti'  => 'required|string',
             'mobile'    => 'required|digits:10',
@@ -58,7 +58,7 @@ class MahilaPravartiSanyojikaController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name'      => 'required|string|max:255',
-            'city'      => 'required|string|max:255',
+            'city'      => 'nullable|string|max:255',
             'post'      => 'required|string',
             'pravarti'  => 'required|string',
             'mobile'    => 'required|digits:10',

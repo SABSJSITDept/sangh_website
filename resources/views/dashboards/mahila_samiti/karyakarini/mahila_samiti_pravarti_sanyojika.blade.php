@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">City *</label>
-                <input type="text" id="city" class="form-control" required>
+                <input type="text" id="city" class="form-control" >
             </div>
             <div class="col-md-4">
                 <label class="form-label">Mobile *</label>
