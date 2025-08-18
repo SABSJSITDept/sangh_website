@@ -10,214 +10,262 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
+
 <style>
-    :root {
-        --sidebar-width: 220px;
-        --sidebar-collapsed: 100px;
-    }
+/* ==== YOUR CSS EXACTLY AS GIVEN ==== */
+:root {
+    --sidebar-width: 220px;
+    --sidebar-collapsed: 100px;
+}
 
-    body {
-        margin: 0;
-        background: #fff;
-        color: #23262f;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+body {
+    margin: 0;
+    background: #fff;
+    color: #23262f;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-    /* Header */
-    .main-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to right, #ff6a00, #ee0979);
-        color: #fff;
-        padding: 7px 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 50px;
-        z-index: 1040;
-    }
-    .main-header .sidebar-toggle {
-        background: none;
-        color: #fff;
-        font-size: 1.5rem;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-    }
-    .main-header b {
-        font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .main-header img {
-        border-radius: 50%;
-        border: 2px solid #356ef9;
-        width: 32px;
-        height: 32px;
-        object-fit: cover;
-    }
+/* Header */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-collapsed);
+    right: 0;
+    background: linear-gradient(to right, #ff6a00, #ee0979);
+    color: #fff;
+    padding: 7px 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    z-index: 1040;
+    transition: left 0.3s ease, width 0.3s ease;
+    width: calc(100% - var(--sidebar-collapsed));
+}
 
-    /* Layout wrapper */
-    .layout {
-        display: flex;
-        padding-top: 50px; /* push content below fixed header */
-    }
+/* When sidebar expanded */
+.sidebar.expanded ~ .main-header {
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
 
-    /* Sidebar */
-    .sidebar {
-        width: var(--sidebar-collapsed);
-        background: #181824;
-        color: white;
-        transition: width 0.3s ease;
-        height: calc(100vh - 50px);
-        position: fixed;
-        top: 50px;
-        left: 0;
-        z-index: 1030;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: #555 transparent;
-    }
-    .sidebar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .sidebar::-webkit-scrollbar-thumb {
-        background-color: #555;
-        border-radius: 3px;
-    }
-    .sidebar.expanded {
-        width: var(--sidebar-width);
-    }
+/* Mobile view: header full width */
 
-    /* Profile section */
-    .sidebar .profile {
-        text-align: center;
-        padding: 20px 0;
-    }
-    .sidebar .profile img {
-        width: 40px;    
-        height: 40px;
-        border-radius: 50%;
-        border: 2px solid #356ef9;
-        margin-bottom: 5px;
-    }
-    .sidebar .profile .name,
-    .sidebar .profile .role {
-        display: none;
-    }
-    .sidebar.expanded .profile .name,
-    .sidebar.expanded .profile .role {
-        display: block;
-        color: #9aa0b9;
-        margin: 2px 0;
-        font-size: 0.9rem;
-        user-select: none;
-    }
+.main-header .sidebar-toggle {
+    background: none;
+    color: #fff;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+.main-header b {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.main-header img {
+    border-radius: 50%;
+    border: 2px solid #356ef9;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+}
 
-    /* Nav items spacing */
-    .sidebar .nav-item {
-        margin-bottom: 16px;
-        display: flex;
-        flex-direction: column;
-    }
+/* Layout wrapper */
+.layout {
+    display: flex;
+    padding-top: 50px; /* push content below fixed header */
+}
 
-    /* Nav links */
-    .nav-link {
-        min-height: 40px; 
-        line-height: 40px; 
-        color: #b6bbc7;
-        padding: 10px 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border-radius: 6px;
-        margin: 4px 8px;
-        text-decoration: none;
-        user-select: none;
-        white-space: nowrap;
-        box-sizing: border-box;
-    }
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-collapsed, 80px);
+    background: #1e1e2d;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+}
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 3px;
+}
+.sidebar.expanded {
+    width: var(--sidebar-width);
+}
+.sidebar .nav-link span {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.2;
+}
 
-    /* Unified hover effect for ALL menu links */
-    .sidebar .nav-link:hover,
-    .sidebar .nav-link.active {
-        background: linear-gradient(150deg, #2760fe 0%, #3e85fa 100%);
-        color: #fff;
-    }
+.sidebar .profile {
+    text-align: center;
+    padding: 15px 0;
+}
+.sidebar .profile img {
+    width: 50px;    
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #00d1ff;
+    /* margin-bottom: 5px; */
+}
+.sidebar .profile .name,
+.sidebar .profile .role {
+    display: none;
+}
+.sidebar.expanded .profile .name,
+.sidebar.expanded .profile .role {
+    display: block;
+    color: #9aa0b9;
+    margin: 2px 0;
+    font-size: 0.8rem;
+    /* user-select: none; */
+    margin-top: 5px;
+}
 
-    /* Hide link text when sidebar collapsed */
-    .nav-link span {
-        display: none;
-    }
-    .sidebar.expanded .nav-link span {
-        display: inline;
-    }
+/* Nav items spacing */
+.sidebar .nav-item {
+    margin: 4px 0;
+}
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ccc;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 0 8px;
+    transition: background 0.2s, color 0.2s;
+}
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+/* Nav links */
+.nav-link {
+    min-height: 40px; 
+    line-height: 40px; 
+    color: #b6bbc7;
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    margin: 2px 6px;
+    text-decoration: none;
+    user-select: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: calc(100% - 12px);
+}
 
-    /* Menu items with submenus */
-    .nav-link.menu-item {
-        background: none;
-        cursor: pointer;
-        justify-content: space-between;
-    }
+/* Hover/active */
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background: #2a2a40;
+    color: #fff;
+}
+/* Hide text collapsed */
+.nav-link span {
+    display: none;
+}
+.sidebar.expanded .nav-link span {
+    display: inline;
+}
 
-    /* Submenu container */
-    .submenu {
-        display: none;
-        flex-direction: column;
-        padding-left: 20px;
-        gap: 8px;
-    }
-    .sidebar.expanded .submenu.show {
-        display: flex;
-    }
-    .submenu .nav-link {
-        font-size: 0.9rem;
-        padding: 7px 12px;
-        color: #aab0c7;
-        border-radius: 4px;
-        min-height: 36px;
-        line-height: 36px;
-    }
+/* Menu items with submenus */
+.nav-link.menu-item {
+    background: none;
+    cursor: pointer;
+    justify-content: space-between;
+}
 
-    /* Icons */
-    .nav-link i {
-        min-width: 20px;
-        font-size: 1.2rem;
-    }
+/* Icons alignment collapsed */
+.sidebar:not(.expanded) .nav-link {
+    justify-content: center;
+    gap: 0;
+    padding: 10px 0;
+}
+.sidebar:not(.expanded) .submenu-toggle {
+    display: none;
+}
+.sidebar.expanded .nav-link {
+    justify-content: flex-start;
+    gap: 10px;
+}
+.sidebar:not(.expanded) .submenu .nav-link {
+    justify-content: center !important;
+    padding: 8px 0 !important;
+}
 
-    /* Submenu toggle arrow */
-    .submenu-toggle {
-        margin-left: auto;
-        transition: transform 0.3s ease;
-        font-size: 1rem;
-        user-select: none;
-    }
-    .submenu-toggle.rotate {
-        transform: rotate(180deg);
-    }
+/* Submenu */
+.submenu {
+    display: none;
+    flex-direction: column;
+    padding-left: 20px;
+    gap: 4px;
+}
+.sidebar.expanded .submenu.show {
+    display: flex;
+}
+.submenu .nav-link {
+    font-size: 0.9rem;
+    padding: 3px 6px;
+    color: #aab0c7;
+    border-radius: 4px;
+    min-height: 36px;
+    line-height: 36px;
+    margin: 2px 6px;
+    width: calc(100% - 12px);
+}
 
-    /* Main content */
-    main.content {
-        margin-left: var(--sidebar-collapsed);
-        padding: 20px;
-        transition: margin-left 0.3s ease;
-        width: 100%;
-        min-height: calc(100vh - 90px);
-        padding-bottom: 60px;
-        background: #f8f9fa;
-    }
-    .sidebar.expanded ~ main.content {
-        margin-left: var(--sidebar-width);
-    }
+/* Icons */
+.nav-link i {
+    min-width: 15px;
+    font-size: 1.2rem;
+}
 
-    /* Footer */
-    .footer {
+/* Submenu toggle arrow */
+.submenu-toggle {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    font-size: 1rem;
+    user-select: none;
+}
+.submenu-toggle.rotate {
+    transform: rotate(180deg);
+}
+
+/* Main content */
+main.content {
+    margin-left: var(--sidebar-collapsed);
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    width: 100%;
+    min-height: calc(100vh - 90px);
+    padding-bottom: 60px;
+    background: #f8f9fa;
+}
+.sidebar.expanded ~ main.content {
+    margin-left: var(--sidebar-width);
+}
+
+/* Footer */
+.footer {
     background: linear-gradient(to right, #7c3434, #c94b4b);
     padding: 0 20px;
     color: #fff;
@@ -236,50 +284,23 @@
     align-items: center;
     justify-content: space-between;
 }
-    .sidebar.expanded ~ .footer {
-        margin-left: var(--sidebar-width);
-        width: calc(100% - var(--sidebar-width));
-    }
+.sidebar.expanded ~ .footer {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
 
-    /* Logout button */
-    .sidebar .logout-btn {
-        margin: 2px 10px;
-        padding: 10px;
-        background: #dc3545;
-        border: none;
-        border-radius: 6px;
-        color: white;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        user-select: none;
-        width: calc(100% - 20px);
-        transition: background-color 0.3s ease;
-    }
-    .sidebar .logout-btn:hover {
-        background: #bb2d3b;
-    }
-    .sidebar:not(.expanded) .logout-btn span {
-        display: none;
-    }
-
-    .footer-left {
+.footer-left {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .footer-right {
     position: relative;
 }
-
 .contact-info-icon {
     cursor: pointer;
     font-size: 1.2rem;
 }
-
 .contact-tooltip {
     display: none;
     position: absolute;
@@ -296,7 +317,7 @@
     min-width: 180px;
 }
 .main-header .btn-logout {
-    background-color: #343a40 !important; /* dark grey */
+    background-color: #343a40 !important;
     border: none;
     color: #fff !important;
     font-weight: bold;
@@ -304,47 +325,44 @@
     border-radius: 4px;
 }
 .main-header .btn-logout:hover {
-    background-color: #23272b !important; /* darker hover */
+    background-color: #23272b !important;
 }
 
-
-/* Show tooltip on hover */
+/* Tooltip hover */
 .footer-right:hover .contact-tooltip {
     display: block;
 }
 
-
-    /* Mobile responsiveness */
-    @media (max-width: 991px) {
-        .sidebar {
-            left: -100%;
-            width: var(--sidebar-width);
-            position: fixed;
-            overflow-y: auto;
-        }
-        .sidebar.mobile-show {
-            left: 0;
-        }
-        main.content,
-        .footer {
-            margin-left: 0 !important;
-            width: 100% !important;
-        }
-        .backdrop {
-            display: none;
-            position: fixed;
-            top: 50px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 1020;
-        }
-        .backdrop.show {
-            display: block;
-        }
+/* Mobile */
+@media (max-width: 991px) {
+    .sidebar {
+        left: -100%;
+        width: var(--sidebar-width);
+        position: fixed;
+        overflow-y: auto;
     }
-
+    .sidebar.mobile-show {
+        left: 0;
+    }
+    main.content,
+    .footer {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    .backdrop {
+        display: none;
+        position: fixed;
+        top: 50px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 1020;
+    }
+    .backdrop.show {
+        display: block;
+    }
+}
 </style>
 
 
@@ -352,13 +370,6 @@
 <body>
  
 
-<header class="main-header">
-    <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
-    <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन संघ </b>
-    <button class="btn btn-logout" onclick="window.location.href='/logout'">
-        Logout
-    </button>
-</header>
 
 
     <!-- BACKDROP for mobile -->
@@ -367,17 +378,18 @@
     <!-- LAYOUT -->
     <div class="layout">
         <!-- SIDEBAR -->
-        <nav class="sidebar" id="sidebarMenu">
+        <nav class="sidebar expanded" id="sidebarMenu">
+
             <div>
                 <div class="profile">
                     <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
                     <div class="name">Hello Admin</div>
-                    <div class="role">SuperUser</div>
+                    <div class="role">Mahila Samiti</div>
                 </div>
 
                 <!-- Dashboard button without submenu -->
                 <div class="nav-item">
-                     <a href="{{ url('dashboard/shree_sangh') }}" class="nav-link">
+                     <a href="{{ url('dashboard/mahila_samiti') }}" class="nav-link">
                         <i class="bi bi-speedometer2"></i>
                         <span>Dashboard</span>
                     </a>
@@ -412,10 +424,7 @@
                             <i class="bi bi-file-earmark-text"></i>
                             <span>आवेदन पत्र</span>
                         </a>
-                        <a href="{{ url('/photo_gallery') }}" class="nav-link">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <span>PHOTO GALLERY</span>
-                        </a>
+                        
                     </div>
                 </div>
 
@@ -503,20 +512,34 @@
                             <i class="bi bi-person-circle"></i>
                             <span>Add Event Photos</span>
                         </a>
-                         <a href="{{ url('/home_slider') }}" class="nav-link">
+                         <a href="{{ url('/mahila_slider') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
                             <span>Home Slider</span>
                         </a>
                     </div>
+                    <!-- Logout as last menu item -->
+<div class="nav-item">
+    <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+    </a>
+</div>
+
                 </div>
             </div>
 
             <!-- Logout fixed at bottom -->
-            <button class="logout-btn" onclick="logoutFunction()">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
-            </button>
+           
         </nav>
+<header class="main-header">
+    <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन महिला समिति </b>
+    <button class="btn btn-logout" onclick="window.location.href='/logout'">
+        Logout
+    </button>
+</header>
+
+@yield('jsp-header')
 
         <!-- MAIN -->
         <main class="content">
@@ -541,42 +564,36 @@
     </div>
 
     <!-- Scripts -->
-    <script>
+<script>
 const sidebar = document.getElementById('sidebarMenu');
 const toggleBtn = document.getElementById('sidebarToggle');
 const backdrop = document.getElementById('sidebarBackdrop');
 
-// Page load pe sidebar expand karo by default
-window.addEventListener('DOMContentLoaded', () => {
-    sidebar.classList.add('expanded');
-});
-
-// Toggle sidebar on desktop/mobile
-toggleBtn.addEventListener('click', () => {
+// ✅ Toggle sidebar on desktop/mobile
+toggleBtn.addEventListener('click', () => { 
     const isMobile = window.innerWidth <= 991;
 
     if (isMobile) {
-        // Mobile: show/hide sidebar + backdrop
         sidebar.classList.toggle('mobile-show');
         backdrop.classList.toggle('show');
     } else {
-        // Desktop: toggle expanded class
         sidebar.classList.toggle('expanded');
 
         if (!sidebar.classList.contains('expanded')) {
-            // Agar sidebar collapse hua toh sab submenu close kar do
             closeAllSubmenus();
         }
     }
 });
 
-// Click on backdrop closes mobile sidebar
-backdrop.addEventListener('click', () => {
+// ✅ Click on backdrop closes mobile sidebar
+backdrop.addEventListener('click', closeMobileSidebar);
+
+function closeMobileSidebar() {
     sidebar.classList.remove('mobile-show');
     backdrop.classList.remove('show');
-});
+}
 
-// Toggle submenu on clicking menu item
+// ✅ Toggle submenu when menu item is clicked
 function toggleSubmenu(element) {
     const submenu = element.nextElementSibling;
     const arrow = element.querySelector('.submenu-toggle');
@@ -585,60 +602,64 @@ function toggleSubmenu(element) {
     const isMobile = window.innerWidth <= 991;
 
     if (isCollapsed && !isMobile) {
-        // Agar sidebar collapsed hai desktop pe, expand karo pehle phir open submenu
         sidebar.classList.add('expanded');
-        // Thoda delay do taaki transition ho jaye
         setTimeout(() => openSubmenu(submenu, arrow), 300);
         return;
     }
 
-    // Agar sidebar expanded ya mobile hai, toggle submenu normally
     if (isOpen) {
         closeSubmenu(submenu, arrow);
     } else {
         openSubmenu(submenu, arrow);
-        // NOTE: Do NOT close other submenus, so multiple can remain open
     }
 }
 
-// Open submenu without closing others
+// ✅ Open submenu
 function openSubmenu(submenu, arrow) {
     submenu.classList.add('show');
-    arrow.classList.add('rotate');
+    if (arrow) arrow.classList.add('rotate');
 }
 
-// Close submenu
+// ✅ Close submenu
 function closeSubmenu(submenu, arrow) {
     submenu.classList.remove('show');
-    arrow.classList.remove('rotate');
+    if (arrow) arrow.classList.remove('rotate');
 }
 
-// Close all submenus - used only when sidebar collapses
+// ✅ Close all submenus
 function closeAllSubmenus() {
     document.querySelectorAll('.submenu').forEach(s => s.classList.remove('show'));
     document.querySelectorAll('.submenu-toggle').forEach(i => i.classList.remove('rotate'));
 }
 
-// Logout button function (change to your own logic)
+// ✅ Logout button action
 function logoutFunction() {
     window.location.href = "{{ route('logout') }}";
 }
 
-// Tooltip logic for contact info icon
- const infoIcon = document.querySelector('.contact-info-icon');
-    const tooltip = document.getElementById('contactTooltip');
+// ✅ Tooltip logic for contact info icon
+const infoIcon = document.querySelector('.contact-info-icon');
+const tooltip = document.getElementById('contactTooltip');
 
+if (infoIcon && tooltip) {
     infoIcon.addEventListener('click', () => {
         tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
     });
 
-    // Optional: Hide when clicking outside
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', (event) => {
         if (!infoIcon.contains(event.target) && !tooltip.contains(event.target)) {
             tooltip.style.display = 'none';
         }
     });
+}
 
-    </script>
+// ✅ Auto-close mobile sidebar if window resized to desktop
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 991) {
+        closeMobileSidebar();
+    }
+});
+</script>
+
 </body>
 </html> 

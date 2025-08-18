@@ -258,5 +258,11 @@ Route::get('/mahila_photo_gallery', function () {
     return view('dashboards.photo_gallery.mahila_samiti');
 })->name('mahila_photo_gallery.view');
 
+
+Route::get('/mahila_slider', function () {
+    return view('dashboards.mahila_samiti.mahila_samiti_slider');
+})->name('mahila_slider.view');
+
+
 });
                      

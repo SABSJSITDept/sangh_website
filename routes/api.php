@@ -31,6 +31,7 @@ use App\Http\Controllers\SanghSahitya\sahitya\AddSahityaController;
 use App\Http\Controllers\SanghSahitya\ChaturmasSuchi\AddChaturmasSuchiController;
 use App\Http\Controllers\PhotoGallery\AddPhotoController;
 use App\Http\Controllers\SanghSahitya\pakhi_ka_panna\AddPakhiController;
+use App\Http\Controllers\MahilaSamiti\MahilaSliderController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -243,3 +244,8 @@ Route::apiResource('home_slider', App\Http\Controllers\HomeSlider\AddHomeSlider:
 // -----------------Pakhi Ka Panna api ------------------------------------
 Route::apiResource('pakhi', AddPakhiController::class);
 // -----------------Pakhi Ka Panna api ------------------------------------
+
+
+// -----------------Mahila Slider api ------------------------------------
+Route::apiResource('mahila-slider', MahilaSliderController::class);
+// -----------------Mahila Slider api ------------------------------------
