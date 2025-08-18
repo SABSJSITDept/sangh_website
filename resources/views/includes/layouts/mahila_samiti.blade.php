@@ -389,7 +389,7 @@ main.content {
 
                 <!-- Dashboard button without submenu -->
                 <div class="nav-item">
-                     <a href="{{ url('  ') }}" class="nav-link">
+                     <a href="{{ url('/dashboard/mahila_samiti') }}" class="nav-link">
                         <i class="bi bi-speedometer2"></i>
                         <span>Dashboard</span>
                     </a>
