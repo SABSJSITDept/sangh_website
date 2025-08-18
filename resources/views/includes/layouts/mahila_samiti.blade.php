@@ -389,7 +389,7 @@ main.content {
 
                 <!-- Dashboard button without submenu -->
                 <div class="nav-item">
-                     <a href="{{ url('dashboard/mahila_samiti') }}" class="nav-link">
+                     <a href="{{ url('  ') }}" class="nav-link">
                         <i class="bi bi-speedometer2"></i>
                         <span>Dashboard</span>
                     </a>
@@ -403,23 +403,12 @@ main.content {
                         <i class="bi bi-chevron-down submenu-toggle"></i>
                     </div>
                     <div class="submenu">
-                       
-                        <a href="{{ url('/daily-thoughts') }}" class="nav-link">
-                            <i class="bi bi-lightbulb"></i>
-                            <span>आज का विचार</span>
-                        </a>
-                        <a href="{{ url('/dashboard/vihar-sewa') }}" class="nav-link">
-                            <i class="bi bi-geo-alt"></i>
-                            <span>विहार जानकारी</span>
-                        </a>
+                     
                         <a href="{{ url('/news') }}" class="nav-link">
                             <i class="bi bi-megaphone"></i>
                             <span>NEWS</span>
                         </a>
-                        <a href="{{ url('/shivir') }}" class="nav-link">
-                            <i class="bi bi-calendar-event"></i>
-                            <span>शिविर</span>
-                        </a>
+                      
                         <a href="{{ url('/aavedan_patra') }}" class="nav-link">
                             <i class="bi bi-file-earmark-text"></i>
                             <span>आवेदन पत्र</span>
@@ -448,10 +437,7 @@ main.content {
             <i class="bi bi-person-badge"></i>
             <span class="link-text">VP/SEC सदस्य</span>
         </a>
-        <a href="{{ route('admin.it_cell') }}" class="nav-link">
-            <i class="bi bi-cpu"></i>
-            <span class="link-text">IT-CELL सदस्य</span>
-        </a>
+      
         <a href="{{ url('/mahila_pravarti_sanyojika') }}" class="nav-link">
             <i class="bi bi-diagram-3-fill"></i>
             <span class="link-text">प्रवर्ती संयोजक</span>
@@ -460,42 +446,11 @@ main.content {
             <i class="bi bi-people-fill"></i>
             <span class="link-text">कार्यसमिति सदस्य</span>
         </a>
-        <a href="{{ url('/sthayi_sampati_sanwardhan_samiti') }}" class="nav-link">
-            <i class="bi bi-bank"></i>
-            <span class="link-text">स्थायि सम्पति संवर्द्धन समित</span>
-        </a>
-        <a href="{{ url('/sanyojan_mandal_antrastriya_sadasyata') }}" class="nav-link">
-            <i class="bi bi-globe2"></i>
-            <span class="link-text">संयोजन मंडल अंतरस्त्रिय सदस्यता</span>
-        </a>
-        <a href="{{ url('/samta_jan_kalyan_pranayash') }}" class="nav-link">
-            <i class="bi bi-activity"></i>
-            <span class="link-text">समता जन कल्याण प्राणायास</span>
-        </a>
-        <a href="{{ url('/padhadhikari_prashashan_karyashala') }}" class="nav-link">
-            <i class="bi bi-file-earmark-pdf"></i>
-            <span class="link-text">पदाधिकारी प्रशासन कार्यशाला</span>
-        </a>
+     
+      
     </div>
  </div>                <!-- Users -->
-                <div class="nav-item">
-                    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-                        <i class="bi bi-people"></i>
-                        <span>संघ प्रवृत्तियाँ</span>
-                        <i class="bi bi-chevron-down submenu-toggle"></i>
-                    </div>
-                    <div class="submenu">
-                        <a href="{{ route('dharmik_pravartiya') }}" class="nav-link">
-                            <i class="bi bi-person"></i>
-                            <span>धार्मिक प्रवर्तियाँ</span>
-                        </a>
-                        <a href="{{ route('jsp.dashboard') }}" class="nav-link">
-                            <i class="bi bi-person-plus"></i>
-                            <span>JSP</span>
-                        </a>
-                       
-                    </div>
-                </div>
+              
 
                 <!-- Settings -->
                 <div class="nav-item">
@@ -505,10 +460,10 @@ main.content {
                         <i class="bi bi-chevron-down submenu-toggle"></i>
                     </div>
                     <div class="submenu">
-                        <a href="{{ url('/photo_gallery') }}" class="nav-link">
+                        <!-- <a href="{{ url('/photo_gallery') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
                             <span>Add Event Photos</span>
-                        </a>
+                        </a> -->
                          <a href="{{ url('/mahila_slider') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
                             <span>Home Slider</span>
