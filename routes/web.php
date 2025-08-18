@@ -280,5 +280,9 @@ Route::get('/mahila_ksm_members', function () {
 })->name('mahila_ksm_members.view');
 
 
+Route::get('/mahila_pravarti_sanyojika', function () {
+    return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_pravarti_sanyojika');
+})->name('mahila_pravarti_sanyojika.view');
+
 });
                      

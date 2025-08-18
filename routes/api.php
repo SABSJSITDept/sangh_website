@@ -36,6 +36,7 @@ use App\Http\Controllers\MahilaSamiti\MahilaPstController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaExPrsidentController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaVpSecController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaKsmMembersController;
+use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaPravartiSanyojikaController;
 
 
 
@@ -270,3 +271,16 @@ Route::apiResource('mahila_vp_sec', MahilaVpSecController::class);
 // -----------------Mahila KSM Members api ------------------------------------
 Route::apiResource('mahila_ksm_members', MahilaKsmMembersController::class);
 // -----------------Mahila KSM Members api ------------------------------------
+
+// -----------------Mahila pravarti sanyojika api ------------------------------------
+Route::prefix('mahila_pravarti_sanyojika')->group(function() {
+    Route::get('/', [MahilaPravartiSanyojikaController::class, 'index']);
+    Route::post('/', [MahilaPravartiSanyojikaController::class, 'store']);
+    Route::get('/{id}', [MahilaPravartiSanyojikaController::class, 'show']);
+    Route::post('/{id}', [MahilaPravartiSanyojikaController::class, 'update']); // uses _method=PUT
+    Route::delete('/{id}', [MahilaPravartiSanyojikaController::class, 'destroy']);
+
+    // ✅ Pravarti-wise
+    Route::get('/pravarti/{slug}', [MahilaPravartiSanyojikaController::class, 'pravartiWise']);
+});
+// -----------------Mahila pravarti sanyojika api ------------------------------------

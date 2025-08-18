@@ -452,7 +452,7 @@ main.content {
             <i class="bi bi-cpu"></i>
             <span class="link-text">IT-CELL सदस्य</span>
         </a>
-        <a href="{{ url('/pravarti-sanyojak') }}" class="nav-link">
+        <a href="{{ url('/mahila_pravarti_sanyojika') }}" class="nav-link">
             <i class="bi bi-diagram-3-fill"></i>
             <span class="link-text">प्रवर्ती संयोजक</span>
         </a>
