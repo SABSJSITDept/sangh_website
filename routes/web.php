@@ -270,5 +270,11 @@ Route::get('/mahila_pst', function () {
 Route::get('/mahila_ex_president', function () {
     return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_ex_prsident');
 })->name('mahila_ex_president.view');
+
+Route::get('/mahila_vp_sec', function () {
+    return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_vp_sec');
+})->name('mahila_vp_sec.view');
+
+
 });
                      

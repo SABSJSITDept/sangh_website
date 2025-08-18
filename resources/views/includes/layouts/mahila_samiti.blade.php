@@ -444,7 +444,7 @@ main.content {
             <i class="bi bi-person-video2"></i>
             <span class="link-text">PST</span>
         </a>
-        <a href="{{ url('/vp-sec') }}" class="nav-link">
+        <a href="{{ url('/mahila_vp_sec') }}" class="nav-link">
             <i class="bi bi-person-badge"></i>
             <span class="link-text">VP/SEC सदस्य</span>
         </a>

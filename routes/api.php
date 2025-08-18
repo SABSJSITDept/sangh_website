@@ -34,7 +34,7 @@ use App\Http\Controllers\SanghSahitya\pakhi_ka_panna\AddPakhiController;
 use App\Http\Controllers\MahilaSamiti\MahilaSliderController;
 use App\Http\Controllers\MahilaSamiti\MahilaPstController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaExPrsidentController;
-
+use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaVpSecController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -260,3 +260,7 @@ Route::apiResource('mahila-pst', MahilaPstController::class);
 // -----------------Mahila Ex-President api ------------------------------------
 Route::apiResource('mahila-ex-prsident', MahilaExPrsidentController::class);
 // -----------------Mahila Ex-President api ------------------------------------
+
+// -----------------Mahila VP Sec api ------------------------------------
+Route::apiResource('mahila_vp_sec', MahilaVpSecController::class);
+// -----------------Mahila VP Sec api ------------------------------------
