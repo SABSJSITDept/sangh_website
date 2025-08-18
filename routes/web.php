@@ -284,5 +284,9 @@ Route::get('/mahila_pravarti_sanyojika', function () {
     return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_pravarti_sanyojika');
 })->name('mahila_pravarti_sanyojika.view');
 
+Route::get('/mahila_events', function () {
+    return view('dashboards.mahila_samiti.events.mahila_samiti_events');
+})->name('mahila_events.view');
+
 });
                      

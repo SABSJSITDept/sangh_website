@@ -404,9 +404,9 @@ main.content {
                     </div>
                     <div class="submenu">
                      
-                        <a href="{{ url('/news') }}" class="nav-link">
+                        <a href="{{ url('/mahila_events') }}" class="nav-link">
                             <i class="bi bi-megaphone"></i>
-                            <span>NEWS</span>
+                            <span>EVENTS</span>
                         </a>
                       
                         <a href="{{ url('/aavedan_patra') }}" class="nav-link">

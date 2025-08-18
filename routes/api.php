@@ -37,6 +37,7 @@ use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaExPrsidentController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaVpSecController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaKsmMembersController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaPravartiSanyojikaController;
+use App\Http\Controllers\Mahila_Samiti\Events\Mahila_EventsController;
 
 
 
@@ -284,3 +285,7 @@ Route::prefix('mahila_pravarti_sanyojika')->group(function() {
     Route::get('/pravarti/{slug}', [MahilaPravartiSanyojikaController::class, 'pravartiWise']);
 });
 // -----------------Mahila pravarti sanyojika api ------------------------------------
+
+// -----------------Mahila Events api ------------------------------------
+Route::apiResource('mahila-events', Mahila_EventsController::class);
+// -----------------Mahila Events api ------------------------------------
