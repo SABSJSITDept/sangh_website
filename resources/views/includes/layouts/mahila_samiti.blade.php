@@ -456,7 +456,7 @@ main.content {
             <i class="bi bi-diagram-3-fill"></i>
             <span class="link-text">प्रवर्ती संयोजक</span>
         </a>
-        <a href="{{ url('/karyasamiti-sadasya') }}" class="nav-link">
+        <a href="{{ url('/mahila_ksm_members') }}" class="nav-link">
             <i class="bi bi-people-fill"></i>
             <span class="link-text">कार्यसमिति सदस्य</span>
         </a>

@@ -35,6 +35,8 @@ use App\Http\Controllers\MahilaSamiti\MahilaSliderController;
 use App\Http\Controllers\MahilaSamiti\MahilaPstController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaExPrsidentController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaVpSecController;
+use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaKsmMembersController;
+
 
 
 // ------------------Thoughts api ------------------------------------
@@ -264,3 +266,7 @@ Route::apiResource('mahila-ex-prsident', MahilaExPrsidentController::class);
 // -----------------Mahila VP Sec api ------------------------------------
 Route::apiResource('mahila_vp_sec', MahilaVpSecController::class);
 // -----------------Mahila VP Sec api ------------------------------------
+
+// -----------------Mahila KSM Members api ------------------------------------
+Route::apiResource('mahila_ksm_members', MahilaKsmMembersController::class);
+// -----------------Mahila KSM Members api ------------------------------------

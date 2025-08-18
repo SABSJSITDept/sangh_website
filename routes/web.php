@@ -275,6 +275,10 @@ Route::get('/mahila_vp_sec', function () {
     return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_vp_sec');
 })->name('mahila_vp_sec.view');
 
+Route::get('/mahila_ksm_members', function () {
+    return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_ksm_members');
+})->name('mahila_ksm_members.view');
+
 
 });
                      
