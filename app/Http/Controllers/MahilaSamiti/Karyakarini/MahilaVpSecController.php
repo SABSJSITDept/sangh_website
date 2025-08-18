@@ -25,7 +25,7 @@ public function store(Request $request)
     $request->validate([
         'name'   => 'required|string|max:255',
         'post'   => 'required|in:उपाध्यक्ष,मंत्री',
-        'city'   => 'required|string|max:255',
+        'city'   => 'nullable|string|max:255',
         'mobile' => 'required|string|max:15',
         'aanchal_id' => 'required|exists:aanchal,id',
         'photo'  => 'required|image|max:200', // 200 KB
@@ -63,7 +63,7 @@ public function store(Request $request)
         $request->validate([
             'name'   => 'required|string|max:255',
             'post'   => 'required|in:उपाध्यक्ष,मंत्री',
-            'city'   => 'required|string|max:255',
+            'city'   => 'nullable|string|max:255',
             'mobile' => 'required|string|max:15',
             'aanchal_id' => 'required|exists:aanchal,id',
             'photo'  => 'nullable|image|max:200',

@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">शहर</label>
-                    <input type="text" id="city" class="form-control" required>
+                    <input type="text" id="city" class="form-control" >
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">मोबाइल</label>
