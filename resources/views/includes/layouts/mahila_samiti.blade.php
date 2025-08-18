@@ -435,15 +435,12 @@ main.content {
         <i class="bi bi-chevron-down submenu-toggle"></i>
     </div>
     <div class="submenu">
-        <a href="{{ route('karyakarini.index') }}" class="nav-link">
-            <i class="bi bi-house-door"></i>
-            <span class="link-text">HOME</span>
-        </a>
-        <a href="{{ url('/shree-sangh/ex-president') }}" class="nav-link">
+       
+        <a href="{{ url('/mahila_ex_president') }}" class="nav-link">
             <i class="bi bi-person-check"></i>
             <span class="link-text">पूर्व अध्यक्ष</span>
         </a>
-        <a href="{{ url('/shree-sangh/karyakarini/pst') }}" class="nav-link">
+        <a href="{{ url('/mahila_pst') }}" class="nav-link">
             <i class="bi bi-person-video2"></i>
             <span class="link-text">PST</span>
         </a>

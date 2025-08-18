@@ -32,6 +32,9 @@ use App\Http\Controllers\SanghSahitya\ChaturmasSuchi\AddChaturmasSuchiController
 use App\Http\Controllers\PhotoGallery\AddPhotoController;
 use App\Http\Controllers\SanghSahitya\pakhi_ka_panna\AddPakhiController;
 use App\Http\Controllers\MahilaSamiti\MahilaSliderController;
+use App\Http\Controllers\MahilaSamiti\MahilaPstController;
+use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaExPrsidentController;
+
 
 
 // ------------------Thoughts api ------------------------------------
@@ -249,3 +252,11 @@ Route::apiResource('pakhi', AddPakhiController::class);
 // -----------------Mahila Slider api ------------------------------------
 Route::apiResource('mahila-slider', MahilaSliderController::class);
 // -----------------Mahila Slider api ------------------------------------
+
+// -----------------Mahila PST api ------------------------------------
+Route::apiResource('mahila-pst', MahilaPstController::class);
+// -----------------Mahila PST api ------------------------------------ 
+
+// -----------------Mahila Ex-President api ------------------------------------
+Route::apiResource('mahila-ex-prsident', MahilaExPrsidentController::class);
+// -----------------Mahila Ex-President api ------------------------------------
