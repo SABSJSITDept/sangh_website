@@ -288,5 +288,15 @@ Route::get('/mahila_events', function () {
     return view('dashboards.mahila_samiti.events.mahila_samiti_events');
 })->name('mahila_events.view');
 
+
+Route::get('/mahila_aavedan_patra', function () {
+    return view('dashboards.mahila_samiti.downloads.mahila_samiti_aavedan_patra');
+})->name('mahila_aavedan_patra.view');
+
+Route::get('/mahila_prativedan', function () {
+    return view('dashboards.mahila_samiti.downloads.mahila_samiti_prativedan');
+})->name('mahila_prativedan.view');
+
+
 });
                      

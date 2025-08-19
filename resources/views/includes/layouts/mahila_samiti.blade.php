@@ -409,11 +409,16 @@ main.content {
                             <span>EVENTS</span>
                         </a>
                       
-                        <a href="{{ url('/aavedan_patra') }}" class="nav-link">
+                        <a href="{{ url('/mahila_aavedan_patra') }}" class="nav-link">
                             <i class="bi bi-file-earmark-text"></i>
                             <span>आवेदन पत्र</span>
                         </a>
                         
+                        <a href="{{ url('/mahila_prativedan') }}" class="nav-link">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span>प्रतिवेदन</span>
+                        </a>
+
                     </div>
                 </div>
 

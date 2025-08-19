@@ -38,7 +38,8 @@ use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaVpSecController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaKsmMembersController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaPravartiSanyojikaController;
 use App\Http\Controllers\Mahila_Samiti\Events\Mahila_EventsController;
-
+use App\Http\Controllers\MahilaSamiti\Downloads\MahilaAavedanPatraController;
+use App\Http\Controllers\Mahila_Samiti\Downloads\Mahila_PrativedanController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -289,3 +290,18 @@ Route::prefix('mahila_pravarti_sanyojika')->group(function() {
 // -----------------Mahila Events api ------------------------------------
 Route::apiResource('mahila-events', Mahila_EventsController::class);
 // -----------------Mahila Events api ------------------------------------
+
+// -----------------Mahila Aavedan Patra api ------------------------------------
+
+Route::apiResource('mahila-aavedan-patra', MahilaAavedanPatraController::class)->except(['show']);
+
+
+// ✅ Extra routes for offline/online forms
+Route::get('mahila-aavedan-patra/offline', [MahilaAavedanPatraController::class, 'offlineForms']);
+Route::get('mahila-aavedan-patra/online', [MahilaAavedanPatraController::class, 'onlineForms']);
+
+// -----------------Mahila Aavedan Patra api ------------------------------------
+
+// -----------------Mahila Prativedan api ------------------------------------
+Route::apiResource('mahila_prativedan', Mahila_PrativedanController::class);
+// -----------------Mahila Prativedan api ------------------------------------
