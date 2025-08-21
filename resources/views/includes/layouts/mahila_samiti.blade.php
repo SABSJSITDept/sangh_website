@@ -454,7 +454,7 @@ main.content {
      
       
     </div>
- </div>                <!-- Users -->
+ </div>              
               
 
                 <!-- Settings -->
@@ -465,12 +465,20 @@ main.content {
                         <i class="bi bi-chevron-down submenu-toggle"></i>
                     </div>
                     <div class="submenu">
-                        <!-- <a href="{{ url('/photo_gallery') }}" class="nav-link">
+                        <a href="{{ url('/photo_gallery_mahila_samiti') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
                             <span>Add Event Photos</span>
-                        </a> -->
+                        </a>
                          <a href="{{ url('/mahila_slider') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
+                            <span>Home Slider</span>
+                        </a>
+                         <a href="{{ url('/mobile_slider') }}" class="nav-link">
+                            <i class="bi bi-person-circle"></i>
+                            <span>Mobile Slider</span>
+                        </a>
+                        <a href="{{ url('/home_slider') }}" class="nav-link">
+                            <i class="bi bi-person-circle"></i>
                             <span>Home Slider</span>
                         </a>
                     </div>

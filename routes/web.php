@@ -302,5 +302,12 @@ Route::get('/mobile_slider', function () {
     return view('dashboards.shree_sangh.mobile_slider.mobile_slider');
 })->name('mobile_slider.view');
 
+Route::get('/mahila_samiti_photo_gallery', function () {
+    return view('dashboards.photo_gallery.mahila_samiti');
+})->name('sangh_photo_gallery.view');
+
+Route::get('/photo_gallery_mahila_samiti', function () {
+    return view('dashboards.photo_gallery.add_photo_mahila');
+})->name('photo_gallery_mahila_samiti.view');
 });
                      
