@@ -10,10 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class Mahila_EventsController extends Controller
 {
-    public function index()
-    {
-        return response()->json(Mahila_Events::all());
-    }
+  public function index()
+{
+    // Latest events first
+    $events = Mahila_Events::orderBy('created_at', 'desc')->get();
+    return response()->json($events);
+}
+
 
     public function store(Request $request)
     {
