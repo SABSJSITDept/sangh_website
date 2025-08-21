@@ -264,7 +264,8 @@ Route::apiResource('mahila-pst', MahilaPstController::class);
 // -----------------Mahila PST api ------------------------------------ 
 
 // -----------------Mahila Ex-President api ------------------------------------
-Route::apiResource('mahila-ex-prsident', MahilaExPrsidentController::class);
+Route::apiResource('mahila-ex-prsident', MahilaExPrsidentController::class)->except(['show']);
+Route::get('/mahila-ex-prsident/latest', [MahilaExPrsidentController::class, 'latest']);
 // -----------------Mahila Ex-President api ------------------------------------
 
 // -----------------Mahila VP Sec api ------------------------------------
@@ -309,4 +310,4 @@ Route::apiResource('mahila_prativedan', Mahila_PrativedanController::class);
 
 // -----------------Mobile Slider api ------------------------------------
 Route::apiResource('mobile-slider', MobileSliderController::class);
-// -----------------Mobile Slider api ------------------------------------
+// -----------------Mobile Slider api ------------------------------------  

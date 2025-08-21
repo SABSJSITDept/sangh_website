@@ -77,4 +77,12 @@ class MahilaExPrsidentController extends Controller
 
         return response()->json(['success' => true]);
     }
+// ✅ Fetch Latest Entry
+public function latest()
+{
+    $latest = MahilaExPrsident::latest()->first();
+    return response()->json($latest);
 }
+
+}
+

@@ -30,6 +30,14 @@
     <!-- ✅ Toast -->
     <div class="toast-container"></div>
 
+    <!-- ✅ Latest Entry Section -->
+    <div class="card card-custom mb-4 p-3">
+        <h5 class="mb-3 text-secondary">🌟 Latest Entry</h5>
+        <div id="latestEntry" class="d-flex align-items-center">
+            <p class="text-muted">Loading latest entry...</p>
+        </div>
+    </div>
+
     <!-- ✅ Form -->
     <div class="card card-custom mb-4 p-3">
         <h5 class="mb-3 text-secondary">➕ नई एंट्री जोड़ें / अपडेट करें</h5>
@@ -79,7 +87,29 @@ function showToast(message, type = 'success') {
         </div>`;
 }
 
-// ✅ Fetch Data
+// ✅ Fetch Latest Entry
+async function fetchLatest() {
+    let res = await fetch('/api/mahila-ex-prsident/latest');
+    let item = await res.json();
+
+    let latestHtml = '';
+    if(item) {
+        latestHtml = `
+            <img src="${item.photo}" alt="${item.name}" width="100" height="100" class="me-3">
+            <div>
+                <h5 class="mb-1">${item.name}</h5>
+                <p class="mb-1"><strong>कार्यकाल:</strong> ${item.karyakal ?? '-'}</p>
+                <p class="mb-1"><strong>Place:</strong> ${item.place}</p>
+            </div>
+        `;
+    } else {
+        latestHtml = "<p class='text-muted'>No latest entry found.</p>";
+    }
+
+    document.getElementById('latestEntry').innerHTML = latestHtml;
+}
+
+// ✅ Fetch Data (All Entries)
 async function fetchData() {
     let res = await fetch('/api/mahila-ex-prsident');
     let data = await res.json();
@@ -132,16 +162,13 @@ document.getElementById('prsidentForm').addEventListener('submit', async (e) => 
 
     let result = await res.json();
 
-    // ✅ Success
     if(result.success){
         showToast('Saved Successfully');
         resetForm();
         fetchData();
-    } 
-    // ❌ Validation / Error Handling
-    else {
+        fetchLatest(); // ✅ Latest भी update हो जाएगा
+    } else {
         if(result.errors){  
-            // loop through all errors
             Object.values(result.errors).forEach(errArr => {
                 errArr.forEach(err => showToast(err, 'error'));
             });
@@ -152,7 +179,6 @@ document.getElementById('prsidentForm').addEventListener('submit', async (e) => 
         }
     }
 });
-
 
 // ✅ Edit Row
 function editRow(id, name, karyakal, place, photo) {
@@ -177,6 +203,7 @@ async function deleteRow(id) {
     if(result.success){
         showToast('Deleted Successfully');
         fetchData();
+        fetchLatest(); // ✅ delete के बाद भी latest refresh होगा
     }
 }
 
@@ -187,6 +214,7 @@ function resetForm() {
 }
 
 // Load Data Initially
+fetchLatest();
 fetchData();
 </script>
 @endsection
