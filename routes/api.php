@@ -40,6 +40,7 @@ use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaPravartiSanyojikaControl
 use App\Http\Controllers\Mahila_Samiti\Events\Mahila_EventsController;
 use App\Http\Controllers\MahilaSamiti\Downloads\MahilaAavedanPatraController;
 use App\Http\Controllers\Mahila_Samiti\Downloads\Mahila_PrativedanController;
+use App\Http\Controllers\ShreeSangh\MobileSlider\MobileSliderController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -305,3 +306,7 @@ Route::get('mahila-aavedan-patra/online', [MahilaAavedanPatraController::class, 
 // -----------------Mahila Prativedan api ------------------------------------
 Route::apiResource('mahila_prativedan', Mahila_PrativedanController::class);
 // -----------------Mahila Prativedan api ------------------------------------
+
+// -----------------Mobile Slider api ------------------------------------
+Route::apiResource('mobile-slider', MobileSliderController::class);
+// -----------------Mobile Slider api ------------------------------------

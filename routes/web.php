@@ -298,5 +298,9 @@ Route::get('/mahila_prativedan', function () {
 })->name('mahila_prativedan.view');
 
 
+Route::get('/mobile_slider', function () {
+    return view('dashboards.shree_sangh.mobile_slider.mobile_slider');
+})->name('mobile_slider.view');
+
 });
                      
