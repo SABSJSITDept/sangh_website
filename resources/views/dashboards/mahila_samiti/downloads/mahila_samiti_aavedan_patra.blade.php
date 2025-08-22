@@ -34,8 +34,20 @@
     <!-- Toast Container -->
     <div class="toast-container position-fixed top-0 end-0 p-3"></div>
 
-    <!-- Form Card -->
+    <!-- Row: Left Message + Form -->
     <div class="row justify-content-center mb-5">
+        <!-- Left Side Message -->
+        <div class="col-md-5 mb-3">
+            <div class="alert alert-info shadow-sm border-0 rounded-4">
+                <h5 class="fw-bold text-primary mb-2">⚠️ ध्यान दें</h5>
+                <ul class="mb-0">
+                    <li>Google Form का लिंक डालने के बाद <strong>एक बार ज़रूर चेक</strong> करें ✅</li>
+                    <li>PDF फ़ाइल का साइज़ <strong>2MB तक ही</strong> होना चाहिए 📄</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Form Card -->
         <div class="col-md-7">
             <div id="formCard" class="card shadow-lg border-0 rounded-4">
                 <div class="card-body p-4">

@@ -41,7 +41,7 @@
                     <option value="Sangathan">Sangathan</option>
                     <option value="Sarwadharmi Sahyog">Sarwadharmi Sahyog</option>
                     <option value="Yuvati Shakti">Yuvati Shakti</option>
-                    <option value="Sadhumargi Women's Motivational Forum">Sadhumargi Women's Motivational Forum</option>
+                    <option value="Sadhumargi Womens Motivational Forum">Sadhumargi Women's Motivational Forum</option>
                     <option value="Parivaranjali">Parivaranjali</option>
                     <option value="Samta Chhatravratti">Samta Chhatravratti</option>
                     <option value="Reporting System">Reporting System</option>
@@ -66,7 +66,7 @@
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Sangathan')">Sangathan</button>
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Sarwadharmi Sahyog')">Sarwadharmi Sahyog</button>
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Yuvati Shakti')">Yuvati Shakti</button>
-            <button class="btn btn-outline-primary" onclick="fetchPravarti('Sadhumargi Womens Motivational Forum')">Sadhumargi Women's Motivational Forum</button>
+            <button class="btn btn-outline-primary" onclick="fetchPravarti('Sadhumargi Womens Motivational Forum')">Sadhumargi Womens Motivational Forum</button>
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Parivaranjali')">Parivaranjali</button>
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Samta Chhatravratti')">Samta Chhatravratti</button>
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Reporting System')">Reporting System</button>

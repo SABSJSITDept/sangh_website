@@ -20,13 +20,13 @@
                 <div class="row">
                     <!-- Title -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold">शीर्षक</label>
+                        <label class="form-label fw-semibold">Title </label>
                         <input type="text" class="form-control" name="title" id="title" required>
                     </div>
 
                     <!-- Content -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold">सामग्री</label>
+                        <label class="form-label fw-semibold">Description</label>
                         <textarea class="form-control" name="content" id="content" rows="1" required></textarea>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                 <div class="row">
                     <!-- Photo -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold">फोटो (200kb तक)</label>
+                        <label class="form-label fw-semibold">Photo (200kb तक)</label>
                         <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
                     </div>
                 </div>
@@ -55,10 +55,10 @@
                 <thead class="table-dark text-center">
                     <tr>
                         <th>ID</th>
-                        <th>शीर्षक</th>
-                        <th>सामग्री</th>
-                        <th>फोटो</th>
-                        <th>क्रिया</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Photo</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody class="text-center"></tbody>
