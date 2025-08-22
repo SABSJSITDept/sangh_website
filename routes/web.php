@@ -309,5 +309,14 @@ Route::get('/mahila_samiti_photo_gallery', function () {
 Route::get('/photo_gallery_mahila_samiti', function () {
     return view('dashboards.photo_gallery.add_photo_mahila');
 })->name('photo_gallery_mahila_samiti.view');
+
+Route::get('/mahila_mobile_slider', function () {
+    return view('dashboards.mahila_samiti.mobile_slider.mobile_slider');
+})->name('mahila_mobile_slider.view');
+
+Route::get('/mahila_home_slider', function () {
+    return view('dashboards.mahila_samiti.mobile_slider.home_slider');
+})->name('mahila_home_slider.view');
+
 });
                      

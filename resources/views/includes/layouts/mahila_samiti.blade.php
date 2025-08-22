@@ -471,15 +471,15 @@ main.content {
                         </a>
                          <a href="{{ url('/mahila_slider') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
-                            <span>Home Slider</span>
+                            <span>Mahila Samiti Slider</span>
                         </a>
-                         <a href="{{ url('/mobile_slider') }}" class="nav-link">
+                         <a href="{{ url('/mahila_mobile_slider') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
-                            <span>Mobile Slider</span>
+                            <span>Mobile App Slider</span>
                         </a>
-                        <a href="{{ url('/home_slider') }}" class="nav-link">
+                        <a href="{{ url('/mahila_home_slider') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
-                            <span>Home Slider</span>
+                            <span>Shree Sangh Home Slider</span>
                         </a>
                     </div>
                     <!-- Logout as last menu item -->

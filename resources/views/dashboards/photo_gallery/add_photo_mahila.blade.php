@@ -1,4 +1,4 @@
-@extends('includes.layouts.mahila_samiti')
+@extends('includes.layouts.mahila_Samiti')
 
 @section('content')
 <div class="container mt-5">
