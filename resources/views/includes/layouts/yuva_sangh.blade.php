@@ -434,7 +434,7 @@ main.content {
             <i class="bi bi-person-check"></i>
             <span class="link-text">पूर्व अध्यक्ष</span>
         </a>
-        <a href="{{ url('#') }}" class="nav-link">
+        <a href="{{ url('/yuva_pst') }}" class="nav-link">
             <i class="bi bi-person-video2"></i>
             <span class="link-text">PST</span>
         </a>

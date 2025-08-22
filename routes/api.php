@@ -43,7 +43,7 @@ use App\Http\Controllers\Mahila_Samiti\Downloads\Mahila_PrativedanController;
 use App\Http\Controllers\ShreeSangh\MobileSlider\MobileSliderController;
 use App\Http\Controllers\YuvaSangh\YuvaSlider\YuvaSliderController;
 use App\Http\Controllers\YuvaSangh\NewsAndEvents\AddNewsController;
-
+use App\Http\Controllers\YuvaSangh\Karyakarini\AddPstController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -322,3 +322,7 @@ Route::apiResource('yuva-slider', YuvaSliderController::class);
 // -----------------Yuva News api ------------------------------------
 Route::apiResource('yuva-news', AddNewsController::class);
 // -----------------Yuva News api ------------------------------------
+
+// -----------------Yuva pst api ------------------------------------
+Route::apiResource('yuva-pst', AddPstController::class);
+// -----------------Yuva pst api ------------------------------------

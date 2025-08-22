@@ -327,6 +327,10 @@ Route::get('/yuva_news', function () {
     return view('dashboards.yuva_sangh.news_and_events.news_and_events');
 })->name('yuva_news_slider.view');
 
+Route::get('/yuva_pst', function () {
+    return view('dashboards.yuva_sangh.karyakarini.yuva_pst');
+})->name('yuva_pst.view');
+
 
 });
                      
