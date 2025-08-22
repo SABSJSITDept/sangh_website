@@ -42,6 +42,7 @@ use App\Http\Controllers\MahilaSamiti\Downloads\MahilaAavedanPatraController;
 use App\Http\Controllers\Mahila_Samiti\Downloads\Mahila_PrativedanController;
 use App\Http\Controllers\ShreeSangh\MobileSlider\MobileSliderController;
 use App\Http\Controllers\YuvaSangh\YuvaSlider\YuvaSliderController;
+use App\Http\Controllers\YuvaSangh\NewsAndEvents\AddNewsController;
 
 
 
@@ -317,3 +318,7 @@ Route::apiResource('mobile-slider', MobileSliderController::class);
 // -----------------Yuva Slider api ------------------------------------
 Route::apiResource('yuva-slider', YuvaSliderController::class);
 // -----------------Yuva Slider api ------------------------------------
+
+// -----------------Yuva News api ------------------------------------
+Route::apiResource('yuva-news', AddNewsController::class);
+// -----------------Yuva News api ------------------------------------

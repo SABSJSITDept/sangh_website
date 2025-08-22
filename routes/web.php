@@ -322,5 +322,11 @@ Route::get('/mahila_home_slider', function () {
 Route::get('/yuva_home_slider', function () {
     return view('dashboards.yuva_sangh.yuva_slider.yuva_slider');
 })->name('yuva_home_slider.view');
+
+Route::get('/yuva_news', function () {
+    return view('dashboards.yuva_sangh.news_and_events.news_and_events');
+})->name('yuva_news_slider.view');
+
+
 });
                      
