@@ -41,6 +41,8 @@ use App\Http\Controllers\Mahila_Samiti\Events\Mahila_EventsController;
 use App\Http\Controllers\MahilaSamiti\Downloads\MahilaAavedanPatraController;
 use App\Http\Controllers\Mahila_Samiti\Downloads\Mahila_PrativedanController;
 use App\Http\Controllers\ShreeSangh\MobileSlider\MobileSliderController;
+use App\Http\Controllers\YuvaSangh\YuvaSlider\YuvaSliderController;
+
 
 
 // ------------------Thoughts api ------------------------------------
@@ -311,3 +313,7 @@ Route::apiResource('mahila_prativedan', Mahila_PrativedanController::class);
 // -----------------Mobile Slider api ------------------------------------
 Route::apiResource('mobile-slider', MobileSliderController::class);
 // -----------------Mobile Slider api ------------------------------------  
+
+// -----------------Yuva Slider api ------------------------------------
+Route::apiResource('yuva-slider', YuvaSliderController::class);
+// -----------------Yuva Slider api ------------------------------------

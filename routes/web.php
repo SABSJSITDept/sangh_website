@@ -318,5 +318,9 @@ Route::get('/mahila_home_slider', function () {
     return view('dashboards.mahila_samiti.mobile_slider.home_slider');
 })->name('mahila_home_slider.view');
 
+
+Route::get('/yuva_home_slider', function () {
+    return view('dashboards.yuva_sangh.yuva_slider.yuva_slider');
+})->name('yuva_home_slider.view');
 });
                      
