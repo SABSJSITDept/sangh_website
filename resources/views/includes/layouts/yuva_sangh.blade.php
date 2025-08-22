@@ -409,15 +409,7 @@ main.content {
                             <span>NEWS</span>
                         </a>
                       
-                        <a href="{{ url('#') }}" class="nav-link">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <span>आवेदन पत्र</span>
-                        </a>
-                        
-                        <a href="{{ url('#') }}" class="nav-link">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <span>प्रतिवेदन</span>
-                        </a>
+                      
 
                     </div>
                 </div>
@@ -443,14 +435,7 @@ main.content {
             <span class="link-text">VP/SEC सदस्य</span>
         </a>
       
-        <a href="{{ url('#') }}" class="nav-link">
-            <i class="bi bi-diagram-3-fill"></i>
-            <span class="link-text">प्रवर्ती संयोजक</span>
-        </a>
-        <a href="{{ url('#') }}" class="nav-link">
-            <i class="bi bi-people-fill"></i>
-            <span class="link-text">कार्यसमिति सदस्य</span>
-        </a>
+       
      
       
     </div>
@@ -465,7 +450,7 @@ main.content {
                         <i class="bi bi-chevron-down submenu-toggle"></i>
                     </div>
                     <div class="submenu">
-                        <a href="{{ url('#i') }}" class="nav-link">
+                        <a href="{{ url('/photo_gallery_yuva_sangh') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
                             <span>Add Event Photos</span>
                         </a>
@@ -473,11 +458,11 @@ main.content {
                             <i class="bi bi-lock"></i>
                             <span>Yuva Sangh Slider</span>
                         </a>
-                         <a href="{{ url('#') }}" class="nav-link">
+                         <a href="{{ url('/yuva_mobile_slider') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
                             <span>Mobile App Slider</span>
                         </a>
-                        <a href="{{ url('#') }}" class="nav-link">
+                        <a href="{{ url('/yuva_main_home_slider') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
                             <span>Shree Sangh Home Slider</span>
                         </a>

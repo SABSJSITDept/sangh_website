@@ -1,4 +1,4 @@
-@extends('includes.layouts.shree_sangh')
+@extends('includes.layouts.yuva_sangh')
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -40,7 +40,7 @@
 </style>
 
 <div class="container mt-4">
-    <h4 class="mb-4 text-center">📸 संघ फोटो गैलरी</h4>
+    <h4 class="mb-4 text-center">📸 युवा संघ फोटो गैलरी</h4>
     <div id="photoGallery"></div>
 </div>
 

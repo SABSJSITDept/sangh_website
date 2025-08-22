@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <h4 class="mb-4 text-center fw-bold">📸 संघ फोटो गैलरी</h4>
+    <h4 class="mb-4 text-center fw-bold">📸 युवा संघ फोटो गैलरी</h4>
 
     <!-- ℹ️ Info Message -->
     <div class="alert alert-info text-center fw-bold rounded-4 shadow-sm">
@@ -56,7 +56,7 @@
 
                 <!-- Yuva Card -->
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='#'">
+                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='/yuva_sangh_photo_gallery'">
                         <img src="{{ asset('images/yuva.png') }}" class="card-img-top rounded-top-4" alt="Yuva Gallery">
                         <div class="card-body text-center">
                             <h5 class="card-title fw-bold text-success">💪 युवा</h5>

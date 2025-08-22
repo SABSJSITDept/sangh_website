@@ -339,6 +339,22 @@ Route::get('/yuva_vp_sec', function () {
     return view('dashboards.yuva_sangh.karyakarini.yuva_vp_sec');
 })->name('/yuva_vp_sec.view');
 
+Route::get('/yuva_mobile_slider', function () {
+    return view('dashboards.yuva_sangh.mobile_slider.yuva_sangh_mobile_slider');
+})->name('yuva_mobile_slider.view');
+
+Route::get('/yuva_main_home_slider', function () {
+    return view('dashboards.yuva_sangh.mobile_slider.shree_sangh_yuva_slider');
+})->name('yuva_main_home_slider.view');
+
+
+Route::get('/photo_gallery_yuva_sangh', function () {
+    return view('dashboards.photo_gallery.add_photo_yuva');
+})->name('photo_gallery_yuva_sangh.view');
+
+Route::get('/yuva_sangh_photo_gallery', function () {
+    return view('dashboards.photo_gallery.yuva_sangh');
+})->name('yuva_sangh_photo_gallery.view');
 
 });
                      
