@@ -331,6 +331,14 @@ Route::get('/yuva_pst', function () {
     return view('dashboards.yuva_sangh.karyakarini.yuva_pst');
 })->name('yuva_pst.view');
 
+Route::get('/yuva_ex_president', function () {
+    return view('dashboards.yuva_sangh.karyakarini.yuva_ex_president');
+})->name('yuva_ex_president.view');
+
+Route::get('/yuva_vp_sec', function () {
+    return view('dashboards.yuva_sangh.karyakarini.yuva_vp_sec');
+})->name('/yuva_vp_sec.view');
+
 
 });
                      

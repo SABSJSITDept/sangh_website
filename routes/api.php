@@ -44,6 +44,9 @@ use App\Http\Controllers\ShreeSangh\MobileSlider\MobileSliderController;
 use App\Http\Controllers\YuvaSangh\YuvaSlider\YuvaSliderController;
 use App\Http\Controllers\YuvaSangh\NewsAndEvents\AddNewsController;
 use App\Http\Controllers\YuvaSangh\Karyakarini\AddPstController;
+use App\Http\Controllers\YuvaSangh\Karyakarini\AddExYuvaPresidentController;
+use App\Http\Controllers\YuvaSangh\Karyakarini\AddYuvaVpSecController;
+
 
 
 // ------------------Thoughts api ------------------------------------
@@ -326,3 +329,11 @@ Route::apiResource('yuva-news', AddNewsController::class);
 // -----------------Yuva pst api ------------------------------------
 Route::apiResource('yuva-pst', AddPstController::class);
 // -----------------Yuva pst api ------------------------------------
+
+// -----------------Yuva ex_president api ------------------------------------
+Route::apiResource('yuva-ex-president', AddExYuvaPresidentController::class);
+// -----------------Yuva ex_president api ------------------------------------
+
+// -----------------Yuva vp/sec api ------------------------------------
+Route::apiResource('yuva-vp-sec', AddYuvaVpSecController::class);
+// -----------------Yuva vp/sec api ------------------------------------

@@ -430,7 +430,7 @@ main.content {
     </div>
     <div class="submenu">
        
-        <a href="{{ url('#') }}" class="nav-link">
+        <a href="{{ url('/yuva_ex_president') }}" class="nav-link">
             <i class="bi bi-person-check"></i>
             <span class="link-text">पूर्व अध्यक्ष</span>
         </a>
@@ -438,7 +438,7 @@ main.content {
             <i class="bi bi-person-video2"></i>
             <span class="link-text">PST</span>
         </a>
-        <a href="{{ url('#') }}" class="nav-link">
+        <a href="{{ url('/yuva_vp_sec') }}" class="nav-link">
             <i class="bi bi-person-badge"></i>
             <span class="link-text">VP/SEC सदस्य</span>
         </a>
