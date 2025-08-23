@@ -11,7 +11,7 @@
 
     {{-- Info Note --}}
     <div class="alert alert-info">
-        Photo optional hai. Agar upload karte ho to <strong>200KB</strong> tak ki <strong>image</strong> (jpg, jpeg, png, webp, gif) hi allow hogi.
+        Logo optional hai. Agar upload karte ho to <strong>200KB</strong> tak ki <strong>image</strong> (jpg, jpeg, png, webp, gif) hi allow hogi.
     </div>
 
     {{-- Create / Update Form --}}
@@ -29,7 +29,7 @@
                         <textarea class="form-control" id="content" rows="4" required></textarea>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Photo (optional, ≤ 200KB, image only)</label>
+                        <label class="form-label">Logo (optional, ≤ 200KB, image only)</label>
                         <input type="file" class="form-control" id="photo" accept="image/*">
                         <div class="form-text">If updating without changing image, leave this empty.</div>
                     </div>
@@ -53,7 +53,7 @@
                             <th style="width:70px">#</th>
                             <th>Heading</th>
                             <th>Content</th>
-                            <th>Photo</th>
+                            <th>Logo</th>
                             <th style="width:180px">Action</th>
                         </tr>
                     </thead>
