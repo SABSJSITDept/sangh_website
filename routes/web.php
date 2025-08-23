@@ -356,5 +356,9 @@ Route::get('/yuva_sangh_photo_gallery', function () {
     return view('dashboards.photo_gallery.yuva_sangh');
 })->name('yuva_sangh_photo_gallery.view');
 
+
+Route::get('/yuva_sangh_pravartiya', function () {
+    return view('dashboards.yuva_sangh.pravartiya.yuva_pravartiya');
+})->name('yuva_sangh_pravartiya.view');
 });
                      

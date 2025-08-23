@@ -409,7 +409,10 @@ main.content {
                             <span>NEWS</span>
                         </a>
                       
-                      
+                        <a href="{{ url('/yuva_sangh_pravartiya') }}" class="nav-link">
+                            <i class="bi bi-megaphone"></i>
+                            <span>PRAVARTIYA</span>
+                        </a>
 
                     </div>
                 </div>

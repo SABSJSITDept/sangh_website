@@ -46,7 +46,7 @@ use App\Http\Controllers\YuvaSangh\NewsAndEvents\AddNewsController;
 use App\Http\Controllers\YuvaSangh\Karyakarini\AddPstController;
 use App\Http\Controllers\YuvaSangh\Karyakarini\AddExYuvaPresidentController;
 use App\Http\Controllers\YuvaSangh\Karyakarini\AddYuvaVpSecController;
-
+use App\Http\Controllers\YuvaSangh\Pravartiya\AddYuvaPravartiController;
 
 
 // ------------------Thoughts api ------------------------------------
@@ -337,3 +337,7 @@ Route::apiResource('yuva-ex-president', AddExYuvaPresidentController::class);
 // -----------------Yuva vp/sec api ------------------------------------
 Route::apiResource('yuva-vp-sec', AddYuvaVpSecController::class);
 // -----------------Yuva vp/sec api ------------------------------------
+
+// -----------------Yuva pravartiya api ------------------------------------
+Route::apiResource('yuva-pravartiya', AddYuvaPravartiController::class);
+// -----------------Yuva pravartiya api ------------------------------------
