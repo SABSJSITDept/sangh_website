@@ -455,20 +455,23 @@ main.content {
                     <div class="submenu">
                         <a href="{{ url('/photo_gallery_yuva_sangh') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
-                            <span>Add Event Photos</span>
+                            <span>Yuva Sangh Photo Gallery</span>
                         </a>
                          <a href="{{ url('/yuva_home_slider') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
-                            <span>Yuva Sangh Slider</span>
+                            <span>Yuva Sangh Home Page Slider</span>
                         </a>
-                         <a href="{{ url('/yuva_mobile_slider') }}" class="nav-link">
-                            <i class="bi bi-person-circle"></i>
-                            <span>Mobile App Slider</span>
-                        </a>
+                        
                         <a href="{{ url('/yuva_main_home_slider') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
                             <span>Shree Sangh Home Slider</span>
                         </a>
+
+                         <a href="{{ url('/yuva_mobile_slider') }}" class="nav-link">
+                            <i class="bi bi-person-circle"></i>
+                            <span>Mobile App Slider</span>
+                        </a>
+                        
                     </div>
                     <!-- Logout as last menu item -->
 <div class="nav-item">
