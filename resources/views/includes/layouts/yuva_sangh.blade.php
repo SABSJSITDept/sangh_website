@@ -469,9 +469,9 @@ main.content {
 
                          <a href="{{ url('/yuva_mobile_slider') }}" class="nav-link">
                             <i class="bi bi-person-circle"></i>
-                            <span>Mobile App Slider</span>
+                            <span>Mobile App Home Screen Slider</span>
                         </a>
-                        
+
                     </div>
                     <!-- Logout as last menu item -->
 <div class="nav-item">

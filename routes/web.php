@@ -9,6 +9,12 @@ use App\Http\Controllers\Shree_sangh\ThoughtApiController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\ExPresidentController;
 use App\Models\Aanchal\Aanchal;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\NotificationController;
+
+
+
+Route::post('/send-notification', [NotificationController::class, 'sendNotification']);
+
 
 
  Route::post('/change-password', [AuthController::class, 'updatePassword'])->name('password.update');
@@ -360,5 +366,10 @@ Route::get('/yuva_sangh_photo_gallery', function () {
 Route::get('/yuva_sangh_pravartiya', function () {
     return view('dashboards.yuva_sangh.pravartiya.yuva_pravartiya');
 })->name('yuva_sangh_pravartiya.view');
+
+Route::get('/send_notification-form', function () {
+    return view('notifications.send');
+})->name('notification_send.view');
+
 });
                      

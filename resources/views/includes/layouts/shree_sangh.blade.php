@@ -520,6 +520,10 @@ main.content {
                             <i class="bi bi-lock"></i>
                             <span>Mobile Slider Update </span>
                         </a>
+                         <a href="{{ url('/send_notification-form') }}" class="nav-link">
+                            <i class="bi bi-lock"></i>
+                            <span>Send Notifications</span>
+                        </a>
                     </div>
                     <!-- Logout as last menu item -->
 <div class="nav-item">
