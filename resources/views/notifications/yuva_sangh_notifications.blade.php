@@ -1,4 +1,4 @@
-@extends('includes.layouts.super_admin')
+@extends('includes.layouts.yuva_sangh')
 
 @section('content')
 <div class="container my-5">

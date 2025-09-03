@@ -466,7 +466,7 @@ main.content {
                 <div class="profile">
                     <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
                     <div class="name">Hello Admin</div>
-                    <div class="role">SuperUser</div>
+                    <div class="role">Shree Sangh</div>
                 </div>
 
                 <!-- Dashboard button without submenu -->

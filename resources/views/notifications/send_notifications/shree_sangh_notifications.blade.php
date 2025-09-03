@@ -1,4 +1,4 @@
-@extends('includes.layouts.super_admin')
+@extends('includes.layouts.shree_sangh')
 
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}">
