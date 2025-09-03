@@ -371,5 +371,8 @@ Route::get('/send_notification-form', function () {
     return view('notifications.send');
 })->name('notification_send.view');
 
+Route::get('/view_notifications_all', function () {
+    return view('notifications.view_notifications');
+})->name('notification_view.all_view');
 });
                      

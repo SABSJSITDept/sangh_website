@@ -47,6 +47,8 @@ use App\Http\Controllers\YuvaSangh\Karyakarini\AddPstController;
 use App\Http\Controllers\YuvaSangh\Karyakarini\AddExYuvaPresidentController;
 use App\Http\Controllers\YuvaSangh\Karyakarini\AddYuvaVpSecController;
 use App\Http\Controllers\YuvaSangh\Pravartiya\AddYuvaPravartiController;
+use App\Http\Controllers\NotificationController;
+
 
 
 // ------------------Thoughts api ------------------------------------
@@ -341,3 +343,12 @@ Route::apiResource('yuva-vp-sec', AddYuvaVpSecController::class);
 // -----------------Yuva pravartiya api ------------------------------------
 Route::apiResource('yuva-pravartiya', AddYuvaPravartiController::class);
 // -----------------Yuva pravartiya api ------------------------------------
+
+// -----------------Send Notification api ------------------------------------
+Route::get('/notifications', [NotificationController::class, 'listNotifications']);
+// routes/api.php
+Route::get('/notifications/last-30-days', [NotificationController::class, 'last30Days']);
+// routes/api.php
+Route::get('/notifications/filter', [NotificationController::class, 'filterByGroupYearMonth']);
+
+// -----------------Send Notification api ------------------------------------

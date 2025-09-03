@@ -524,6 +524,10 @@ main.content {
                             <i class="bi bi-lock"></i>
                             <span>Send Notifications</span>
                         </a>
+                         <a href="{{ url('/view_notifications_all') }}" class="nav-link">
+                            <i class="bi bi-lock"></i>
+                            <span>View Notifications</span>
+                        </a>
                     </div>
                     <!-- Logout as last menu item -->
 <div class="nav-item">
