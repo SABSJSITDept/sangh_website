@@ -350,7 +350,7 @@ main.content {
 
 
 /* Mobile */
-@media (max-width: 991px) {
+/* @media (max-width: 991px) {
     .sidebar {
         left: -100%;
         width: var(--sidebar-width);
@@ -377,6 +377,88 @@ main.content {
     }
     .backdrop.show {
         display: block;
+    }
+} */
+ @media (max-width: 991px) {
+    /* Sidebar drawer */
+    .sidebar {
+        position: fixed;
+        top: 50px;
+        left: -260px;
+        height: calc(100vh - 50px);
+        width: 260px;
+        background: #1e1e2d;
+        transition: left 0.3s ease-in-out;
+        z-index: 2000; /* header ke neeche, backdrop ke upar */
+        overflow-y: auto;
+    }
+    .sidebar.mobile-show {
+        left: 0;
+    }
+
+    /* Backdrop */
+    .backdrop {
+        display: none;
+        position: fixed;
+        top: 100px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.55);
+        backdrop-filter: blur(2px);
+        z-index: 1900; /* sidebar ke neeche */
+    }
+    .backdrop.show {
+        display: block;
+    }
+
+    /* Header always on top */
+    .main-header {
+        left: 0 !important;
+        width: 100% !important;
+        z-index: 2100; /* sabse upar */
+    }
+
+     .main-header b {
+        font-size: 0.65rem;   /* heading chhoti */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 70%; /* mobile screen me text wrap na ho */
+    }
+
+    .main-header .btn-logout {
+        font-size: 0.75rem;
+        padding: 3px 4px;
+        border-radius: 3px;
+    }
+
+    /* Content full width in mobile */
+    main.content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Footer full width */
+    .footer {
+        margin-left: 0 !important;
+        width: 100% !important;
+        z-index: 1800;
+        text-align: center;
+        flex-direction: row;
+        height: auto;
+        padding: 4px;
+        font-size: 0.7rem;
+        line-height: 1.0rem;
+    }
+
+    /* Nav links bigger for touch */
+    .sidebar .nav-link {
+        padding: 12px 18px;
+        font-size: 1rem;
+    }
+    .submenu .nav-link {
+        padding: 10px 18px;
     }
 }
 </style>

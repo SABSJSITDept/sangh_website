@@ -2,16 +2,21 @@
 
 @section('content')
 <div class="container my-5">
-    <h2 class="mb-4 text-center">📜 Shree Sangh Notifications</h2>
+    <h2 class="mb-4 text-center">📜 Notifications Data</h2>
 
     <!-- Filter Options -->
     <div class="card p-4 mb-4">
         <div class="row g-3">
+            <!-- Last 30 days -->
+            <div class="col-md-3">
+                <button id="btnLast30" class="btn btn-primary w-100">Last 30 Days</button>
+            </div>
+
             <!-- Year -->
             <div class="col-md-3">
                 <select id="filterYear" class="form-select">
                     <option value="">Select Year</option>
-                    @for($y = date('Y'); $y >= 2020; $y--)
+                    @for($y = date('Y'); $y >= 2025; $y--)
                         <option value="{{ $y }}">{{ $y }}</option>
                     @endfor
                 </select>
@@ -27,14 +32,26 @@
                 </select>
             </div>
 
-            <!-- Fetch Button -->
+            <!-- Group -->
             <div class="col-md-3">
-                <button id="btnFetchYearMonth" class="btn btn-success w-100">Fetch Data</button>
+                <select id="filterGroup" class="form-select">
+                    <option value="">Select Group</option>
+                    <option value="Shree Sangh">Shree Sangh</option>
+                    <option value="Mahila Samiti">Mahila Samiti</option>
+                    <option value="Yuva Sangh">Yuva Sangh</option>
+                </select>
             </div>
 
-            <!-- Reset Button -->
+            <!-- Fetch Buttons -->
             <div class="col-md-3">
-                <button id="btnReset" class="btn btn-secondary w-100" type="button">Reset</button>
+                <button id="btnFetchYearMonth" class="btn btn-success w-100">Fetch Year/Month</button>
+            </div>
+            <div class="col-md-3">
+                <button id="btnFetchGroup" class="btn btn-warning w-100">Fetch By Group</button>
+            </div>
+            <!-- Reset Filters -->
+            <div class="col-md-3">
+                <button id="btnReset" class="btn btn-secondary w-100" type="button">Reset Filters</button>
             </div>
         </div>
     </div>
@@ -54,7 +71,7 @@
                     </tr>
                 </thead>
                 <tbody id="notificationTable">
-                    <tr><td colspan="6" class="text-center">Loading...</td></tr>
+                    <tr><td colspan="6" class="text-center">No records yet</td></tr>
                 </tbody>
             </table>
         </div>
@@ -64,10 +81,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const tableBody = document.getElementById("notificationTable");
-    const yearSelect = document.getElementById("filterYear");
-    const monthSelect = document.getElementById("filterMonth");
 
-    // render function
+    // Function to render notifications
     function renderTable(data) {
         tableBody.innerHTML = "";
         if (data.length === 0) {
@@ -79,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <td>${i+1}</td>
                         <td>${n.group}</td>
                         <td>${n.title}</td>
-                        <td>${n.body}</td>
+                        <td class="preview-body">${n.body}</td>
                         <td>${n.image ? `<img src="${n.image}" style="height:40px;border-radius:6px"/>` : '-'}</td>
                         <td>${new Date(n.created_at).toLocaleString()}</td>
                     </tr>`;
@@ -87,33 +102,45 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ Default load → Last 30 days for Shree Sangh
-    function loadLast30Days() {
-        fetch(`/api/notifications/filter?group=Shree Sangh`)
-            .then(res => res.json())
-            .then(data => {
-                const last30 = data.filter(n => new Date(n.created_at) >= new Date(Date.now() - 30*24*60*60*1000));
-                renderTable(last30);
-            });
-    }
-
-    loadLast30Days(); // first time load
-
-    // ✅ Fetch Year + Month
-    document.getElementById("btnFetchYearMonth").addEventListener("click", () => {
-        const year = yearSelect.value;
-        const month = monthSelect.value;
-
-        fetch(`/api/notifications/filter?group=Shree Sangh&year=${year}&month=${month}`)
+    // Fetch last 30 days
+    document.getElementById("btnLast30").addEventListener("click", () => {
+        fetch(`/api/notifications/last-30-days`)
             .then(res => res.json())
             .then(data => renderTable(data));
     });
 
-    // ✅ Reset Button
+    // Fetch year + month
+    document.getElementById("btnFetchYearMonth").addEventListener("click", () => {
+        const year = document.getElementById("filterYear").value;
+        const month = document.getElementById("filterMonth").value;
+
+        fetch(`/api/notifications?year=${year}&month=${month}`)
+            .then(res => res.json())
+            .then(data => renderTable(data));
+    });
+
+    // Fetch group + year + month
+    document.getElementById("btnFetchGroup").addEventListener("click", () => {
+        const group = document.getElementById("filterGroup").value;
+        const year = document.getElementById("filterYear").value;
+        const month = document.getElementById("filterMonth").value;
+
+        if (!group) {
+            alert("Please select a group first!");
+            return;
+        }
+
+        fetch(`/api/notifications/filter?group=${group}&year=${year}&month=${month}`)
+            .then(res => res.json())
+            .then(data => renderTable(data));
+    });
+
+    // Reset filters
     document.getElementById("btnReset").addEventListener("click", () => {
-        yearSelect.value = "";
-        monthSelect.value = "";
-        loadLast30Days();
+        document.getElementById("filterYear").value = "";
+        document.getElementById("filterMonth").value = "";
+        document.getElementById("filterGroup").value = "";
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-center">No records yet</td></tr>`;
     });
 });
 </script>

@@ -372,7 +372,20 @@ Route::get('/send_notification-form', function () {
 })->name('notification_send.view');
 
 Route::get('/view_notifications_all', function () {
-    return view('notifications.view_notifications');
+    return view('notifications.super_admin_notifications');
 })->name('notification_view.all_view');
+
+Route::get('/view_notifications_shree_sangh', function () {
+    return view('notifications.view_notifications');
+})->name('notification_view.shree_sangh_view');
+
+Route::get('/view_notifications_mahila_samiti', function () {
+    return view('notifications.mahila_samiti_notifications');
+})->name('notification_view.mahila_samiti_view');
+
+Route::get('/view_notifications_yuva_sangh', function () {
+    return view('notifications.yuva_sangh_notifications');
+})->name('notification_view.yuva_sangh_view');
 });
+
                      

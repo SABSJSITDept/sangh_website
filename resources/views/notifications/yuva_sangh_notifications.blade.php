@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container my-5">
-    <h2 class="mb-4 text-center">📜 Shree Sangh Notifications</h2>
+    <h2 class="mb-4 text-center">📜 Yuva Sangh Notifications</h2>
 
     <!-- Filter Options -->
     <div class="card p-4 mb-4">
@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const yearSelect = document.getElementById("filterYear");
     const monthSelect = document.getElementById("filterMonth");
 
-    // render function
     function renderTable(data) {
         tableBody.innerHTML = "";
         if (data.length === 0) {
@@ -87,9 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ Default load → Last 30 days for Shree Sangh
     function loadLast30Days() {
-        fetch(`/api/notifications/filter?group=Shree Sangh`)
+        fetch(`/api/notifications/filter?group=Yuva Sangh`)
             .then(res => res.json())
             .then(data => {
                 const last30 = data.filter(n => new Date(n.created_at) >= new Date(Date.now() - 30*24*60*60*1000));
@@ -97,19 +95,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    loadLast30Days(); // first time load
+    loadLast30Days();
 
-    // ✅ Fetch Year + Month
     document.getElementById("btnFetchYearMonth").addEventListener("click", () => {
         const year = yearSelect.value;
         const month = monthSelect.value;
 
-        fetch(`/api/notifications/filter?group=Shree Sangh&year=${year}&month=${month}`)
+        fetch(`/api/notifications/filter?group=Yuva Sangh&year=${year}&month=${month}`)
             .then(res => res.json())
             .then(data => renderTable(data));
     });
 
-    // ✅ Reset Button
     document.getElementById("btnReset").addEventListener("click", () => {
         yearSelect.value = "";
         monthSelect.value = "";
