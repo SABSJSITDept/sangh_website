@@ -404,7 +404,7 @@ main.content {
     }
 
      .main-header b {
-        font-size: 0.65rem;   /* heading chhoti */
+        font-size: 0.85rem;   /* heading chhoti */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -602,16 +602,24 @@ main.content {
                             <i class="bi bi-lock"></i>
                             <span>Mobile Slider Update </span>
                         </a>
-                        
-                         <a href="{{ url('/send_notification-form') }}" class="nav-link">
+                            </div>
+                          <div class="nav-item">
+    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+        <i class="bi bi-diagram-3"></i>
+        <span class="link-text">App Notifications</span>
+        <i class="bi bi-chevron-down submenu-toggle"></i>
+    </div>
+    <div class="submenu">
+                         <a href="{{ url('/send_notification-shree_sangh') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
                             <span>Send Notifications</span>
                         </a>
-                         <a href="{{ url('/view_notifications_all') }}" class="nav-link">
+                         <a href="{{ url('/view_notifications_shree_sangh') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
                             <span>View Notifications</span>
                         </a>
-                    </div>
+                              </div>
+                        
                     <!-- Logout as last menu item -->
 <div class="nav-item">
     <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">

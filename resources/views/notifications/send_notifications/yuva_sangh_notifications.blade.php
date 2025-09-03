@@ -25,9 +25,6 @@
             <div class="mb-3">
                 <label class="form-label">Select Group</label>
                 <select name="group" class="form-select" required>
-                    <option value="">-- Select Group --</option>
-                    <option value="Shree Sangh">Shree Sangh</option>
-                    <option value="Mahila Samiti">Mahila Samiti</option>
                     <option value="Yuva Sangh">Yuva Sangh</option>
                 </select>
             </div>

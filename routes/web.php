@@ -368,7 +368,7 @@ Route::get('/yuva_sangh_pravartiya', function () {
 })->name('yuva_sangh_pravartiya.view');
 
 Route::get('/send_notification-form', function () {
-    return view('notifications.send');
+    return view('notifications.send_notifications.send');
 })->name('notification_send.view');
 
 Route::get('/view_notifications_all', function () {
@@ -386,6 +386,18 @@ Route::get('/view_notifications_mahila_samiti', function () {
 Route::get('/view_notifications_yuva_sangh', function () {
     return view('notifications.yuva_sangh_notifications');
 })->name('notification_view.yuva_sangh_view');
+
+Route::get('/send_notification-shree_sangh', function () {
+    return view('notifications.send_notifications.shree_sangh_notifications');
+})->name('notification_send.shree_sangh');
+
+Route::get('/send_notification-mahila_Samiti', function () {
+    return view('notifications.send_notifications.mahila_samiti_notifications');
+})->name('notification_send.mahila_samiti');
+
+Route::get('/send_notification-yuva_sangh', function () {
+    return view('notifications.send_notifications.yuva_sangh_notifications');
+})->name('notification_send.yuva_sangh');
 });
 
                      
