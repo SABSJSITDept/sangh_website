@@ -398,6 +398,10 @@ Route::get('/send_notification-mahila_Samiti', function () {
 Route::get('/send_notification-yuva_sangh', function () {
     return view('notifications.send_notifications.yuva_sangh_notifications');
 })->name('notification_send.yuva_sangh');
+
+Route::get('/mobile_app_version', function () {
+    return view('app_version.app_version');
+})->name('mobile_app_version');
 });
 
                      

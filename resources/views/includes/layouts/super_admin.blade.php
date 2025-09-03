@@ -622,6 +622,10 @@ main.content {
                             <i class="bi bi-lock"></i>
                             <span>View Notifications</span>
                         </a>
+                        <a href="{{ url('/mobile_app_version') }}" class="nav-link">
+                            <i class="bi bi-lock"></i>
+                            <span>App version</span>
+                        </a>
                               </div>
                     <!-- Logout as last menu item -->
 <div class="nav-item">

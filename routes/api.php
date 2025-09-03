@@ -48,6 +48,7 @@ use App\Http\Controllers\YuvaSangh\Karyakarini\AddExYuvaPresidentController;
 use App\Http\Controllers\YuvaSangh\Karyakarini\AddYuvaVpSecController;
 use App\Http\Controllers\YuvaSangh\Pravartiya\AddYuvaPravartiController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AppVersionController;
 
 
 
@@ -352,3 +353,10 @@ Route::get('/notifications/last-30-days', [NotificationController::class, 'last3
 Route::get('/notifications/filter', [NotificationController::class, 'filterByGroupYearMonth']);
 
 // -----------------Send Notification api ------------------------------------
+
+// -----------------App Version api ------------------------------------
+Route::get('/latest-version', [AppVersionController::class, 'latest']); // ✅ Flutter app use karega
+Route::get('/versions', [AppVersionController::class, 'index']);        // ✅ Optional (admin use)
+Route::post('/versions', [AppVersionController::class, 'store']);       // ✅ Add new version
+Route::delete('/versions/{id}', [AppVersionController::class, 'destroy']); // ✅ Delete version
+// -----------------App Version api ------------------------------------
