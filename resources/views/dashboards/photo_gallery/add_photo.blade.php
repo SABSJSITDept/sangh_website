@@ -20,10 +20,7 @@
                     <div class="mb-3">
                         <label class="form-label">Category</label>
                         <select class="form-control" name="category" required>
-                            <option value="">Select Category</option>
                             <option value="sangh">Sangh</option>
-                            <option value="yuva">Yuva</option>
-                            <option value="mahila">Mahila</option   >
                         </select>
                     </div>
                     <div class="mb-3">
@@ -54,29 +51,10 @@
                     </div>
                 </div>
 
-                <!-- Yuva Card -->
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='yuva_photo_gallery'">
-                        <img src="{{ asset('images/yuva.png') }}" class="card-img-top rounded-top-4" alt="Yuva Gallery">
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold text-success">💪 युवा</h5>
-                            <p class="card-text text-muted">युवा संघ के अद्भुत पलों की झलकियां</p>
-                            <button class="btn btn-outline-success px-4 rounded-pill">View Gallery</button>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <!-- Mahila Card -->
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0 rounded-4 gallery-card h-100" onclick="window.location='mahila_photo_gallery'">
-                        <img src="{{ asset('images/mslogo.png') }}" class="card-img-top rounded-top-4" alt="Mahila Gallery">
-                        <div class="card-body text-center">
-                            <h5 class="card-title fw-bold text-danger">🌸 महिला</h5>
-                            <p class="card-text text-muted">महिला समिति के अद्भुत पलों की झलकियां</p>
-                            <button class="btn btn-outline-danger px-4 rounded-pill">View Gallery</button>
-                        </div>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </div> 
