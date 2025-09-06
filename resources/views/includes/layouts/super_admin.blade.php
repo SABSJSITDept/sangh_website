@@ -525,7 +525,7 @@ main.content {
                         </a>
                         <a href="{{ url('/mobile_app_version') }}" class="nav-link">
                             <i class="bi bi-lock"></i>
-                            <span>App version</span>
+                            <span>App version Private </span>
                         </a>
                               </div>
                     <!-- Logout as last menu item -->
