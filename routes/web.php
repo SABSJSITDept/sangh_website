@@ -71,38 +71,36 @@ Route::get('/logout', function () {
 // ✅ All routes below require user to be logged in
 Route::middleware(['web', 'checkSession'])->group(function () {
 
-    // Super Admin Dashboard
-    Route::middleware('matchRole:super_admin')->get('/dashboard/super_admin', function () {
-        return view('dashboards.super_admin.index');
-    })->name('dashboard.super_admin');
+    // Super Admin Dashboard (already only for super_admin)
+Route::middleware('matchRole:super_admin')->get('/dashboard/super_admin', function () {
+    return view('dashboards.super_admin.index');
+})->name('dashboard.super_admin');
 
-    // Sahitya Dashboard
-    Route::middleware('matchRole:sahitya')->get('/dashboard/sahitya', function () {
-        return view('dashboards.sahitya.index');
-    })->name('dashboard.sahitya');
+// Sahitya Dashboard
+Route::middleware('matchRole:sahitya,super_admin')->get('/dashboard/sahitya', function () {
+    return view('dashboards.sahitya.index');
+})->name('dashboard.sahitya');
 
-        // Sahitya publication Dashboard
-    Route::middleware('matchRole:sahitya_publication')->get('/dashboard/sahitya_publication', function () {
-        return view('dashboards.sahitya_publication.index');
-    })->name('dashboard.sahitya_publication');
+// Sahitya publication Dashboard
+Route::middleware('matchRole:sahitya_publication,super_admin')->get('/dashboard/sahitya_publication', function () {
+    return view('dashboards.sahitya_publication.index');
+})->name('dashboard.sahitya_publication');
 
-    // Yuva Sangh Dashboard
-    Route::middleware('matchRole:yuva_sangh')->get('/dashboard/yuva_sangh', function () {
-        return view('dashboards.yuva_sangh.index');
-    })->name('dashboard.yuva_sangh');
+// Yuva Sangh Dashboard
+Route::middleware('matchRole:yuva_sangh,super_admin')->get('/dashboard/yuva_sangh', function () {
+    return view('dashboards.yuva_sangh.index');
+})->name('dashboard.yuva_sangh');
 
-    // Mahila Samiti Dashboard
-    Route::middleware('matchRole:mahila_samiti')->get('/dashboard/mahila_samiti', function () {
-        return view('dashboards.mahila_samiti.index');
-    })->name('dashboard.mahila_samiti');
+// Mahila Samiti Dashboard
+Route::middleware('matchRole:mahila_samiti,super_admin')->get('/dashboard/mahila_samiti', function () {
+    return view('dashboards.mahila_samiti.index');
+})->name('dashboard.mahila_samiti');
 
-    // Shree Sangh Role Routes
-    Route::middleware('matchRole:shree_sangh')->group(function () {
-        Route::get('/dashboard/shree_sangh', function () {
-            return view('dashboards.shree_sangh.index');
-        })->name('dashboard.shree_sangh');
+// Shree Sangh Dashboard
+Route::middleware('matchRole:shree_sangh,super_admin')->get('/dashboard/shree_sangh', function () {
+    return view('dashboards.shree_sangh.index');
+})->name('dashboard.shree_sangh');
 
-    });
 
     // Shared routes for any authenticated user
 
