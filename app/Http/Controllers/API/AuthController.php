@@ -60,29 +60,25 @@ class AuthController extends Controller
     }
 
     // Update password (for authenticated user)
-    public function updatePassword(Request $request)
-    {
-        // यह endpoint auth:sanctum middleware के अंदर होना चाहिए
-        $request->validate([
-            'current_password' => 'required|string',
-            'new_password'     => 'required|string|min:6|confirmed', // new_password_confirmation
-        ]);
+public function updatePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required|string',
+        'new_password'     => 'required|string|min:8|confirmed',
+    ]);
 
-        $user = $request->user(); // authenticated user
+    $user = $request->user();
 
-        if (! Hash::check($request->current_password, $user->password)) {
-            return response()->json([
-                'message' => 'वर्तमान पासवर्ड गलत है।' // or: 'Current password is incorrect.'
-            ], 422);
-        }
-
-        $user->password = Hash::make($request->new_password);
-        $user->save();
-
-        return response()->json([
-            'message' => 'पासवर्ड सफलतापूर्वक बदल दिया गया है।'
-        ], 200);
+    if (! Hash::check($request->current_password, $user->password)) {
+        return redirect()->back()->with('error', '❌ वर्तमान पासवर्ड गलत है।');
     }
+
+    $user->password = Hash::make($request->new_password);
+    $user->save();
+
+    return redirect()->back()->with('success', '✅ पासवर्ड सफलतापूर्वक बदल दिया गया है।');
+}
+
 
     /* 
      Optional: Admin-reset-password endpoint (use only if admin is changing another user's password)

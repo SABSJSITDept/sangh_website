@@ -13,42 +13,46 @@ class MatchUserRole
      * Usage in routes:
      *   ->middleware('matchRole:sahitya,super_admin')
      *
-     * This method accepts either:
-     *  - a single comma-separated string ("role1,role2")
-     *  - or multiple parameters (role1, role2)
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  mixed  ...$roles
-     * @return mixed
+     * Accepts either a single comma-separated string or multiple params.
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        $user = session('user');
+        // Prefer the authenticated user (sanctum/session). Fallback to legacy session('user').
+        $user = $request->user() ?? auth()->user() ?? session('user');
 
-        // no user in session => redirect to login
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Access denied');
+        // No user found -> redirect to login (or return JSON for API calls)
+        if (! $user) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'Please login first.'], 401);
+            }
+            return redirect()->route('login')->with('error', 'Please login first.');
         }
 
-        // If roles were passed as a single comma-separated string, split them
+        // Normalize roles parameter: handle "a,b" single string or multiple params
         if (count($roles) === 1 && is_string($roles[0]) && strpos($roles[0], ',') !== false) {
             $roles = array_map('trim', explode(',', $roles[0]));
         } else {
-            // trim every provided role param
             $roles = array_map(function ($r) {
                 return is_string($r) ? trim($r) : $r;
             }, $roles);
         }
 
-        // If no roles supplied accidentally, deny
         if (empty($roles)) {
+            // No roles provided -> deny access
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'Access denied'], 403);
+            }
             return redirect()->route('login')->with('error', 'Access denied');
         }
 
-        // Check if user's role matches any of the allowed roles
-        // Use strict comparison if you expect exact match
-        if (!in_array($user->role, $roles, true)) {
+        // If $user is an array (rare), try to access role key; else assume object with role prop
+        $userRole = is_array($user) ? ($user['role'] ?? null) : ($user->role ?? null);
+
+        // Final check
+        if (! in_array($userRole, $roles, true)) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'Access denied'], 403);
+            }
             return redirect()->route('login')->with('error', 'Access denied');
         }
 

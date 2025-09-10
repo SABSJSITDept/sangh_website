@@ -500,7 +500,18 @@ main.content {
                     </a>
                 </div>
              
-              
+                 <div class="nav-item">
+    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+        <i class="bi bi-diagram-3"></i>
+        <span class="link-text"> Change Password</span>
+        <i class="bi bi-chevron-down submenu-toggle"></i>
+    </div>
+    <div class="submenu">
+                         <a href="{{ url('/change-password_sahitya') }}" class="nav-link">
+                            <i class="bi bi-lock"></i>
+                            <span>Change Password</span>
+                        </a>
+                </div>
 
             
 

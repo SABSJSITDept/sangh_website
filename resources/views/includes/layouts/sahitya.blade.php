@@ -513,6 +513,19 @@ main.content {
                     </a>
                 </div>
 
+                 <div class="nav-item">
+    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+        <i class="bi bi-diagram-3"></i>
+        <span class="link-text"> Change Password</span>
+        <i class="bi bi-chevron-down submenu-toggle"></i>
+    </div>
+    <div class="submenu">
+                         <a href="{{ url('/change-password_shramnopasak') }}" class="nav-link">
+                            <i class="bi bi-lock"></i>
+                            <span>Change Password</span>
+                        </a>
+                </div>
+
                     <!-- Logout as last menu item -->
    <div class="nav-item">
     <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">

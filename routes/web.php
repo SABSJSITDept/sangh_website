@@ -5,30 +5,50 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Shree_sangh\ThoughtApiController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\ExPresidentController;
 use App\Models\Aanchal\Aanchal;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\NotificationController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Updated: Use Laravel session-based auth for web routes (auth middleware will work).
+|
+*/
 
-
+// Notification route (example)
 Route::post('/send-notification', [NotificationController::class, 'sendNotification']);
 
+// change-password view + submit दोनों को auth के अंदर रखें
+Route::middleware('auth')->group(function () {
+    Route::view('/change-password_shree_sangh', 'change_password_dashboards.change-password')
+     ->name('change-password');
+     Route::view('/change-password_mahila_samiti', 'change_password_dashboards.change_password_mahila')
+     ->name('change-password');
+     Route::view('/change-password_yuva_sangh', 'change_password_dashboards.change_password_yuva')
+     ->name('change-password');
+     Route::view('/change-password_shramnopasak', 'change_password_dashboards.change_password_shramnopasak')
+     ->name('change-password');
+     Route::view('/change-password_sahitya', 'change_password_dashboards.change_password_sahitya')
+     ->name('change-password');
+     Route::view('/change-password_super_admin', 'change_password_dashboards.change_password_super_admin')
+     ->name('change-password');
 
-
- Route::post('/change-password', [AuthController::class, 'updatePassword'])->name('password.update');
-    Route::view('/change-password', 'change-password')->name('password.change');
-
-
-
+    Route::post('/change-password', [AuthController::class, 'updatePassword'])
+         ->name('password.update');
+});
 
 // Login Page (Accessible to All)
 Route::get('/', function () {
     return view('login');
 })->name('login');
 
-// Login Submit
+// Login Submit (web session-based login)
 Route::post('/login', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
@@ -37,12 +57,24 @@ Route::post('/login', function (Request $request) {
 
     $user = User::where('email', $request->email)->first();
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
+    if (! $user || ! Hash::check($request->password, $user->password)) {
         return back()->with('error', 'Invalid credentials');
     }
 
-    session(['user' => $user]);
+    // log in using Laravel guard
+    auth()->login($user);
 
+    // optional: maintain legacy session('user') if other code expects it
+    session(['user' => auth()->user()]);
+
+    // regenerate token to avoid fixation
+    $request->session()->regenerate();
+
+    // debug logs (remove later)
+   Log::info('LOGIN: user id=' . auth()->id());
+   Log::info('SESSION KEYS: ' . json_encode(array_keys(session()->all())));
+
+    // redirect as before
     switch ($user->role) {
         case 'super_admin':
             return redirect()->route('dashboard.super_admin');
@@ -57,51 +89,56 @@ Route::post('/login', function (Request $request) {
         case 'mahila_samiti':
             return redirect()->route('dashboard.mahila_samiti');
         default:
+            auth()->logout();
             return back()->with('error', 'Unknown role');
     }
-});
+})->name('login.submit');
 
-// Logout
-Route::get('/logout', function () {
-    session()->forget('user');
-    return redirect('/');
+
+// Logout (web session)
+Route::get('/logout', function (Request $request) {
+    auth()->logout();
+
+    // Invalidate and regenerate token
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('login');
 })->name('logout');
 
 
-// ✅ All routes below require user to be logged in
+// ✅ All routes below require user to be logged in (your custom checkSession middleware + web)
 Route::middleware(['web', 'checkSession'])->group(function () {
 
     // Super Admin Dashboard (already only for super_admin)
-Route::middleware('matchRole:super_admin')->get('/dashboard/super_admin', function () {
-    return view('dashboards.super_admin.index');
-})->name('dashboard.super_admin');
+    Route::middleware('matchRole:super_admin')->get('/dashboard/super_admin', function () {
+        return view('dashboards.super_admin.index');
+    })->name('dashboard.super_admin');
 
-// Sahitya Dashboard
-Route::middleware('matchRole:sahitya,super_admin')->get('/dashboard/sahitya', function () {
-    return view('dashboards.sahitya.index');
-})->name('dashboard.sahitya');
+    // Sahitya Dashboard
+    Route::middleware('matchRole:sahitya,super_admin')->get('/dashboard/sahitya', function () {
+        return view('dashboards.sahitya.index');
+    })->name('dashboard.sahitya');
 
-// Sahitya publication Dashboard
-Route::middleware('matchRole:sahitya_publication,super_admin')->get('/dashboard/sahitya_publication', function () {
-    return view('dashboards.sahitya_publication.index');
-})->name('dashboard.sahitya_publication');
+    // Sahitya publication Dashboard
+    Route::middleware('matchRole:sahitya_publication,super_admin')->get('/dashboard/sahitya_publication', function () {
+        return view('dashboards.sahitya_publication.index');
+    })->name('dashboard.sahitya_publication');
 
-// Yuva Sangh Dashboard
-Route::middleware('matchRole:yuva_sangh,super_admin')->get('/dashboard/yuva_sangh', function () {
-    return view('dashboards.yuva_sangh.index');
-})->name('dashboard.yuva_sangh');
+    // Yuva Sangh Dashboard
+    Route::middleware('matchRole:yuva_sangh,super_admin')->get('/dashboard/yuva_sangh', function () {
+        return view('dashboards.yuva_sangh.index');
+    })->name('dashboard.yuva_sangh');
 
-// Mahila Samiti Dashboard
-Route::middleware('matchRole:mahila_samiti,super_admin')->get('/dashboard/mahila_samiti', function () {
-    return view('dashboards.mahila_samiti.index');
-})->name('dashboard.mahila_samiti');
+    // Mahila Samiti Dashboard
+    Route::middleware('matchRole:mahila_samiti,super_admin')->get('/dashboard/mahila_samiti', function () {
+        return view('dashboards.mahila_samiti.index');
+    })->name('dashboard.mahila_samiti');
 
-// Shree Sangh Dashboard
-Route::middleware('matchRole:shree_sangh,super_admin')->get('/dashboard/shree_sangh', function () {
-    return view('dashboards.shree_sangh.index');
-})->name('dashboard.shree_sangh');
-
-
+    // Shree Sangh Dashboard
+    Route::middleware('matchRole:shree_sangh,super_admin')->get('/dashboard/shree_sangh', function () {
+        return view('dashboards.shree_sangh.index');
+    })->name('dashboard.shree_sangh');
     // Shared routes for any authenticated user
 
     Route::get('/dashboard/vihar-sewa', function () {
