@@ -456,106 +456,106 @@ main.content {
     <!-- LAYOUT -->
     <div class="layout">
         <!-- SIDEBAR -->
-        <nav class="sidebar expanded" id="sidebarMenu">
+ <nav class="sidebar expanded" id="sidebarMenu">
+    <div>
+        <!-- Profile Section -->
+        <div class="profile">
+            <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
+            <div class="name">Hello Admin</div>
+            <div class="role">SuperUser</div>
+        </div>
 
-            <div>
-                <div class="profile">
-                    <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
-                    <div class="name">Hello Admin</div>
-                    <div class="role">SuperUser</div>
-                </div>
+        <!-- Dashboard Links -->
+        <div class="nav-item">
+            <a href="{{ url('dashboard/super_admin') }}" class="nav-link">
+                <i class="bi bi-speedometer"></i>
+                <span>Super Admin Dashboard</span>
+            </a>
+        </div>
 
-                <!-- Dashboard button without submenu -->
-                <div class="nav-item">
-                     <a href="{{ url('dashboard/super_admin') }}" class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>Super Admin Dashboard</span>
-                    </a>
-                </div>
+        <div class="nav-item">
+            <a href="{{ url('dashboard/shree_Sangh') }}" class="nav-link">
+                <i class="bi bi-bank"></i>
+                <span>Shree Sangh Dashboard</span>
+            </a>
+        </div>
 
-                 <div class="nav-item">
-                     <a href="{{ url('dashboard/shree_Sangh') }}" class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span> Shree Sangh Dashboard</span>
-                    </a>
-                </div>
+        <div class="nav-item">
+            <a href="{{ url('dashboard/mahila_samiti') }}" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Mahila Samiti Dashboard</span>
+            </a>
+        </div>
 
-                  <div class="nav-item">
-                     <a href="{{ url('dashboard/mahila_samiti') }}" class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span> Mahila Samiti Dashboard</span>
-                    </a>
-                </div>
+        <div class="nav-item">
+            <a href="{{ url('dashboard/yuva_sangh') }}" class="nav-link">
+                <i class="bi bi-person-workspace"></i>
+                <span>Yuva Sangh Dashboard</span>
+            </a>
+        </div>
 
-                  <div class="nav-item">
-                     <a href="{{ url('dashboard/yuva_sangh') }}" class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>Yuva Sangh Dashboard</span>
-                    </a>
-                </div>
+        <div class="nav-item">
+            <a href="{{ url('dashboard/sahitya') }}" class="nav-link">
+                <i class="bi bi-book"></i>
+                <span>Shramnopasak Dashboard</span>
+            </a>
+        </div>
 
-                  <div class="nav-item">
-                     <a href="{{ url('dashboard/sahitya') }}" class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>Shramnopasak Dashboard</span>
-                    </a>
-                </div>
+        <div class="nav-item">
+            <a href="{{ url('dashboard/sahitya_publication') }}" class="nav-link">
+                <i class="bi bi-journal-text"></i>
+                <span>Sahitya Publications Dashboard</span>
+            </a>
+        </div>
 
-                 <div class="nav-item">
-                     <a href="{{ url('dashboard/sahitya_publication') }}" class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>Sahitya Publications Dashboard</span>
-                    </a>
-                </div>
-
-                              <div class="nav-item">
-    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-        <i class="bi bi-diagram-3"></i>
-        <span class="link-text">Notifications</span>
-        <i class="bi bi-chevron-down submenu-toggle"></i>
-    </div>
-    <div class="submenu">
-                         <a href="{{ url('/send_notification-form') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>Send Notifications</span>
-                        </a>
-                         <a href="{{ url('/view_notifications_all') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>View Notifications</span>
-                        </a>
-                        <a href="{{ url('/mobile_app_version') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>App version Private </span>
-                        </a>
-                              </div>
-
-                                  <div class="nav-item">
-    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-        <i class="bi bi-diagram-3"></i>
-        <span class="link-text"> Change Password</span>
-        <i class="bi bi-chevron-down submenu-toggle"></i>
-    </div>
-    <div class="submenu">
-                         <a href="{{ url('/change-password_super_admin') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>Change Password</span>
-                        </a>
-                </div>
-
-                    <!-- Logout as last menu item -->
-<div class="nav-item">
-    <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">
-        <i class="bi bi-box-arrow-right"></i>
-        <span>Logout</span>
-    </a>
-</div>
-
-                </div>
+        <!-- Notifications Submenu -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-bell"></i>
+                <span class="link-text">Notifications</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
             </div>
+            <div class="submenu">
+                <a href="{{ url('/send_notification-form') }}" class="nav-link">
+                    <i class="bi bi-send"></i>
+                    <span>Send Notifications</span>
+                </a>
+                <a href="{{ url('/view_notifications_all') }}" class="nav-link">
+                    <i class="bi bi-eye"></i>
+                    <span>View Notifications</span>
+                </a>
+                <a href="{{ url('/mobile_app_version') }}" class="nav-link">
+                    <i class="bi bi-phone"></i>
+                    <span>App Version Private</span>
+                </a>
+            </div>
+        </div>
 
-            <!-- Logout fixed at bottom -->
-           
-        </nav>
+        <!-- Change Password -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-key"></i>
+                <span class="link-text">Change Password</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
+            </div>
+            <div class="submenu">
+                <a href="{{ url('/change-password_super_admin') }}" class="nav-link">
+                    <i class="bi bi-lock"></i>
+                    <span>Change Password</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Logout -->
+        <div class="nav-item">
+            <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
 <header class="main-header">
     <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
 
@@ -565,10 +565,7 @@ main.content {
     </b>
 
     <div class="header-buttons">
-        <button class="btn btn-logout" onclick="window.location.href='/dashboard/super_admin'">
-            Dashboard
-        </button>
-        <button class="btn btn-logout" onclick="window.location.href='/logout'">
+           <button class="btn btn-logout" onclick="window.location.href='/logout'">
             Logout
         </button>
     </div>

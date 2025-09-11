@@ -460,146 +460,136 @@ main.content {
     <!-- LAYOUT -->
     <div class="layout">
         <!-- SIDEBAR -->
-        <nav class="sidebar expanded" id="sidebarMenu">
+      <nav class="sidebar expanded" id="sidebarMenu">
+    <div>
+        <!-- Profile -->
+        <div class="profile">
+            <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
+            <div class="name">Hello Admin</div>
+            <div class="role">Yuva Sangh</div>
+        </div>
 
-            <div>
-                <div class="profile">
-                    <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" />
-                    <div class="name">Hello Admin</div>
-                    <div class="role">Yuva Sagh</div>
-                </div>
+        <!-- Dashboard -->
+        <div class="nav-item">
+            <a href="{{ url('/dashboard/yuva_sangh') }}" class="nav-link">
+                <i class="bi bi-speedometer"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
 
-                <!-- Dashboard button without submenu -->
-                <div class="nav-item">
-                     <a href="{{ url('/dashboard/yuva_sangh') }}" class="nav-link">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </div>
-
-                <!-- Daily with submenu -->
-                <div class="nav-item">
-                    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-                        <i class="bi bi-calendar-day"></i>
-                        <span>General Updates</span>
-                        <i class="bi bi-chevron-down submenu-toggle"></i>
-                    </div>
-                    <div class="submenu">
-                     
-                        <a href="{{ url('/yuva_news') }}" class="nav-link">
-                            <i class="bi bi-megaphone"></i>
-                            <span>NEWS</span>
-                        </a>
-                      
-                        <a href="{{ url('/yuva_sangh_pravartiya') }}" class="nav-link">
-                            <i class="bi bi-megaphone"></i>
-                            <span>PRAVARTIYA</span>
-                        </a>
-
-                    </div>
-                </div>
-
- <div class="nav-item">
-    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-        <i class="bi bi-diagram-3"></i>
-        <span class="link-text">कार्यकारिणी</span>
-        <i class="bi bi-chevron-down submenu-toggle"></i>
-    </div>
-    <div class="submenu">
-       
-        <a href="{{ url('/yuva_ex_president') }}" class="nav-link">
-            <i class="bi bi-person-check"></i>
-            <span class="link-text">पूर्व अध्यक्ष</span>
-        </a>
-        <a href="{{ url('/yuva_pst') }}" class="nav-link">
-            <i class="bi bi-person-video2"></i>
-            <span class="link-text">PST</span>
-        </a>
-        <a href="{{ url('/yuva_vp_sec') }}" class="nav-link">
-            <i class="bi bi-person-badge"></i>
-            <span class="link-text">VP/SEC सदस्य</span>
-        </a>
-      
-       
-     
-      
-    </div>
- </div>              
-              
-
-                <!-- Settings -->
-                <div class="nav-item">
-                    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-                        <i class="bi bi-gear"></i>
-                        <span>Photo Gallery</span>
-                        <i class="bi bi-chevron-down submenu-toggle"></i>
-                    </div>
-                    <div class="submenu">
-                        <a href="{{ url('/photo_gallery_yuva_sangh') }}" class="nav-link">
-                            <i class="bi bi-person-circle"></i>
-                            <span>Yuva Sangh Photo Gallery</span>
-                        </a>
-                         <a href="{{ url('/yuva_home_slider') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>Yuva Sangh Home Page Slider</span>
-                        </a>
-                        
-                        <a href="{{ url('/yuva_main_home_slider') }}" class="nav-link">
-                            <i class="bi bi-person-circle"></i>
-                            <span>Shree Sangh Home Slider</span>
-                        </a>
-
-                         <a href="{{ url('/yuva_mobile_slider') }}" class="nav-link">
-                            <i class="bi bi-person-circle"></i>
-                            <span>Mobile App Home Screen Slider</span>
-                        </a>
-
-                    </div>
-                     <div class="nav-item">
-    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-        <i class="bi bi-diagram-3"></i>
-        <span class="link-text">App Notifications</span>
-        <i class="bi bi-chevron-down submenu-toggle"></i>
-    </div>
-    <div class="submenu">
-                         <a href="{{ url('/send_notification-yuva_sangh') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>Send Notifications</span>
-                        </a>
-                         <a href="{{ url('/view_notifications_yuva_sangh') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>View Notifications</span>
-                        </a>
-                              </div>
-
-                                  <div class="nav-item">
-    <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
-        <i class="bi bi-diagram-3"></i>
-        <span class="link-text"> Change Password</span>
-        <i class="bi bi-chevron-down submenu-toggle"></i>
-    </div>
-    <div class="submenu">
-                         <a href="{{ url('/change-password_yuva_sangh') }}" class="nav-link">
-                            <i class="bi bi-lock"></i>
-                            <span>Change Password</span>
-                        </a>
-                </div>
-
-
-                    <!-- Logout as last menu item -->
-<div class="nav-item">
-    <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">
-        <i class="bi bi-box-arrow-right"></i>
-        <span>Logout</span>
-    </a>
-</div>
-
-                </div>
+        <!-- General Updates -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-calendar-event"></i>
+                <span>General Updates</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
             </div>
+            <div class="submenu">
+                <a href="{{ url('/yuva_news') }}" class="nav-link">
+                    <i class="bi bi-newspaper"></i>
+                    <span>NEWS</span>
+                </a>
+                <a href="{{ url('/yuva_sangh_pravartiya') }}" class="nav-link">
+                    <i class="bi bi-broadcast"></i>
+                    <span>PRAVARTIYA</span>
+                </a>
+            </div>
+        </div>
 
-            <!-- Logout fixed at bottom -->
-           
-        </nav>
+        <!-- कार्यकारिणी -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-people-fill"></i>
+                <span class="link-text">कार्यकारिणी</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
+            </div>
+            <div class="submenu">
+                <a href="{{ url('/yuva_ex_president') }}" class="nav-link">
+                    <i class="bi bi-person-check"></i>
+                    <span class="link-text">पूर्व अध्यक्ष</span>
+                </a>
+                <a href="{{ url('/yuva_pst') }}" class="nav-link">
+                    <i class="bi bi-person-video2"></i>
+                    <span class="link-text">PST</span>
+                </a>
+                <a href="{{ url('/yuva_vp_sec') }}" class="nav-link">
+                    <i class="bi bi-person-badge"></i>
+                    <span class="link-text">VP/SEC सदस्य</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-images"></i>
+                <span>Photo Gallery</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
+            </div>
+            <div class="submenu">
+                <a href="{{ url('/photo_gallery_yuva_sangh') }}" class="nav-link">
+                    <i class="bi bi-collection"></i>
+                    <span>Yuva Sangh Photo Gallery</span>
+                </a>
+                <a href="{{ url('/yuva_home_slider') }}" class="nav-link">
+                    <i class="bi bi-sliders"></i>
+                    <span>Yuva Sangh Home Page Slider</span>
+                </a>
+                <a href="{{ url('/yuva_main_home_slider') }}" class="nav-link">
+                    <i class="bi bi-house-door"></i>
+                    <span>Shree Sangh Home Slider</span>
+                </a>
+                <a href="{{ url('/yuva_mobile_slider') }}" class="nav-link">
+                    <i class="bi bi-phone"></i>
+                    <span>Mobile App Home Screen Slider</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- App Notifications -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-bell"></i>
+                <span class="link-text">App Notifications</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
+            </div>
+            <div class="submenu">
+                <a href="{{ url('/send_notification-yuva_sangh') }}" class="nav-link">
+                    <i class="bi bi-send"></i>
+                    <span>Send Notifications</span>
+                </a>
+                <a href="{{ url('/view_notifications_yuva_sangh') }}" class="nav-link">
+                    <i class="bi bi-eye"></i>
+                    <span>View Notifications</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-key"></i>
+                <span class="link-text">Change Password</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
+            </div>
+            <div class="submenu">
+                <a href="{{ url('/change-password_yuva_sangh') }}" class="nav-link">
+                    <i class="bi bi-lock"></i>
+                    <span>Change Password</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Logout -->
+        <div class="nav-item">
+            <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
 <header class="main-header">
     <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
     <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन महिला समिति </b>
