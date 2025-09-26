@@ -50,6 +50,8 @@ use App\Http\Controllers\YuvaSangh\Pravartiya\AddYuvaPravartiController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AppVersionController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\YuvaSangh\GeneralDetails\ContentController;
+
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -370,3 +372,7 @@ Route::get('/versions', [AppVersionController::class, 'index']);        // ✅ O
 Route::post('/versions', [AppVersionController::class, 'store']);       // ✅ Add new version
 Route::delete('/versions/{id}', [AppVersionController::class, 'destroy']); // ✅ Delete version
 // -----------------App Version api ------------------------------------
+
+// -----------------Yuva Content api ------------------------------------
+Route::apiResource('yuva-content', ContentController::class);
+// -----------------Yuva Content api ------------------------------------

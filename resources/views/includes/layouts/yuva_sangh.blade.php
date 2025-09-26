@@ -543,6 +543,10 @@ main.content {
                     <i class="bi bi-phone"></i>
                     <span>Mobile App Home Screen Slider</span>
                 </a>
+                 <a href="{{ url('/yuva_content') }}" class="nav-link">
+                    <i class="bi bi-phone"></i>
+                    <span>Update The Content</span>
+                </a>
             </div>
         </div>
 

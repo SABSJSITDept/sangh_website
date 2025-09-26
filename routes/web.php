@@ -439,4 +439,6 @@ Route::get('/mobile_app_version', function () {
 })->name('mobile_app_version');
 });
 
-                     
+Route::get('/yuva_content', function () {
+    return view('dashboards.yuva_sangh.general_details.update_content');
+})->name('yuva_content.view');                     
