@@ -492,7 +492,11 @@ main.content {
                 <a href="{{ url('/yuva_sangh_pravartiya') }}" class="nav-link">
                     <i class="bi bi-broadcast"></i>
                     <span>PRAVARTIYA</span>
-                </a>                
+                </a>
+                  <a href="{{ url('/yuva_content') }}" class="nav-link">
+                    <i class="bi bi-phone"></i>
+                    <span>Update The Content</span>
+                </a>
             </div>
         </div>
 
@@ -543,7 +547,7 @@ main.content {
                     <i class="bi bi-phone"></i>
                     <span>Mobile App Home Screen Slider</span>
                 </a>
-                 
+               
             </div>
         </div>
 
