@@ -253,16 +253,27 @@ document.getElementById("vpSecForm").addEventListener("submit", async function (
 async function deleteItem(id) {
     if (!confirm("क्या आप वाकई इस सदस्य को हटाना चाहते हैं?")) return;
 
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     const res = await fetch(`/api/vp-sec/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": token,
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json"
+        },
+        credentials: "same-origin" // ✅ ensures cookies/sessions sent
     });
 
     if (res.ok) {
         showToast("🗑️ सदस्य को हटा दिया गया", "success");
         loadData();
+    } else if (res.status === 419) {
+        showToast("⚠️ सत्र समाप्त हुआ — कृपया पेज रीफ़्रेश करें।", "danger");
     } else {
         showToast("❌ डिलीट में समस्या आई", "danger");
     }
 }
+
 </script>
 @endsection
