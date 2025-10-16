@@ -597,7 +597,7 @@ main.content {
 
 <header class="main-header">
     <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
-    <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन महिला समिति </b>
+    <b><i class="bi bi-speedometer2"></i> श्री अखिल भारतवर्षीय साधुमार्गी जैन समता युवा संघ  </b>
     <button class="btn btn-logout" onclick="window.location.href='/logout'">
         Logout
     </button>
