@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-md-4">
                     <label>अंचल</label>
-                    <select name="aanchal" class="form-select" id="aanchalDropdown" required>
+                    <select name="aanchal_id" class="form-select" id="aanchalDropdown" required>
                         <option value="">चुनें</option>
                     </select>
                 </div>
@@ -141,12 +141,12 @@ async function loadAanchals() {
 
         aanchals.forEach(item => {
             const opt1 = document.createElement("option");
-            opt1.value = item.name;
+            opt1.value = item.id;         // id (numeric)
             opt1.textContent = item.name;
             dropdown.appendChild(opt1);
 
             const opt2 = document.createElement("option");
-            opt2.value = item.name;
+            opt2.value = item.id;         // filter by id
             opt2.textContent = item.name;
             filter.appendChild(opt2);
         });
@@ -154,6 +154,7 @@ async function loadAanchals() {
         showToast("❌ अंचल लोड नहीं हुआ", "danger");
     }
 }
+
 
 async function loadData() {
     const selected = document.getElementById("filterAanchal").value;
