@@ -26,7 +26,7 @@ public function store(Request $request)
         'name'   => 'required|string|max:255',
         'post'   => 'required|in:उपाध्यक्ष,मंत्री',
         'city'   => 'nullable|string|max:255',
-        'mobile' => 'required|string|max:15',
+        'mobile' => 'nullable|string|max:15',
         'aanchal_id' => 'required|exists:aanchal,id',
         'photo'  => 'required|image|max:200', // 200 KB
     ]);
@@ -64,7 +64,7 @@ public function store(Request $request)
             'name'   => 'required|string|max:255',
             'post'   => 'required|in:उपाध्यक्ष,मंत्री',
             'city'   => 'nullable|string|max:255',
-            'mobile' => 'required|string|max:15',
+            'mobile' => 'nullable|string|max:15',
             'aanchal_id' => 'required|exists:aanchal,id',
             'photo'  => 'nullable|image|max:200',
         ]);
@@ -81,6 +81,16 @@ public function store(Request $request)
 
         return response()->json(['success' => true, 'data' => $vpSec]);
     }
+
+    // उपयुक्त use बात पहले से है
+public function show($id)
+{
+    // id से रिकॉर्ड लाओ, नहीं मिला तो 404 दे देगा
+    $item = MahilaVpSec::with('aanchal')->findOrFail($id);
+
+    return response()->json($item);
+}
+
 
     public function destroy($id)
     {

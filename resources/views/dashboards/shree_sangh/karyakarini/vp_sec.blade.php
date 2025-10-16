@@ -39,7 +39,7 @@
                 <div class="col-md-4">
                     <label>मोबाइल</label>
                     <input type="text" name="mobile" class="form-control"
-                           required maxlength="10" pattern="[0-9]{10}"
+                            maxlength="10" pattern="[0-9]{10}"
                            title="10 अंकों का मोबाइल नंबर डालें"
                            oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
