@@ -48,6 +48,8 @@
                     <option value="Shramanopasak Sanyojika">Shramanopasak Sanyojika</option>
                     <option value="International">International</option>
                     <option value="Pratikraman Sanyojika">Pratikraman Sanyojika</option>
+                    <option value="Sajjhayami Rao Saya">Sajjhayami Rao Saya</option>
+                    <option value="Golden Steps">Golden Steps</option>
                 </select>
             </div>
             <div class="col-md-4">
@@ -73,6 +75,8 @@
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Shramanopasak Sanyojika')">Shramanopasak Sanyojika</button>
             <button class="btn btn-outline-primary" onclick="fetchPravarti('International')">International</button>
             <button class="btn btn-outline-primary" onclick="fetchPravarti('Pratikraman Sanyojika')">Pratikraman Sanyojika</button>
+            <button class="btn btn-outline-primary" onclick="fetchPravarti('Sajjhayami Rao Saya')">Sajjhayami Rao Saya</button>
+            <button class="btn btn-outline-primary" onclick="fetchPravarti('Golden Steps')">Golden Steps</button>
         </div>
     </div>
 

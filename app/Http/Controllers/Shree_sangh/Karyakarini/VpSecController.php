@@ -58,7 +58,7 @@ class VpSecController extends Controller
         }
 
         // ✅ Check duplicate पद in same आंचल
-        if ($request->aanchal && $request->post) {
+        if (!empty($request->aanchal) && !empty($request->post)) {
             $exists = VpSec::where('aanchal', $request->aanchal)
                 ->where('post', $request->post)
                 ->exists();
@@ -71,6 +71,11 @@ class VpSecController extends Controller
         }
 
         $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile']);
+        
+        // Ensure aanchal is set to null if empty
+        if (empty($data['aanchal'])) {
+            $data['aanchal'] = null;
+        }
 
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
@@ -106,7 +111,7 @@ class VpSecController extends Controller
         }
 
         // ✅ Check duplicate पद in same आंचल (excluding self)
-        if ($request->aanchal && $request->post) {
+        if (!empty($request->aanchal) && !empty($request->post)) {
             $exists = VpSec::where('aanchal', $request->aanchal)
                 ->where('post', $request->post)
                 ->where('id', '!=', $vpSec->id)
@@ -120,6 +125,11 @@ class VpSecController extends Controller
         }
 
         $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile']);
+        
+        // Ensure aanchal is set to null if empty
+        if (empty($data['aanchal'])) {
+            $data['aanchal'] = null;
+        }
 
         if ($request->hasFile('photo')) {
             if ($vpSec->photo) {

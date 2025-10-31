@@ -1,6 +1,7 @@
 @extends('includes.layouts.shree_sangh')
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="container mt-4">
     <h3 class="mb-4 fw-bold text-primary">📋 VP/SEC सदस्य प्रबंधन</h3>
 
@@ -185,7 +186,19 @@ function editItem(item) {
     document.querySelector("select[name='post']").value = item.post;
     document.querySelector("input[name='city']").value = item.city;
     document.querySelector("input[name='mobile']").value = item.mobile;
-    document.querySelector("select[name='aanchal']").value = item.aanchal ?? "";
+    
+    // ✅ Set aanchal by name (find the option with matching text)
+    const aanchalDropdown = document.querySelector("select[name='aanchal_id']");
+    if (item.aanchal) {
+        for (let option of aanchalDropdown.options) {
+            if (option.textContent === item.aanchal) {
+                aanchalDropdown.value = option.value;
+                break;
+            }
+        }
+    } else {
+        aanchalDropdown.value = "";
+    }
 
     document.getElementById("editId").value = item.id;
     document.getElementById("formMethod").value = "PUT";
@@ -210,6 +223,16 @@ document.getElementById("vpSecForm").addEventListener("submit", async function (
     const editId = document.getElementById("editId").value.trim();
     const method = document.getElementById("formMethod").value;
 
+    // ✅ Convert aanchal_id to aanchal name
+    const aanchalId = formData.get('aanchal_id');
+    if (aanchalId) {
+        const aanchalDropdown = document.getElementById('aanchalDropdown');
+        const selectedOption = aanchalDropdown.options[aanchalDropdown.selectedIndex];
+        const aanchalName = selectedOption ? selectedOption.textContent : '';
+        formData.delete('aanchal_id');
+        formData.append('aanchal', aanchalName);
+    }
+
     let url = "/api/vp-sec";
     let fetchMethod = "POST";
 
@@ -221,6 +244,10 @@ document.getElementById("vpSecForm").addEventListener("submit", async function (
     try {
         const response = await fetch(url, {
             method: fetchMethod,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
             body: formData,
         });
 
