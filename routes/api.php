@@ -302,7 +302,8 @@ Route::prefix('mahila_pravarti_sanyojika')->group(function() {
     Route::get('/', [MahilaPravartiSanyojikaController::class, 'index']);
     Route::post('/', [MahilaPravartiSanyojikaController::class, 'store']);
     Route::get('/{id}', [MahilaPravartiSanyojikaController::class, 'show']);
-    Route::post('/{id}', [MahilaPravartiSanyojikaController::class, 'update']); // uses _method=PUT
+    Route::post('/{id}', [MahilaPravartiSanyojikaController::class, 'update']); // uses _method=PUT with FormData
+    Route::put('/{id}', [MahilaPravartiSanyojikaController::class, 'update']); // for direct PUT requests
     Route::delete('/{id}', [MahilaPravartiSanyojikaController::class, 'destroy']);
 
     // ✅ Pravarti-wise
