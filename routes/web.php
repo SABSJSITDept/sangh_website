@@ -250,6 +250,14 @@ Route::get('/jsp-old-papers', function () {
     return view('dashboards.shree_sangh.jsp.jsp_old_papers');
 })->name('jsp-old-papers.view');
 
+ Route::get('/jsp_results', function () {
+    return view('shree_sangh.jsp.JspResult');
+})->name('jsp.result');
+
+ Route::get('/jsp_bulk_results', function () {
+    return view('shree_sangh.jsp.JspResultBulkUpload');
+})->name('jsp.bulk_results');
+
 Route::get('/shramnopasak', function () {
     return view('dashboards.sahitya.shramnopasak');
 })->name('shramnopasak.view');

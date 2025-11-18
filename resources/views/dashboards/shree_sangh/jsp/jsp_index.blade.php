@@ -70,6 +70,17 @@
                 </div>
             </div>
         </div>
+
+        <!-- Card 7 - JSP Add Results -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body text-center border-top border-4 border-info">
+                    <h5 class="card-title text-info fw-bold">📝 ADD RESULTS</h5>
+                    <p class="card-text">Add and manage JSP exam results.</p>
+                    <a href="{{ route('jsp.result') }}" class="btn btn-outline-info w-100">Add Results</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

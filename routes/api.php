@@ -51,6 +51,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AppVersionController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\YuvaSangh\GeneralDetails\ContentController;
+use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspResultController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -215,6 +216,9 @@ Route::apiResource('jsp-basic', SpBasicController::class);
 Route::apiResource('jsp-exam', JspExamController::class);
 // -----------------JSP Exam api ------------------------------------
 
+Route::apiResource('jsp-result', JspResultController::class);
+
+
 // -----------------JSP Big Exam api ------------------------------------
 Route::apiResource('jsp-bigexam', JspBigexamController::class);
 // -----------------JSP Big Exam api ------------------------------------
@@ -377,3 +381,5 @@ Route::delete('/versions/{id}', [AppVersionController::class, 'destroy']); // âœ
 // -----------------Yuva Content api ------------------------------------
 Route::apiResource('yuva-content', ContentController::class);
 // -----------------Yuva Content api ------------------------------------
+
+Route::post('/get-result', [JspResultController::class, 'getResult']);
