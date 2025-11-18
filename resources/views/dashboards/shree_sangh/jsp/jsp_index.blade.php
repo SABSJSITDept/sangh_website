@@ -81,6 +81,17 @@
                 </div>
             </div>
         </div>
+
+        <!-- Card 8 - JSP Bulk Results -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-body text-center border-top border-4 border-secondary">
+                    <h5 class="card-title text-secondary fw-bold">📊 BULK RESULTS</h5>
+                    <p class="card-text">Upload and manage bulk JSP results.</p>
+                    <a href="{{ route('jsp.bulk_results') }}" class="btn btn-outline-secondary w-100">Manage Bulk Results</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
