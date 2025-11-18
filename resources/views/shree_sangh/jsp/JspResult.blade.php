@@ -124,8 +124,8 @@
                             <label class="form-label">Class</label>
                             <select class="form-select" id="class" name="class" required>
                                 <option value="">Select Class</option>
-                                @for($i=1;$i<=12;$i++)
-                                    <option value="Class {{$i}}">Class {{$i}}</option>
+                                @for($i=1;$i<=9;$i++)
+                                    <option value=" {{$i}}">Class {{$i}}</option>
                                 @endfor
                             </select>
                         </div>
