@@ -120,4 +120,29 @@ class JspResultController extends Controller
 
         return response()->json(['result' => $result]);
     }
+
+    public function filterData(Request $request)
+    {
+        $query = JspResult::query();
+
+        if ($request->has('class_name') && !empty($request->class_name)) {
+            $query->where('Class', 'LIKE', '%' . $request->class_name . '%');
+        }
+
+        if ($request->has('phone_number') && !empty($request->phone_number)) {
+            $query->where('Mobile', 'LIKE', '%' . $request->phone_number . '%');
+        }
+
+        if ($request->has('city') && !empty($request->city)) {
+            $query->where('City', 'LIKE', '%' . $request->city . '%');
+        }
+
+        if ($request->has('state') && !empty($request->state)) {
+            $query->where('State', 'LIKE', '%' . $request->state . '%');
+        }
+
+        $results = $query->get();
+
+        return response()->json($results);
+    }
 }

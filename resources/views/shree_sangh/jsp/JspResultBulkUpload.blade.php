@@ -10,38 +10,57 @@
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- XLSX library for Excel download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         .toast-container { position: fixed; top: 70px; right: 20px; z-index: 9999; }
+        .spinner-border { display: none; }
     </style>
 </head>
 <body>
 <div class="container py-4">
-    <h2 class="mb-4">Bulk Upload JSP Results (Excel)</h2>
-    <div class="mb-3">
-        <label for="classSelect" class="form-label">Select Class</label>
-        <select id="classSelect" class="form-select" style="max-width:300px;">
-            <option value="">Select Class</option>
-            <option value="Class 1">Class 1</option>
-            <option value="Class 2">Class 2</option>
-            <option value="Class 3">Class 3</option>
-            <option value="Class 4">Class 4</option>
-            <option value="Class 5">Class 5</option>
-            <!-- Add more classes as needed -->
-        </select>
-    </div>
-    <button type="button" class="btn btn-info mb-3" id="downloadFormat">Download Sample Excel Format</button>
-    <form id="importForm" enctype="multipart/form-data" class="mb-4">
-        <div class="input-group">
-            <input type="file" name="excel" id="excelFile" accept=".xlsx,.xls" class="form-control">
-            <button type="submit" class="btn btn-primary">Import Excel</button>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Bulk Upload JSP Results (Excel)</h2>
         </div>
-    </form>
-    <form id="bulkUploadForm" class="mb-4" style="display:none;">
-        <div id="previewTable"></div>
-        <button type="submit" class="btn btn-success mt-3">Upload All</button>
-    </form>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="classSelect" class="form-label">Select Class</label>
+                <select id="classSelect" class="form-select" style="max-width:300px;">
+                    <option value="">Select Class</option>
+                    <option value=" 1">Class 1</option>
+                    <option value=" 2">Class 2</option>
+                    <option value=" 3">Class 3</option>
+                    <option value=" 4">Class 4</option>
+                    <option value=" 5">Class 5</option>
+                    <option value=" 6">Class 6</option>
+                    <option value=" 7">Class 7</option>
+                    <option value=" 8">Class 8</option>
+                    <option value=" 9">Class 9</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-info mb-3" id="downloadFormat">
+                <i class="fas fa-download"></i> Download Sample Excel Format
+            </button>
+            <form id="importForm" enctype="multipart/form-data" class="mb-4">
+                <div class="input-group">
+                    <input type="file" name="excel" id="excelFile" accept=".xlsx,.xls" class="form-control">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Import Excel
+                    </button>
+                </div>
+            </form>
+            <form id="bulkUploadForm" class="mb-4" style="display:none;">
+                <div id="previewTable"></div>
+                <button type="submit" class="btn btn-success mt-3">
+                    <i class="fas fa-upload"></i> Upload All
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 <div class="toast-container" id="toastContainer"></div>
 <script>
@@ -75,6 +94,8 @@ document.getElementById('importForm').addEventListener('submit', function(e) {
         showToast('Please select an Excel file', 'warning');
         return;
     }
+    const spinner = document.querySelector('#importForm .spinner-border');
+    spinner.style.display = 'inline-block';
     const reader = new FileReader();
     reader.onload = function(evt) {
         try {
@@ -87,29 +108,13 @@ document.getElementById('importForm').addEventListener('submit', function(e) {
                 return;
             }
             
-            // Validate column headers (without Class)
-            const requiredColumns = ['Student_Name', 'Guardian_Name', 'Mobile', 'City', 'State', 'Marks', 'Rank', 'Remarks'];
-            const actualColumns = rows[0].map(col => col ? col.trim() : '');
-            
-            // Check if columns match exactly
-            const isValid = actualColumns.length === requiredColumns.length && 
-                           actualColumns.every((col, idx) => col === requiredColumns[idx]);
-            
-            if (!isValid) {
-                showToast('Invalid Excel format! Required columns: ' + requiredColumns.join(', '), 'danger');
-                console.log('Expected:', requiredColumns);
-                console.log('Actual:', actualColumns);
-                return;
-            }
-            
             let html = `<table class='table table-bordered'><thead><tr>`;
             rows[0].forEach(h => html += `<th>${h}</th>`);
             html += `</tr></thead><tbody>`;
-            // Ensure all fields are populated correctly in the preview table
             for (let i = 1; i < rows.length; i++) {
                 html += `<tr>`;
                 for (let j = 0; j < rows[0].length; j++) {
-                    const val = rows[i][j] !== undefined ? rows[i][j] : ''; // Ensure undefined values are handled
+                    const val = rows[i][j] !== undefined ? rows[i][j] : '';
                     html += `<td><input type='text' name='row[${i-1}][${rows[0][j]}]' value='${val}' class='form-control form-control-sm'></td>`;
                 }
                 html += `</tr>`;
@@ -121,6 +126,8 @@ document.getElementById('importForm').addEventListener('submit', function(e) {
         } catch(error) {
             showToast('Error reading Excel file: ' + error.message, 'danger');
             console.error(error);
+        } finally {
+            spinner.style.display = 'none';
         }
     };
     reader.readAsArrayBuffer(file);

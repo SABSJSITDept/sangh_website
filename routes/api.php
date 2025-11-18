@@ -383,3 +383,7 @@ Route::apiResource('yuva-content', ContentController::class);
 // -----------------Yuva Content api ------------------------------------
 
 Route::post('/get-result', [JspResultController::class, 'getResult']);
+
+// ------------------Filter Data API ------------------------------------
+Route::get('/filter-data', [JspResultController::class, 'filterData']);
+// ------------------Filter Data API ------------------------------------
