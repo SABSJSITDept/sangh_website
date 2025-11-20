@@ -17,9 +17,38 @@
     <style>
         .toast-container { position: fixed; top: 70px; right: 20px; z-index: 9999; }
         .spinner-border { display: none; }
+        #loaderOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(255,255,255,0.85);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #loaderOverlay .loader-content {
+            text-align: center;
+        }
+        #loaderOverlay .spinner-border {
+            width: 4rem; height: 4rem;
+            color: #0d6efd;
+        }
+        #loaderOverlay .loader-text {
+            margin-top: 18px;
+            font-size: 1.3rem;
+            color: #0d6efd;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
+<div id="loaderOverlay">
+    <div class="loader-content">
+        <div class="spinner-border" role="status"></div>
+        <div class="loader-text">Uploading, please wait...</div>
+    </div>
+</div>
 <div class="container py-4">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
@@ -146,6 +175,8 @@ document.getElementById('bulkUploadForm').onsubmit = function(e) {
         showToast('Please select a class', 'warning');
         return;
     }
+    const loader = document.getElementById('loaderOverlay');
+    loader.style.display = 'flex';
     const inputs = document.querySelectorAll('#previewTable input');
     const rows = {};
     inputs.forEach(input => {
@@ -176,6 +207,7 @@ document.getElementById('bulkUploadForm').onsubmit = function(e) {
     })
     .then(res => res.json())
     .then(data => {
+        loader.style.display = 'none';
         if (data.success) {
             showToast('Bulk upload successful - ' + data.message, 'success');
             document.getElementById('bulkUploadForm').style.display = 'none';
@@ -190,6 +222,7 @@ document.getElementById('bulkUploadForm').onsubmit = function(e) {
         }
     })
     .catch(err => {
+        loader.style.display = 'none';
         showToast('Bulk upload failed: ' + err.message, 'danger');
         console.error(err);
     });
