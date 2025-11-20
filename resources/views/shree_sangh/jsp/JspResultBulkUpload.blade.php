@@ -39,6 +39,12 @@
                     <option value=" 7">Class 7</option>
                     <option value=" 8">Class 8</option>
                     <option value=" 9">Class 9</option>
+                    <option value=" 9">Class 9</option>
+                    <option value=" 10">Class 10</option>
+                    <option value=" 11 Aagam">Class 11 Aagam</option>
+                    <option value=" 11 Tatwa">Class 11 Tatwa</option>
+                    <option value=" 12 Aagam">Class 12 Aagam</option>
+                    <option value=" 12 Tatwa">Class 12 Tatwa</option>
                 </select>
             </div>
             <button type="button" class="btn btn-info mb-3" id="downloadFormat">

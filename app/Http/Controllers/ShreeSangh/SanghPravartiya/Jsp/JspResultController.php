@@ -15,15 +15,15 @@ class JspResultController extends Controller
     private function getValidationRules()
     {
         return [
-            'Student_Name' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
-            'Guardian_Name' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
-            'Mobile' => 'nullable|regex:/^\d{10}$/',
-            'City' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
-            'State' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
+            'Student_Name' => 'nullable|string',
+            'Guardian_Name' => 'nullable|string',
+            'Mobile' => 'nullable|string',
+            'City' => 'nullable|string',
+            'State' => 'nullable|string',
             'Class' => 'required|string',
-            'Marks' => 'nullable|integer|min:0|max:100',
-            'Rank' => 'nullable|string|regex:/^[a-zA-Z0-9\s]+$/',
-            'Remarks' => 'nullable|string|regex:/^[a-zA-Z0-9\s.,\-()]+$/'
+            'Marks' => 'nullable|string',
+            'Rank' => 'nullable|string',
+            'Remarks' => 'nullable|string'
         ];
     }
 

@@ -124,9 +124,13 @@
                             <label class="form-label">Class</label>
                             <select class="form-select" id="class" name="class" required>
                                 <option value="">Select Class</option>
-                                @for($i=1;$i<=9;$i++)
-                                    <option value=" {{$i}}">Class {{$i}}</option>
+                                @for($i=1;$i<=10;$i++)
+                                    <option value="{{$i}}">Class {{$i}}</option>
                                 @endfor
+                                <option value="11 Aagam">11 Aagam</option>
+                                <option value="11 Tatwa">11 Tatwa</option>
+                                <option value="12 Aagam">12 Aagam</option>
+                                <option value="12 Tatwa">12 Tatwa</option>
                             </select>
                         </div>
                         <div class="col-md-4">
