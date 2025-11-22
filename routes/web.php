@@ -1,3 +1,5 @@
+
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -48,6 +50,37 @@ Route::get('/', function () {
     return view('login');
 })->name('login');
 
+// Register Page (Accessible to All)
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
+
+// Register Submit
+Route::post('/register', function (Request $request) {
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:8|confirmed',
+        'role' => 'required|in:super_admin,shree_sangh,yuva_sangh,spf,mahila_samiti,sahitya,sahitya_publication'
+    ]);
+
+    try {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role
+        ]);
+
+        Log::info('USER CREATED: id=' . $user->id . ', email=' . $user->email . ', role=' . $user->role);
+
+        return back()->with('success', 'User created successfully! You can now login.');
+    } catch (\Exception $e) {
+        Log::error('USER CREATION FAILED: ' . $e->getMessage());
+        return back()->with('error', 'Failed to create user. Please try again.')->withInput();
+    }
+})->name('register.submit');
+
 // Login Submit (web session-based login)
 Route::post('/login', function (Request $request) {
     $request->validate([
@@ -88,6 +121,8 @@ Route::post('/login', function (Request $request) {
             return redirect()->route('dashboard.yuva_sangh');
         case 'mahila_samiti':
             return redirect()->route('dashboard.mahila_samiti');
+            case 'spf':
+            return redirect()->route('dashboard.spf');
         default:
             auth()->logout();
             return back()->with('error', 'Unknown role');
@@ -134,6 +169,10 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::middleware('matchRole:mahila_samiti,super_admin')->get('/dashboard/mahila_samiti', function () {
         return view('dashboards.mahila_samiti.index');
     })->name('dashboard.mahila_samiti');
+
+    Route::middleware('matchRole:spf,super_admin')->get('/dashboard/spf', function () {
+        return view('dashboards.spf.index');
+    })->name('dashboard.spf');
 
     // Shree Sangh Dashboard
     Route::middleware('matchRole:shree_sangh,super_admin')->get('/dashboard/shree_sangh', function () {
@@ -450,3 +489,8 @@ Route::get('/mobile_app_version', function () {
 Route::get('/yuva_content', function () {
     return view('dashboards.yuva_sangh.general_details.update_content');
 })->name('yuva_content.view');                     
+
+// SPF Dashboard Home Screen
+Route::get('/dashboard/spf', function () {
+    return view('dashboards.spf.home_screen');
+})->name('dashboard.spf.home');

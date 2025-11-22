@@ -1,3 +1,6 @@
+
+
+
 <?php
 
 use Illuminate\Http\Request;
@@ -52,6 +55,9 @@ use App\Http\Controllers\AppVersionController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\YuvaSangh\GeneralDetails\ContentController;
 use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspResultController;
+use App\Http\Controllers\Spf\SpfAboutController;
+use App\Http\Controllers\Spf\SpfMissionController;
+use App\Http\Controllers\Spf\SpfVisionController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -387,3 +393,9 @@ Route::post('/get-result', [JspResultController::class, 'getResult']);
 // ------------------Filter Data API ------------------------------------
 Route::get('/filter-data', [JspResultController::class, 'filterData']);
 // ------------------Filter Data API ------------------------------------
+
+// SPF About, Mission, Vision APIs
+Route::apiResource('spf-about', SpfAboutController::class);
+Route::apiResource('spf-mission', SpfMissionController::class);
+Route::apiResource('spf-vision', SpfVisionController::class);
+// SPF About, Mission, Vision APIs
