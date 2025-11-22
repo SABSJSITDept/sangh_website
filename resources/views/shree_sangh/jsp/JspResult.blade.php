@@ -84,7 +84,8 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Rank</label>
-                        <input type="number" name="Rank" class="form-control" placeholder="Rank" min="1">
+                        <input type="text" name="Rank" class="form-control" placeholder="Rank (number or text)">
+                        <div class="form-text small-muted">You can enter a number or characters (e.g., 1, 2, A+, Topper, etc.).</div>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Remarks</label>
@@ -111,7 +112,9 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <!-- Table rows are rendered dynamically by JavaScript. -->
+                        </tbody>
                     </table>
                 </div>
             </div>
