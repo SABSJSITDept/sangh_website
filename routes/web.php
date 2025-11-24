@@ -1,5 +1,3 @@
-
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -29,17 +27,17 @@ Route::post('/send-notification', [NotificationController::class, 'sendNotificat
 // change-password view + submit दोनों को auth के अंदर रखें
 Route::middleware('auth')->group(function () {
     Route::view('/change-password_shree_sangh', 'change_password_dashboards.change-password')
-     ->name('change-password');
-     Route::view('/change-password_mahila_samiti', 'change_password_dashboards.change_password_mahila')
-     ->name('change-password');
-     Route::view('/change-password_yuva_sangh', 'change_password_dashboards.change_password_yuva')
-     ->name('change-password');
-     Route::view('/change-password_shramnopasak', 'change_password_dashboards.change_password_shramnopasak')
-     ->name('change-password');
-     Route::view('/change-password_sahitya', 'change_password_dashboards.change_password_sahitya')
-     ->name('change-password');
-     Route::view('/change-password_super_admin', 'change_password_dashboards.change_password_super_admin')
-     ->name('change-password');
+         ->name('change-password.shree_sangh');
+    Route::view('/change-password_mahila_samiti', 'change_password_dashboards.change_password_mahila')
+         ->name('change-password.mahila_samiti');
+    Route::view('/change-password_yuva_sangh', 'change_password_dashboards.change_password_yuva')
+         ->name('change-password.yuva_sangh');
+    Route::view('/change-password_shramnopasak', 'change_password_dashboards.change_password_shramnopasak')
+         ->name('change-password.shramnopasak');
+    Route::view('/change-password_sahitya', 'change_password_dashboards.change_password_sahitya')
+         ->name('change-password.sahitya');
+    Route::view('/change-password_super_admin', 'change_password_dashboards.change_password_super_admin')
+         ->name('change-password.super_admin');
 
     Route::post('/change-password', [AuthController::class, 'updatePassword'])
          ->name('password.update');
@@ -121,7 +119,7 @@ Route::post('/login', function (Request $request) {
             return redirect()->route('dashboard.yuva_sangh');
         case 'mahila_samiti':
             return redirect()->route('dashboard.mahila_samiti');
-            case 'spf':
+        case 'spf':
             return redirect()->route('dashboard.spf');
         default:
             auth()->logout();
@@ -174,7 +172,7 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.spf.index');
     })->name('dashboard.spf');
 
-    // Shree Sangh Dashboard
+    // Shree Sangh Dashboard    
     Route::middleware('matchRole:shree_sangh,super_admin')->get('/dashboard/shree_sangh', function () {
         return view('dashboards.shree_sangh.index');
     })->name('dashboard.shree_sangh');
@@ -392,7 +390,7 @@ Route::get('/mobile_slider', function () {
 
 Route::get('/mahila_samiti_photo_gallery', function () {
     return view('dashboards.photo_gallery.mahila_samiti');
-})->name('sangh_photo_gallery.view');
+})->name('mahila_samiti_photo_gallery.view');
 
 Route::get('/photo_gallery_mahila_samiti', function () {
     return view('dashboards.photo_gallery.add_photo_mahila');
@@ -491,6 +489,10 @@ Route::get('/yuva_content', function () {
 })->name('yuva_content.view');                     
 
 // SPF Dashboard Home Screen
-Route::get('/dashboard/spf', function () {
+Route::get('/dashboard/spf/home', function () {
     return view('dashboards.spf.home_screen');
 })->name('dashboard.spf.home');
+
+Route::get('/dashboard/spf/committee', function () {
+    return view('dashboards.spf.spf_committee_screen');
+})->name('dashboard.spf.committee');

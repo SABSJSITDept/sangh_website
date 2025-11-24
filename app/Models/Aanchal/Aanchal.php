@@ -9,7 +9,7 @@ class Aanchal extends Model
 {
     use HasFactory;
 
-    protected $table = 'aanchal';
+    protected $table = 'anchal';
 
     protected $fillable = ['name'];
 }

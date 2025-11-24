@@ -1,6 +1,3 @@
-
-
-
 <?php
 
 use Illuminate\Http\Request;
@@ -58,6 +55,7 @@ use App\Http\Controllers\ShreeSangh\SanghPravartiya\Jsp\JspResultController;
 use App\Http\Controllers\Spf\SpfAboutController;
 use App\Http\Controllers\Spf\SpfMissionController;
 use App\Http\Controllers\Spf\SpfVisionController;
+use App\Http\Controllers\Spf\SpfCommitteeController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -399,3 +397,11 @@ Route::apiResource('spf-about', SpfAboutController::class);
 Route::apiResource('spf-mission', SpfMissionController::class);
 Route::apiResource('spf-vision', SpfVisionController::class);
 // SPF About, Mission, Vision APIs
+
+// SPF Committee API Resource
+Route::apiResource('spf-committee', SpfCommitteeController::class);
+
+// Custom SPF Committee routes
+Route::get('spf-committee/advisory-board', [SpfCommitteeController::class, 'getAdvisoryBoard']);
+Route::get('spf-committee/core-committee', [SpfCommitteeController::class, 'getCoreCommittee']);
+Route::get('spf-committee/anchal-coordinators/{anchalId?}', [SpfCommitteeController::class, 'getAnchalCoordinators']);

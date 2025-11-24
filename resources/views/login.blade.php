@@ -160,7 +160,7 @@
       <button type="submit" class="login-btn">Login</button>
     </form>
 
-    <a href="/register">Don't have an account? Create User</a>
+  
   </div>
 </div>
 
