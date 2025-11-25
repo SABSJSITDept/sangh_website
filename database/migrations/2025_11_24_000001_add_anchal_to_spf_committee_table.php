@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::table('spf_committee', function (Blueprint $table) {
             $table->unsignedBigInteger('anchal_id')->nullable()->after('post');
-            $table->foreign('anchal_id')->references('id')->on('anchal')->onDelete('set null');
+            $table->foreign('anchal_id')->references('id')->on('aanchal')->onDelete('set null');
         });
     }
 
