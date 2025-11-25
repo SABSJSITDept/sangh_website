@@ -26,7 +26,13 @@ class SpfCommitteeController extends Controller
             'name' => 'required|string|max:255',
             'post' => 'required|string|max:255',
             'anchal_id' => 'nullable|exists:aanchal,id',
+            'photo' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('spf', 'public');
+            $validated['photo'] = $path;
+        }
 
         $member = SpfCommittee::create($validated);
         return response()->json(['data' => $member, 'message' => 'Member created successfully'], 201);
@@ -41,7 +47,13 @@ class SpfCommitteeController extends Controller
             'name' => 'required|string|max:255',
             'post' => 'required|string|max:255',
             'anchal_id' => 'nullable|exists:aanchal,id',
+            'photo' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('spf', 'public');
+            $validated['photo'] = $path;
+        }
 
         $spfCommittee->update($validated);
         return response()->json(['data' => $spfCommittee, 'message' => 'Member updated successfully'], 200);

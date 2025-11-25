@@ -15,6 +15,7 @@ class SpfCommittee extends Model
         'name',
         'post',
         'anchal_id',
+        'photo',
     ];
 
     public function anchal()
