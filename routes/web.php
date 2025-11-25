@@ -27,20 +27,20 @@ Route::post('/send-notification', [NotificationController::class, 'sendNotificat
 // change-password view + submit दोनों को auth के अंदर रखें
 Route::middleware('auth')->group(function () {
     Route::view('/change-password_shree_sangh', 'change_password_dashboards.change-password')
-         ->name('change-password.shree_sangh');
+        ->name('change-password.shree_sangh');
     Route::view('/change-password_mahila_samiti', 'change_password_dashboards.change_password_mahila')
-         ->name('change-password.mahila_samiti');
+        ->name('change-password.mahila_samiti');
     Route::view('/change-password_yuva_sangh', 'change_password_dashboards.change_password_yuva')
-         ->name('change-password.yuva_sangh');
+        ->name('change-password.yuva_sangh');
     Route::view('/change-password_shramnopasak', 'change_password_dashboards.change_password_shramnopasak')
-         ->name('change-password.shramnopasak');
+        ->name('change-password.shramnopasak');
     Route::view('/change-password_sahitya', 'change_password_dashboards.change_password_sahitya')
-         ->name('change-password.sahitya');
+        ->name('change-password.sahitya');
     Route::view('/change-password_super_admin', 'change_password_dashboards.change_password_super_admin')
-         ->name('change-password.super_admin');
+        ->name('change-password.super_admin');
 
     Route::post('/change-password', [AuthController::class, 'updatePassword'])
-         ->name('password.update');
+        ->name('password.update');
 });
 
 // Login Page (Accessible to All)
@@ -88,7 +88,7 @@ Route::post('/login', function (Request $request) {
 
     $user = User::where('email', $request->email)->first();
 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
+    if (!$user || !Hash::check($request->password, $user->password)) {
         return back()->with('error', 'Invalid credentials');
     }
 
@@ -102,8 +102,8 @@ Route::post('/login', function (Request $request) {
     $request->session()->regenerate();
 
     // debug logs (remove later)
-   Log::info('LOGIN: user id=' . auth()->id());
-   Log::info('SESSION KEYS: ' . json_encode(array_keys(session()->all())));
+    Log::info('LOGIN: user id=' . auth()->id());
+    Log::info('SESSION KEYS: ' . json_encode(array_keys(session()->all())));
 
     // redirect as before
     switch ($user->role) {
@@ -214,8 +214,8 @@ Route::middleware(['web', 'checkSession'])->group(function () {
 
 
     Route::get('/aanchals', function () {
-    return Aanchal::select('name')->orderBy('name')->get();
-});
+        return Aanchal::select('name')->orderBy('name')->get();
+    });
 
 
 
@@ -247,246 +247,246 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.shree_sangh.news.shivir_update');
     });
 
-      Route::get('/aavedan_patra', function () {
+    Route::get('/aavedan_patra', function () {
         return view('dashboards.shree_sangh.aavedan_patra.aavedan_patra');
     });
 
     Route::get('/dharmik-pravartiya', function () {
-    return view('dashboards.shree_sangh.sangh_pravartiya.dharmik_pravartiya');
-})->name('dharmik_pravartiya');
+        return view('dashboards.shree_sangh.sangh_pravartiya.dharmik_pravartiya');
+    })->name('dharmik_pravartiya');
 
- Route::get('/add-user-dashboard', function () {
-    return view('dashboards.shree_sangh.jsp.jsp_index');
-})->name('jsp.dashboard');
+    Route::get('/add-user-dashboard', function () {
+        return view('dashboards.shree_sangh.jsp.jsp_index');
+    })->name('jsp.dashboard');
 
-Route::get('/shree-sangh/sangh-pravartiya/jsp-basic', function () {
-    return view('dashboards.shree_sangh.jsp.jsp_basic');
-})->name('jsp.basic');
+    Route::get('/shree-sangh/sangh-pravartiya/jsp-basic', function () {
+        return view('dashboards.shree_sangh.jsp.jsp_basic');
+    })->name('jsp.basic');
 
 
-Route::get('/jsp-exam', function () {
-    return view('dashboards.shree_sangh.jsp.jsp_exam');
-})->name('jsp_exam.view');
+    Route::get('/jsp-exam', function () {
+        return view('dashboards.shree_sangh.jsp.jsp_exam');
+    })->name('jsp_exam.view');
 
 
 
-Route::get('/jsp-bigexam', function () {
-    return view('dashboards.shree_sangh.jsp.jsp_bigexam');
-})->name('jsp-bigexam');
+    Route::get('/jsp-bigexam', function () {
+        return view('dashboards.shree_sangh.jsp.jsp_bigexam');
+    })->name('jsp-bigexam');
 
 
-Route::get('/dashboard/jsp-hindi-books', function () {
-    return view('dashboards.shree_sangh.jsp.jsp_hindi_books');
-})->name('jsp-hindi-books.view');
+    Route::get('/dashboard/jsp-hindi-books', function () {
+        return view('dashboards.shree_sangh.jsp.jsp_hindi_books');
+    })->name('jsp-hindi-books.view');
 
-Route::get('/jsp-gujrati-books', function () {
-    return view('dashboards.shree_sangh.jsp.jsp_gujrati_books');
-})->name('jsp-gujrati-books.view');
+    Route::get('/jsp-gujrati-books', function () {
+        return view('dashboards.shree_sangh.jsp.jsp_gujrati_books');
+    })->name('jsp-gujrati-books.view');
 
-Route::get('/jsp-old-papers', function () {
-    return view('dashboards.shree_sangh.jsp.jsp_old_papers');
-})->name('jsp-old-papers.view');
+    Route::get('/jsp-old-papers', function () {
+        return view('dashboards.shree_sangh.jsp.jsp_old_papers');
+    })->name('jsp-old-papers.view');
 
- Route::get('/jsp_results', function () {
-    return view('shree_sangh.jsp.JspResult');
-})->name('jsp.result');
+    Route::get('/jsp_results', function () {
+        return view('shree_sangh.jsp.JspResult');
+    })->name('jsp.result');
 
- Route::get('/jsp_bulk_results', function () {
-    return view('shree_sangh.jsp.JspResultBulkUpload');
-})->name('jsp.bulk_results');
+    Route::get('/jsp_bulk_results', function () {
+        return view('shree_sangh.jsp.JspResultBulkUpload');
+    })->name('jsp.bulk_results');
 
-Route::get('/shramnopasak', function () {
-    return view('dashboards.sahitya.shramnopasak');
-})->name('shramnopasak.view');
+    Route::get('/shramnopasak', function () {
+        return view('dashboards.sahitya.shramnopasak');
+    })->name('shramnopasak.view');
 
-Route::get('/shramnopasak/all-view', function () {
-    return view('dashboards.sahitya.shramnopasak_all');
-});
+    Route::get('/shramnopasak/all-view', function () {
+        return view('dashboards.sahitya.shramnopasak_all');
+    });
 
 
-Route::get('/dashboard/sahitya-publication', function () {
-    return view('dashboards.sahitya_publication.sahitya_publication');
-})->name('sahitya.publication');
+    Route::get('/dashboard/sahitya-publication', function () {
+        return view('dashboards.sahitya_publication.sahitya_publication');
+    })->name('sahitya.publication');
 
-Route::get('/daily-thoughts', function () {
-    return view('dashboards.shree_sangh.daily_thoughts');
-})->name('daily.thoughts');
+    Route::get('/daily-thoughts', function () {
+        return view('dashboards.shree_sangh.daily_thoughts');
+    })->name('daily.thoughts');
 
 
-Route::get('/chaturmas-suchi', function () {
-    return view('dashboards.sahitya.chaturmas_suchi');
-})->name('chaturmas_suchi.view');
+    Route::get('/chaturmas-suchi', function () {
+        return view('dashboards.sahitya.chaturmas_suchi');
+    })->name('chaturmas_suchi.view');
 
-Route::get('/pakhi', function () {
-    return view('dashboards.sahitya.pakhi');
-})->name('pakhi.view');
+    Route::get('/pakhi', function () {
+        return view('dashboards.sahitya.pakhi');
+    })->name('pakhi.view');
 
-Route::get('/photo_gallery', function () {
-    return view('dashboards.photo_gallery.add_photo');
-})->name('photio_gallery.view');
+    Route::get('/photo_gallery', function () {
+        return view('dashboards.photo_gallery.add_photo');
+    })->name('photio_gallery.view');
 
 
-Route::get('/sangh_photo_gallery', function () {
-    return view('dashboards.photo_gallery.sangh');
-})->name('sangh_photo_gallery.view');
+    Route::get('/sangh_photo_gallery', function () {
+        return view('dashboards.photo_gallery.sangh');
+    })->name('sangh_photo_gallery.view');
 
 
-Route::get('/home_slider', function () {
-    return view('dashboards.home_slider.add_home_slider');
-})->name('add_home_slider.view');
+    Route::get('/home_slider', function () {
+        return view('dashboards.home_slider.add_home_slider');
+    })->name('add_home_slider.view');
 
 
-Route::get('/yuva_photo_gallery', function () {
-    return view('dashboards.photo_gallery.yuva_sangh');
-})->name('yuva_photo_gallery.view');
+    Route::get('/yuva_photo_gallery', function () {
+        return view('dashboards.photo_gallery.yuva_sangh');
+    })->name('yuva_photo_gallery.view');
 
-Route::get('/mahila_photo_gallery', function () {
-    return view('dashboards.photo_gallery.mahila_samiti');
-})->name('mahila_photo_gallery.view');
+    Route::get('/mahila_photo_gallery', function () {
+        return view('dashboards.photo_gallery.mahila_samiti');
+    })->name('mahila_photo_gallery.view');
 
 
-Route::get('/mahila_slider', function () {
-    return view('dashboards.mahila_samiti.mahila_samiti_slider');
-})->name('mahila_slider.view');
+    Route::get('/mahila_slider', function () {
+        return view('dashboards.mahila_samiti.mahila_samiti_slider');
+    })->name('mahila_slider.view');
 
-Route::get('/mahila_pst', function () {
-    return view('dashboards.mahila_samiti.mahila_samiti_pst');
-})->name('mahila_pst.view');
+    Route::get('/mahila_pst', function () {
+        return view('dashboards.mahila_samiti.mahila_samiti_pst');
+    })->name('mahila_pst.view');
 
-Route::get('/mahila_ex_president', function () {
-    return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_ex_prsident');
-})->name('mahila_ex_president.view');
+    Route::get('/mahila_ex_president', function () {
+        return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_ex_prsident');
+    })->name('mahila_ex_president.view');
 
-Route::get('/mahila_vp_sec', function () {
-    return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_vp_sec');
-})->name('mahila_vp_sec.view');
+    Route::get('/mahila_vp_sec', function () {
+        return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_vp_sec');
+    })->name('mahila_vp_sec.view');
 
-Route::get('/mahila_ksm_members', function () {
-    return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_ksm_members');
-})->name('mahila_ksm_members.view');
+    Route::get('/mahila_ksm_members', function () {
+        return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_ksm_members');
+    })->name('mahila_ksm_members.view');
 
 
-Route::get('/mahila_pravarti_sanyojika', function () {
-    return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_pravarti_sanyojika');
-})->name('mahila_pravarti_sanyojika.view');
+    Route::get('/mahila_pravarti_sanyojika', function () {
+        return view('dashboards.mahila_samiti.karyakarini.mahila_samiti_pravarti_sanyojika');
+    })->name('mahila_pravarti_sanyojika.view');
 
-Route::get('/mahila_events', function () {
-    return view('dashboards.mahila_samiti.events.mahila_samiti_events');
-})->name('mahila_events.view');
+    Route::get('/mahila_events', function () {
+        return view('dashboards.mahila_samiti.events.mahila_samiti_events');
+    })->name('mahila_events.view');
 
 
-Route::get('/mahila_aavedan_patra', function () {
-    return view('dashboards.mahila_samiti.downloads.mahila_samiti_aavedan_patra');
-})->name('mahila_aavedan_patra.view');
+    Route::get('/mahila_aavedan_patra', function () {
+        return view('dashboards.mahila_samiti.downloads.mahila_samiti_aavedan_patra');
+    })->name('mahila_aavedan_patra.view');
 
-Route::get('/mahila_prativedan', function () {
-    return view('dashboards.mahila_samiti.downloads.mahila_samiti_prativedan');
-})->name('mahila_prativedan.view');
+    Route::get('/mahila_prativedan', function () {
+        return view('dashboards.mahila_samiti.downloads.mahila_samiti_prativedan');
+    })->name('mahila_prativedan.view');
 
 
-Route::get('/mobile_slider', function () {
-    return view('dashboards.shree_sangh.mobile_slider.mobile_slider');
-})->name('mobile_slider.view');
+    Route::get('/mobile_slider', function () {
+        return view('dashboards.shree_sangh.mobile_slider.mobile_slider');
+    })->name('mobile_slider.view');
 
-Route::get('/mahila_samiti_photo_gallery', function () {
-    return view('dashboards.photo_gallery.mahila_samiti');
-})->name('mahila_samiti_photo_gallery.view');
+    Route::get('/mahila_samiti_photo_gallery', function () {
+        return view('dashboards.photo_gallery.mahila_samiti');
+    })->name('mahila_samiti_photo_gallery.view');
 
-Route::get('/photo_gallery_mahila_samiti', function () {
-    return view('dashboards.photo_gallery.add_photo_mahila');
-})->name('photo_gallery_mahila_samiti.view');
+    Route::get('/photo_gallery_mahila_samiti', function () {
+        return view('dashboards.photo_gallery.add_photo_mahila');
+    })->name('photo_gallery_mahila_samiti.view');
 
-Route::get('/mahila_mobile_slider', function () {
-    return view('dashboards.mahila_samiti.mobile_slider.mobile_slider');
-})->name('mahila_mobile_slider.view');
+    Route::get('/mahila_mobile_slider', function () {
+        return view('dashboards.mahila_samiti.mobile_slider.mobile_slider');
+    })->name('mahila_mobile_slider.view');
 
-Route::get('/mahila_home_slider', function () {
-    return view('dashboards.mahila_samiti.mobile_slider.home_slider');
-})->name('mahila_home_slider.view');
+    Route::get('/mahila_home_slider', function () {
+        return view('dashboards.mahila_samiti.mobile_slider.home_slider');
+    })->name('mahila_home_slider.view');
 
 
-Route::get('/yuva_home_slider', function () {
-    return view('dashboards.yuva_sangh.yuva_slider.yuva_slider');
-})->name('yuva_home_slider.view');
+    Route::get('/yuva_home_slider', function () {
+        return view('dashboards.yuva_sangh.yuva_slider.yuva_slider');
+    })->name('yuva_home_slider.view');
 
-Route::get('/yuva_news', function () {
-    return view('dashboards.yuva_sangh.news_and_events.news_and_events');
-})->name('yuva_news_slider.view');
+    Route::get('/yuva_news', function () {
+        return view('dashboards.yuva_sangh.news_and_events.news_and_events');
+    })->name('yuva_news_slider.view');
 
-Route::get('/yuva_pst', function () {
-    return view('dashboards.yuva_sangh.karyakarini.yuva_pst');
-})->name('yuva_pst.view');
+    Route::get('/yuva_pst', function () {
+        return view('dashboards.yuva_sangh.karyakarini.yuva_pst');
+    })->name('yuva_pst.view');
 
-Route::get('/yuva_ex_president', function () {
-    return view('dashboards.yuva_sangh.karyakarini.yuva_ex_president');
-})->name('yuva_ex_president.view');
+    Route::get('/yuva_ex_president', function () {
+        return view('dashboards.yuva_sangh.karyakarini.yuva_ex_president');
+    })->name('yuva_ex_president.view');
 
-Route::get('/yuva_vp_sec', function () {
-    return view('dashboards.yuva_sangh.karyakarini.yuva_vp_sec');
-})->name('/yuva_vp_sec.view');
+    Route::get('/yuva_vp_sec', function () {
+        return view('dashboards.yuva_sangh.karyakarini.yuva_vp_sec');
+    })->name('/yuva_vp_sec.view');
 
-Route::get('/yuva_mobile_slider', function () {
-    return view('dashboards.yuva_sangh.mobile_slider.yuva_sangh_mobile_slider');
-})->name('yuva_mobile_slider.view');
+    Route::get('/yuva_mobile_slider', function () {
+        return view('dashboards.yuva_sangh.mobile_slider.yuva_sangh_mobile_slider');
+    })->name('yuva_mobile_slider.view');
 
-Route::get('/yuva_main_home_slider', function () {
-    return view('dashboards.yuva_sangh.mobile_slider.shree_sangh_yuva_slider');
-})->name('yuva_main_home_slider.view');
+    Route::get('/yuva_main_home_slider', function () {
+        return view('dashboards.yuva_sangh.mobile_slider.shree_sangh_yuva_slider');
+    })->name('yuva_main_home_slider.view');
 
 
-Route::get('/photo_gallery_yuva_sangh', function () {
-    return view('dashboards.photo_gallery.add_photo_yuva');
-})->name('photo_gallery_yuva_sangh.view');
+    Route::get('/photo_gallery_yuva_sangh', function () {
+        return view('dashboards.photo_gallery.add_photo_yuva');
+    })->name('photo_gallery_yuva_sangh.view');
 
-Route::get('/yuva_sangh_photo_gallery', function () {
-    return view('dashboards.photo_gallery.yuva_sangh');
-})->name('yuva_sangh_photo_gallery.view');
+    Route::get('/yuva_sangh_photo_gallery', function () {
+        return view('dashboards.photo_gallery.yuva_sangh');
+    })->name('yuva_sangh_photo_gallery.view');
 
 
-Route::get('/yuva_sangh_pravartiya', function () {
-    return view('dashboards.yuva_sangh.pravartiya.yuva_pravartiya');
-})->name('yuva_sangh_pravartiya.view');
+    Route::get('/yuva_sangh_pravartiya', function () {
+        return view('dashboards.yuva_sangh.pravartiya.yuva_pravartiya');
+    })->name('yuva_sangh_pravartiya.view');
 
-Route::get('/send_notification-form', function () {
-    return view('notifications.send_notifications.send');
-})->name('notification_send.view');
+    Route::get('/send_notification-form', function () {
+        return view('notifications.send_notifications.send');
+    })->name('notification_send.view');
 
-Route::get('/view_notifications_all', function () {
-    return view('notifications.super_admin_notifications');
-})->name('notification_view.all_view');
+    Route::get('/view_notifications_all', function () {
+        return view('notifications.super_admin_notifications');
+    })->name('notification_view.all_view');
 
-Route::get('/view_notifications_shree_sangh', function () {
-    return view('notifications.view_notifications');
-})->name('notification_view.shree_sangh_view');
+    Route::get('/view_notifications_shree_sangh', function () {
+        return view('notifications.view_notifications');
+    })->name('notification_view.shree_sangh_view');
 
-Route::get('/view_notifications_mahila_samiti', function () {
-    return view('notifications.mahila_samiti_notifications');
-})->name('notification_view.mahila_samiti_view');
+    Route::get('/view_notifications_mahila_samiti', function () {
+        return view('notifications.mahila_samiti_notifications');
+    })->name('notification_view.mahila_samiti_view');
 
-Route::get('/view_notifications_yuva_sangh', function () {
-    return view('notifications.yuva_sangh_notifications');
-})->name('notification_view.yuva_sangh_view');
+    Route::get('/view_notifications_yuva_sangh', function () {
+        return view('notifications.yuva_sangh_notifications');
+    })->name('notification_view.yuva_sangh_view');
 
-Route::get('/send_notification-shree_sangh', function () {
-    return view('notifications.send_notifications.shree_sangh_notifications');
-})->name('notification_send.shree_sangh');
+    Route::get('/send_notification-shree_sangh', function () {
+        return view('notifications.send_notifications.shree_sangh_notifications');
+    })->name('notification_send.shree_sangh');
 
-Route::get('/send_notification-mahila_Samiti', function () {
-    return view('notifications.send_notifications.mahila_samiti_notifications');
-})->name('notification_send.mahila_samiti');
+    Route::get('/send_notification-mahila_Samiti', function () {
+        return view('notifications.send_notifications.mahila_samiti_notifications');
+    })->name('notification_send.mahila_samiti');
 
-Route::get('/send_notification-yuva_sangh', function () {
-    return view('notifications.send_notifications.yuva_sangh_notifications');
-})->name('notification_send.yuva_sangh');
+    Route::get('/send_notification-yuva_sangh', function () {
+        return view('notifications.send_notifications.yuva_sangh_notifications');
+    })->name('notification_send.yuva_sangh');
 
-Route::get('/mobile_app_version', function () {
-    return view('app_version.app_version');
-})->name('mobile_app_version');
+    Route::get('/mobile_app_version', function () {
+        return view('app_version.app_version');
+    })->name('mobile_app_version');
 });
 
 Route::get('/yuva_content', function () {
     return view('dashboards.yuva_sangh.general_details.update_content');
-})->name('yuva_content.view');                     
+})->name('yuva_content.view');
 
 // SPF Dashboard Home Screen
 Route::get('/dashboard/spf/home', function () {
@@ -496,3 +496,7 @@ Route::get('/dashboard/spf/home', function () {
 Route::get('/dashboard/spf/committee', function () {
     return view('dashboards.spf.spf_committee_screen');
 })->name('dashboard.spf.committee');
+
+Route::get('/dashboard/spf/slider', function () {
+    return view('dashboards.spf.slider');
+})->name('dashboard.spf.slider');

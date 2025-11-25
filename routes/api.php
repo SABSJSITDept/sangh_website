@@ -56,6 +56,7 @@ use App\Http\Controllers\Spf\SpfAboutController;
 use App\Http\Controllers\Spf\SpfMissionController;
 use App\Http\Controllers\Spf\SpfVisionController;
 use App\Http\Controllers\Spf\SpfCommitteeController;
+use App\Http\Controllers\Spf\SpfSliderController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -81,7 +82,7 @@ Route::prefix('vihar')->group(function () {
     Route::post('/', [ViharController::class, 'store']);
     Route::put('/{id}', [ViharController::class, 'update']);
     Route::delete('/{id}', [ViharController::class, 'destroy']);
-    });
+});
 // ------------------Vihart api ------------------------------------
 
 // ------------------Ex-President api ------------------------------------
@@ -90,7 +91,7 @@ Route::prefix('ex-president')->group(function () {
     Route::post('/', [ExPresidentController::class, 'store']);
     Route::post('/{id}', [ExPresidentController::class, 'update']); // file upload requires POST
     Route::delete('/{id}', [ExPresidentController::class, 'destroy']);
-}); 
+});
 // ------------------Ex-President api ------------------------------------
 
 
@@ -109,7 +110,7 @@ Route::prefix('pst')->group(function () {
 Route::prefix('vp-sec')->group(function () {
     Route::get('/', [VpSecController::class, 'index']);
     Route::post('/', [VpSecController::class, 'store']);
- Route::put('/{id}', [VpSecController::class, 'update']); // ✅ REQUIRED
+    Route::put('/{id}', [VpSecController::class, 'update']); // ✅ REQUIRED
     Route::get('/{id}', [VpSecController::class, 'show']);
     Route::delete('/{id}', [VpSecController::class, 'destroy']);
 });
@@ -186,9 +187,9 @@ Route::apiResource('/samta-jan-kalyan-pranayash', SamtaJanKalyanPranayashControl
 // -----------------Padhadhikari Prashashan Karyashala api ------------------------------------
 
 Route::apiResource('padhadhikari-prashashan-karyashala', PadhadhikariPrashashanKaryashalaController::class)
-     ->parameters([
-         'padhadhikari-prashashan-karyashala' => 'record' // 👈 shorten the route parameter
-     ]);
+    ->parameters([
+        'padhadhikari-prashashan-karyashala' => 'record' // 👈 shorten the route parameter
+    ]);
 // -----------------Padhadhikari Prashashan Karyashala api ------------------------------------
 
 
@@ -267,7 +268,7 @@ Route::prefix('photo-gallery')->group(function () {
     Route::post('/store', [AddPhotoController::class, 'store']);
     Route::get('/fetch/{category}', [AddPhotoController::class, 'fetchByCategoryEvent']);
     Route::delete('/delete-single/{id}', [AddPhotoController::class, 'deleteSinglePhoto']);
-    Route::post('/update/{id}', [AddPhotoController::class, 'updatePhoto']); 
+    Route::post('/update/{id}', [AddPhotoController::class, 'updatePhoto']);
     Route::post('/update-event/{eventName}', [AddPhotoController::class, 'updateEventName']);
     Route::delete('/delete-event/{category}/{eventName}', [AddPhotoController::class, 'deleteEvent']);
 });
@@ -306,7 +307,7 @@ Route::apiResource('mahila_ksm_members', MahilaKsmMembersController::class);
 // -----------------Mahila KSM Members api ------------------------------------
 
 // -----------------Mahila pravarti sanyojika api ------------------------------------
-Route::prefix('mahila_pravarti_sanyojika')->group(function() {
+Route::prefix('mahila_pravarti_sanyojika')->group(function () {
     Route::get('/', [MahilaPravartiSanyojikaController::class, 'index']);
     Route::post('/', [MahilaPravartiSanyojikaController::class, 'store']);
     Route::get('/{id}', [MahilaPravartiSanyojikaController::class, 'show']);
@@ -406,5 +407,8 @@ Route::get('spf-committee/anchal-coordinators/{anchalId?}', [SpfCommitteeControl
 
 // SPF Committee API Resource
 Route::apiResource('spf-committee', SpfCommitteeController::class);
+
+// SPF Slider API Resource
+Route::apiResource('spf-slider', SpfSliderController::class);
 
 
