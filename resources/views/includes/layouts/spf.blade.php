@@ -487,16 +487,23 @@ main.content {
 
                 <!-- Dashboard button without submenu -->
                 <div class="nav-item">
-                     <a href="#" class="nav-link">
+                     <a href="{{ url('/dashboard/spf') }}" class="nav-link">
                 <i class="bi bi-house-door"></i>
                 <span class="link-text">HOME</span>
             </a>
                 </div>
 
                <div class="nav-item">
-                     <a href="#"  class="nav-link">
+                     <a href="{{ url('/dashboard/spf/home') }}"  class="nav-link">
                         <i class="bi bi-speedometer2"></i>
-                        <span class="link-text">ADD SAHITYA</span>
+                        <span class="link-text">Home Screen updates</span>
+                    </a>
+                </div>
+
+                   <div class="nav-item">
+                     <a href="{{ url('/dashboard/spf/committee') }}"  class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="link-text">SPF Committee</span>
                     </a>
                 </div>
              
