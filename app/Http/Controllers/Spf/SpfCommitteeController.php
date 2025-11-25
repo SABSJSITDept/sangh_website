@@ -13,7 +13,7 @@ class SpfCommitteeController extends Controller
      */
     public function index()
     {
-        $members = SpfCommittee::with('anchal')->get();
+        $members = SpfCommittee::with('aanchal')->get();
         return response()->json(['data' => $members], 200);
     }
 
@@ -25,7 +25,7 @@ class SpfCommitteeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'post' => 'required|string|max:255',
-            'anchal_id' => 'nullable|exists:anchal,id',
+            'anchal_id' => 'nullable|exists:aanchal,id',
         ]);
 
         $member = SpfCommittee::create($validated);
@@ -40,7 +40,7 @@ class SpfCommitteeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'post' => 'required|string|max:255',
-            'anchal_id' => 'nullable|exists:anchal,id',
+            'anchal_id' => 'nullable|exists:aanchal,id',
         ]);
 
         $spfCommittee->update($validated);
@@ -68,11 +68,13 @@ class SpfCommitteeController extends Controller
         return response()->json(['data' => $members], 200);
     }
 
-    public function getAnchalCoordinators($anchalId)
+    public function getAnchalCoordinators($anchalId = null)
     {
-        $members = SpfCommittee::where('post', 'Anchal Coordinators')
-            ->where('anchal_id', $anchalId)
-            ->get();
+        $query = SpfCommittee::where('post', 'Anchal Coordinators');
+        if ($anchalId) {
+            $query->where('anchal_id', $anchalId);
+        }
+        $members = $query->get();
         return response()->json(['data' => $members], 200);
     }
 

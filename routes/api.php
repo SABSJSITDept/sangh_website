@@ -398,10 +398,13 @@ Route::apiResource('spf-mission', SpfMissionController::class);
 Route::apiResource('spf-vision', SpfVisionController::class);
 // SPF About, Mission, Vision APIs
 
-// SPF Committee API Resource
-Route::apiResource('spf-committee', SpfCommitteeController::class);
 
 // Custom SPF Committee routes
 Route::get('spf-committee/advisory-board', [SpfCommitteeController::class, 'getAdvisoryBoard']);
 Route::get('spf-committee/core-committee', [SpfCommitteeController::class, 'getCoreCommittee']);
 Route::get('spf-committee/anchal-coordinators/{anchalId?}', [SpfCommitteeController::class, 'getAnchalCoordinators']);
+
+// SPF Committee API Resource
+Route::apiResource('spf-committee', SpfCommitteeController::class);
+
+

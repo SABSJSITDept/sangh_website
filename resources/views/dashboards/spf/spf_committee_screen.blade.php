@@ -2,48 +2,159 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    .spf-card {
+        border-radius: 18px;
+        box-shadow: 0 4px 32px 0 rgba(0,0,0,0.10);
+        border: none;
+        background: #fff;
+    }
+    .spf-card-header {
+        border-radius: 18px 18px 0 0;
+        background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 600;
+        padding: 1.2rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+    }
+    .spf-btn-add {
+        background: linear-gradient(90deg, #28a745 60%, #5be584 100%);
+        color: #fff;
+        font-weight: 500;
+        border: none;
+        border-radius: 6px;
+        padding: 0.5rem 1.2rem;
+        transition: background 0.2s;
+    }
+    .spf-btn-add:hover {
+        background: linear-gradient(90deg, #218838 60%, #43d97b 100%);
+        color: #fff;
+    }
+    .spf-form-floating .form-control:focus ~ label,
+    .spf-form-floating .form-control:not(:placeholder-shown) ~ label {
+        top: -0.8rem;
+        left: 0.75rem;
+        font-size: 0.9rem;
+        color: #007bff;
+        background: #fff;
+        padding: 0 0.25rem;
+    }
+    .spf-form-floating {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    .spf-form-floating label {
+        position: absolute;
+        top: 0.7rem;
+        left: 1rem;
+        color: #888;
+        pointer-events: none;
+        transition: all 0.2s;
+        background: transparent;
+        padding: 0 0.25rem;
+    }
+    .spf-form-floating .form-control {
+        padding-top: 1.5rem;
+        border-radius: 8px;
+    }
+    .spf-table {
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f8f9fa;
+        margin-top: 1.5rem;
+    }
+    .spf-table th, .spf-table td {
+        vertical-align: middle;
+    }
+    .spf-table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f1f7ff;
+    }
+    .spf-table thead {
+        background: #e3f0ff;
+    }
+    .spf-action-btn {
+        border-radius: 6px;
+        margin-right: 0.4rem;
+        transition: background 0.2s, color 0.2s;
+    }
+    .spf-action-btn.edit {
+        background: #e3f0ff;
+        color: #007bff;
+    }
+    .spf-action-btn.edit:hover {
+        background: #007bff;
+        color: #fff;
+    }
+    .spf-action-btn.delete {
+        background: #ffe3e3;
+        color: #dc3545;
+    }
+    .spf-action-btn.delete:hover {
+        background: #dc3545;
+        color: #fff;
+    }
+    .spf-toast {
+        min-width: 220px;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 1rem;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+        opacity: 0.97;
+    }
+    @media (max-width: 600px) {
+        .spf-card { border-radius: 10px; }
+        .spf-card-header { font-size: 1.05rem; padding: 1rem; }
+        .spf-table { font-size: 0.95rem; }
+    }
+</style>
 <div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span>SPF Committee Management</span>
-                    <button class="btn btn-success btn-sm" onclick="openForm()">Add Member</button>
+        <div class="col-lg-8 col-md-10 col-12">
+            <div class="card spf-card">
+                <div class="spf-card-header">
+                    <span><i class="bi bi-people-fill me-2"></i>SPF Committee Management</span>
+                    <button class="spf-btn-add" onclick="openForm()"><i class="bi bi-plus-circle me-1"></i> Add Member</button>
                 </div>
-                <div class="card-body">
-                    <div id="toast" class="toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true" style="display:none;z-index:9999;">
+                <div class="card-body p-4">
+                    <div id="toast" class="toast spf-toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true" style="display:none;z-index:9999;">
                         <div class="d-flex">
                             <div class="toast-body" id="toast-message"></div>
                             <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="hideToast()"></button>
                         </div>
                     </div>
-                    <form id="spfForm" class="mb-4" style="display:none;" onsubmit="return submitForm(event)">
+                    <form id="spfForm" class="mb-4" style="display:none;max-width:520px;margin:auto;" onsubmit="return submitForm(event)">
                         <input type="hidden" id="member_id">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" required>
+                        <div class="spf-form-floating">
+                            <input type="text" class="form-control" id="name" placeholder=" " required>
+                            <label for="name">Name</label>
                             <div class="invalid-feedback">Name is required.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="post" class="form-label">Post</label>
-                            <select class="form-control" id="post" required>
+                        <div class="spf-form-floating">
+                            <select class="form-control" id="post" placeholder=" " required>
                                 <option value="">Select Post</option>
                                 <option value="Advisory Board">Advisory Board</option>
                                 <option value="Core Committee">Core Committee</option>
                                 <option value="Anchal Coordinators">Anchal Coordinators</option>
                             </select>
+                            <label for="post">Post</label>
                             <div class="invalid-feedback">Post is required.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="anchal" class="form-label">Anchal</label>
-                            <select class="form-control" id="anchal">
+                        <div class="spf-form-floating">
+                            <select class="form-control" id="anchal" placeholder=" ">
                                 <option value="">Select Anchal</option>
                             </select>
+                            <label for="anchal">Anchal</label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeForm()">Cancel</button>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i>Save</button>
+                            <button type="button" class="btn btn-outline-secondary px-4" onclick="closeForm()"><i class="bi bi-x-circle me-1"></i>Cancel</button>
+                        </div>
                     </form>
-                    <ul class="nav nav-tabs" id="committeeTabs" role="tablist">
+                    <ul class="nav nav-tabs mt-3" id="committeeTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="advisory-tab" data-bs-toggle="tab" data-bs-target="#advisory" type="button" role="tab" aria-controls="advisory" aria-selected="true">Advisory Board</button>
                         </li>
@@ -56,30 +167,30 @@
                     </ul>
                     <div class="tab-content" id="committeeTabsContent">
                         <div class="tab-pane fade show active" id="advisory" role="tabpanel" aria-labelledby="advisory-tab">
-                            <table class="table table-bordered table-hover mt-3">
-                                <thead class="table-light">
+                            <table class="table spf-table spf-table-striped table-hover">
+                                <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th style="width: 50px;">#</th>
                                         <th>Name</th>
                                         <th>Post</th>
-                                        <th>Actions</th>
+                                        <th style="width: 120px;">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="committeeTable">
+                                <tbody id="advisoryTable">
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="core" role="tabpanel" aria-labelledby="core-tab">
-                            <table class="table table-bordered table-hover mt-3">
-                                <thead class="table-light">
+                            <table class="table spf-table spf-table-striped table-hover">
+                                <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th style="width: 50px;">#</th>
                                         <th>Name</th>
                                         <th>Post</th>
-                                        <th>Actions</th>
+                                        <th style="width: 120px;">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="committeeTable">
+                                <tbody id="coreTable">
                                 </tbody>
                             </table>
                         </div>
@@ -87,16 +198,16 @@
                             <select class="form-control mb-3" id="anchalFilter">
                                 <option value="">Select Anchal</option>
                             </select>
-                            <table class="table table-bordered table-hover mt-3">
-                                <thead class="table-light">
+                            <table class="table spf-table spf-table-striped table-hover">
+                                <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th style="width: 50px;">#</th>
                                         <th>Name</th>
                                         <th>Post</th>
-                                        <th>Actions</th>
+                                        <th style="width: 120px;">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="committeeTable">
+                                <tbody id="anchalTable">
                                 </tbody>
                             </table>
                         </div>
@@ -173,14 +284,41 @@ async function submitForm(event) {
         if (!res.ok) throw new Error('Failed to save member');
         showToast('Member saved successfully!');
         closeForm();
-        loadCommittee();
+        // Determine active tab and load correct committee data
+        const activeTab = document.querySelector('#committeeTabs .nav-link.active');
+        if (activeTab) {
+            const tabId = activeTab.id;
+            if (tabId === 'advisory-tab') {
+                loadCommittee('/api/spf-committee/advisory-board');
+            } else if (tabId === 'core-tab') {
+                loadCommittee('/api/spf-committee/core-committee');
+            } else if (tabId === 'anchal-tab') {
+                const anchalFilter = document.getElementById('anchalFilter');
+                let url = '/api/spf-committee/anchal-coordinators';
+                if (anchalFilter && anchalFilter.value) url += `/${anchalFilter.value}`;
+                loadCommittee(url);
+            }
+        } else {
+            // fallback: load advisory board
+            loadCommittee('/api/spf-committee/advisory-board');
+        }
     } catch (err) {
         showToast(err.message, false);
     }
     return false;
 }
 async function loadCommittee(apiUrl) {
-    const table = document.getElementById('committeeTable');
+    // Determine which tab is active and select the correct table body
+    let tableId = 'advisoryTable';
+    const advisoryTab = document.getElementById('advisory-tab');
+    const coreTab = document.getElementById('core-tab');
+    const anchalTab = document.getElementById('anchal-tab');
+    if (coreTab && coreTab.classList.contains('active')) {
+        tableId = 'coreTable';
+    } else if (anchalTab && anchalTab.classList.contains('active')) {
+        tableId = 'anchalTable';
+    }
+    const table = document.getElementById(tableId);
     table.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
     try {
         const res = await fetch(apiUrl);
@@ -192,8 +330,8 @@ async function loadCommittee(apiUrl) {
                 <td>${member.name}</td>
                 <td>${member.post}</td>
                 <td>
-                    <button class='btn btn-sm btn-info me-2' onclick='openForm(${member.id}, "${member.name}", "${member.post}", ${member.anchal_id || "''"})'>Edit</button>
-                    <button class='btn btn-sm btn-danger' onclick='deleteMember(${member.id})'>Delete</button>
+                    <button class='spf-action-btn edit btn btn-sm' title='Edit' onclick='openForm(${member.id}, "${member.name}", "${member.post}", ${member.anchal_id || "''"})'><i class="bi bi-pencil-square"></i></button>
+                    <button class='spf-action-btn delete btn btn-sm' title='Delete' onclick='deleteMember(${member.id})'><i class="bi bi-trash"></i></button>
                 </td>
             </tr>`;
         });
@@ -252,10 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (tabId === 'core-tab') {
                 loadCommittee('/api/spf-committee/core-committee');
             } else if (tabId === 'anchal-tab') {
-                // If anchalFilter exists and has value, pass it
-                const anchalId = anchalFilter ? anchalFilter.value : '';
+                // Always load all Anchal Coordinators if no filter is selected
                 let url = '/api/spf-committee/anchal-coordinators';
-                if (anchalId) url += `/${anchalId}`;
+                if (anchalFilter && anchalFilter.value) url += `/${anchalFilter.value}`;
                 loadCommittee(url);
             }
         });
@@ -263,9 +400,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (anchalFilter) {
         anchalFilter.addEventListener('change', function() {
-            const anchalId = anchalFilter.value;
             let url = '/api/spf-committee/anchal-coordinators';
-            if (anchalId) url += `/${anchalId}`;
+            if (anchalFilter.value) url += `/${anchalFilter.value}`;
             loadCommittee(url);
         });
     }
