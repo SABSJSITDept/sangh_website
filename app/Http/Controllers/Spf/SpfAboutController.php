@@ -27,7 +27,7 @@ class SpfAboutController extends Controller
             'content' => 'required|string',
         ]);
         $about = SpfAbout::create([
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
         return response()->json($about, 201);
     }
@@ -49,7 +49,7 @@ class SpfAboutController extends Controller
             'content' => 'required|string',
         ]);
         $spfAbout->update([
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
         return response()->json($spfAbout);
     }

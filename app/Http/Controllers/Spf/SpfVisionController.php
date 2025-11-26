@@ -27,7 +27,7 @@ class SpfVisionController extends Controller
             'content' => 'required|string',
         ]);
         $vision = SpfVision::create([
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
         return response()->json($vision, 201);
     }
@@ -49,7 +49,7 @@ class SpfVisionController extends Controller
             'content' => 'required|string',
         ]);
         $spfVision->update([
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
         return response()->json($spfVision);
     }

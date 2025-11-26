@@ -27,7 +27,7 @@ class SpfMissionController extends Controller
             'content' => 'required|string',
         ]);
         $mission = SpfMission::create([
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
         return response()->json($mission, 201);
     }
@@ -49,7 +49,7 @@ class SpfMissionController extends Controller
             'content' => 'required|string',
         ]);
         $spfMission->update([
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
         return response()->json($spfMission);
     }

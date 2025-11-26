@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\spf;
+namespace App\Http\Controllers\Sspf;
 
 use App\Http\Controllers\Controller;
 use App\Models\spf\SpfEvents;
