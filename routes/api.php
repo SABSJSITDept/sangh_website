@@ -414,5 +414,8 @@ Route::apiResource('spf-slider', SpfSliderController::class);
 // SPF Events API Resource
 Route::apiResource('spf-events', App\Http\Controllers\spf\SpfEventsController::class);
 
+// SPF Projects API Resource
+Route::apiResource('spf-projects', App\Http\Controllers\spf\SpfProjectsController::class);
+
 
 

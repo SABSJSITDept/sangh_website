@@ -514,3 +514,7 @@ Route::get('/spf_photo_gallery', function () {
 Route::get('/spf_photo_gallery_view', function () {
     return view('dashboards.photo_gallery.spf_photos');
 })->name('spf_photo_gallery.view');
+
+Route::get('/dashboard/spf/projects', function () {
+    return view('dashboards.spf.projects');
+})->name('dashboard.spf.projects');
