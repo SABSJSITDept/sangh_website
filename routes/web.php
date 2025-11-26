@@ -330,10 +330,6 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.photo_gallery.sangh');
     })->name('sangh_photo_gallery.view');
 
-    Route::get('/spf_photo_gallery', function () {
-        return view('dashboards.photo_gallery.spf_photos');
-    })->name('spf_photo_gallery.view');
-
     Route::get('/home_slider', function () {
         return view('dashboards.home_slider.add_home_slider');
     })->name('add_home_slider.view');
@@ -503,3 +499,11 @@ Route::get('/dashboard/spf/committee', function () {
 Route::get('/dashboard/spf/slider', function () {
     return view('dashboards.spf.slider');
 })->name('dashboard.spf.slider');
+
+Route::get('/spf_photo_gallery', function () {
+    return view('dashboards.photo_gallery.add_photo_spf');
+})->name('photo_gallery_spf.view');
+
+Route::get('/spf_photo_gallery_view', function () {
+    return view('dashboards.photo_gallery.spf_photos');
+})->name('spf_photo_gallery.view');
