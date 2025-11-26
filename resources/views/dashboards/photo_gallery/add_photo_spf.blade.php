@@ -32,9 +32,36 @@
         .page-header h1 {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #ffffff !important;
+            color: #1a202c !important;
             margin-bottom: 1rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #f7ff00 100%);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 237, 78, 0.3);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header h1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         @keyframes fadeInDown {
@@ -302,7 +329,8 @@
         <!-- Info Alert -->
         <div class="info-alert">
             <p>⚠️ कृपया ध्यान दें: प्रत्येक फोटो का साइज़ <strong>200 KB</strong> से अधिक नहीं होना चाहिए और आप अधिकतम
-                <strong>10 फोटो</strong> ही अपलोड कर सकते हैं।</p>
+                <strong>10 फोटो</strong> ही अपलोड कर सकते हैं।
+            </p>
         </div>
 
         <div class="row">

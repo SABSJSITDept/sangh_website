@@ -36,9 +36,36 @@
         .page-header h1 {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #ffffff !important;
+            color: #1a202c !important;
             margin: 0;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #f7ff00 100%);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 237, 78, 0.3);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header h1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         @keyframes fadeInDown {
@@ -431,59 +458,59 @@
 
             // Show loading
             document.getElementById('photoGallery').innerHTML = `
-                                                <div class="empty-state">
-                                                    <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
-                                                        <span class="visually-hidden">Loading...</span>
+                                                    <div class="empty-state">
+                                                        <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        <h3 class="mt-3">Loading photos...</h3>
                                                     </div>
-                                                    <h3 class="mt-3">Loading photos...</h3>
-                                                </div>
-                                            `;
+                                                `;
 
             fetch(`/api/photo-gallery/fetch/${category}`)
                 .then(res => res.json())
                 .then(events => {
                     if (!events || events.length === 0) {
                         document.getElementById('photoGallery').innerHTML = `
-                                                            <div class="empty-state">
-                                                                <i class="bi bi-images"></i>
-                                                                <h3>No photos yet</h3>
-                                                                <p>Upload some photos to get started!</p>
-                                                            </div>
-                                                        `;
+                                                                <div class="empty-state">
+                                                                    <i class="bi bi-images"></i>
+                                                                    <h3>No photos yet</h3>
+                                                                    <p>Upload some photos to get started!</p>
+                                                                </div>
+                                                            `;
                         return;
                     }
 
                     let html = '';
                     events.forEach((event, index) => {
                         html += `
-                                                            <div class="event-card" style="animation-delay: ${index * 0.1}s">
-                                                                <div class="event-header">
-                                                                    <h2 class="event-title">${event.event_name}</h2>
-                                                                    <div class="event-actions">
-                                                                        <button class="btn-edit-event" onclick="enableEventEdit('${event.event_name}')">
-                                                                            <i class="bi bi-pencil me-1"></i>Edit
-                                                                        </button>
-                                                                        <button class="btn-delete-event" onclick="deleteEvent('${event.event_name}')">
-                                                                            <i class="bi bi-trash me-1"></i>Delete
-                                                                        </button>
+                                                                <div class="event-card" style="animation-delay: ${index * 0.1}s">
+                                                                    <div class="event-header">
+                                                                        <h2 class="event-title">${event.event_name}</h2>
+                                                                        <div class="event-actions">
+                                                                            <button class="btn-edit-event" onclick="enableEventEdit('${event.event_name}')">
+                                                                                <i class="bi bi-pencil me-1"></i>Edit
+                                                                            </button>
+                                                                            <button class="btn-delete-event" onclick="deleteEvent('${event.event_name}')">
+                                                                                <i class="bi bi-trash me-1"></i>Delete
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="photo-grid">`;
+                                                                    <div class="photo-grid">`;
 
                         event.photos.forEach(photoObj => {
                             window.photoMap[photoObj.url] = photoObj.id;
                             html += `
-                                                                <div class="photo-item">
-                                                                    <img src="${photoObj.url}" class="event-photo" alt="Event Photo">
-                                                                    <div class="photo-actions">
-                                                                        <button class="btn-photo-action btn-photo-edit" onclick="openEdit('${photoObj.url}')">
-                                                                            <i class="bi bi-pencil me-1"></i>Edit
-                                                                        </button>
-                                                                        <button class="btn-photo-action btn-photo-delete" onclick="deletePhoto('${photoObj.url}')">
-                                                                            <i class="bi bi-trash me-1"></i>Delete
-                                                                        </button>
-                                                                    </div>
-                                                                </div>`;
+                                                                    <div class="photo-item">
+                                                                        <img src="${photoObj.url}" class="event-photo" alt="Event Photo">
+                                                                        <div class="photo-actions">
+                                                                            <button class="btn-photo-action btn-photo-edit" onclick="openEdit('${photoObj.url}')">
+                                                                                <i class="bi bi-pencil me-1"></i>Edit
+                                                                            </button>
+                                                                            <button class="btn-photo-action btn-photo-delete" onclick="deletePhoto('${photoObj.url}')">
+                                                                                <i class="bi bi-trash me-1"></i>Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>`;
                         });
 
                         html += `</div></div>`;
@@ -492,12 +519,12 @@
                 })
                 .catch(err => {
                     document.getElementById('photoGallery').innerHTML = `
-                                                        <div class="empty-state">
-                                                            <i class="bi bi-exclamation-triangle"></i>
-                                                            <h3>Error loading photos</h3>
-                                                            <p>Please try again later</p>
-                                                        </div>
-                                                    `;
+                                                            <div class="empty-state">
+                                                                <i class="bi bi-exclamation-triangle"></i>
+                                                                <h3>Error loading photos</h3>
+                                                                <p>Please try again later</p>
+                                                            </div>
+                                                        `;
                 });
         }
 

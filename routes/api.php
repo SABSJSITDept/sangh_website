@@ -411,4 +411,8 @@ Route::apiResource('spf-committee', SpfCommitteeController::class);
 // SPF Slider API Resource
 Route::apiResource('spf-slider', SpfSliderController::class);
 
+// SPF Events API Resource
+Route::apiResource('spf-events', App\Http\Controllers\spf\SpfEventsController::class);
+
+
 

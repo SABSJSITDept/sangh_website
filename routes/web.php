@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
         ->name('change-password.sahitya');
     Route::view('/change-password_super_admin', 'change_password_dashboards.change_password_super_admin')
         ->name('change-password.super_admin');
+    Route::view('/change-password_spf', 'change_password_dashboards.change_password_spf')
+        ->name('change-password.spf');
 
     Route::post('/change-password', [AuthController::class, 'updatePassword'])
         ->name('password.update');
@@ -499,6 +501,11 @@ Route::get('/dashboard/spf/committee', function () {
 Route::get('/dashboard/spf/slider', function () {
     return view('dashboards.spf.slider');
 })->name('dashboard.spf.slider');
+
+Route::get('/dashboard/spf/events', function () {
+    return view('dashboards.spf.events');
+})->name('dashboard.spf.events');
+
 
 Route::get('/spf_photo_gallery', function () {
     return view('dashboards.photo_gallery.add_photo_spf');
