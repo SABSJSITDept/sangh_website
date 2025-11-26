@@ -578,6 +578,14 @@
             </div>
 
             <div class="nav-item">
+                <a href="{{ url('/dashboard/spf/projects') }}" class="nav-link">
+                    <i class="bi bi-calendar-event"></i>
+                    <span class="link-text">projects</span>
+                </a>
+            </div>
+
+
+            <div class="nav-item">
                 <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
                     <i class="bi bi-shield-lock-fill"></i>
                     <span class="link-text"> Change Password</span>
