@@ -58,6 +58,9 @@ use App\Http\Controllers\Spf\SpfVisionController;
 use App\Http\Controllers\Spf\SpfCommitteeController;
 use App\Http\Controllers\Spf\SpfSliderController;
 
+use App\Http\Controllers\Spf\SpfEventsController;
+use App\Http\Controllers\Spf\SpfProjectsController;
+
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -412,10 +415,10 @@ Route::apiResource('spf-committee', SpfCommitteeController::class);
 Route::apiResource('spf-slider', SpfSliderController::class);
 
 // SPF Events API Resource
-Route::apiResource('spf-events', App\Http\Controllers\spf\SpfEventsController::class);
+Route::apiResource('spf-events', SpfEventsController::class);
 
 // SPF Projects API Resource
-Route::apiResource('spf-projects', App\Http\Controllers\spf\SpfProjectsController::class);
+Route::apiResource('spf-projects', SpfProjectsController::class);
 
 
 

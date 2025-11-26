@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Sspf;
+namespace App\Http\Controllers\Spf;
 
 use App\Http\Controllers\Controller;
-use App\Models\spf\SpfEvents;
+use App\Models\Spf\SpfEvents;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 

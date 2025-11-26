@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Spf;
 
 use App\Http\Controllers\Controller;
-use App\Models\spf\SpfProjects;
+use App\Models\Spf\SpfProjects;
 use Illuminate\Http\Request;
 
 class SpfProjectsController extends Controller
