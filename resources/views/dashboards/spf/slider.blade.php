@@ -15,6 +15,7 @@
                 <label class="form-label fw-bold">Upload Image</label>
                 <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
                 <div class="form-text text-muted">Max 2MB, only 1 image at a time</div>
+                <div class="form-text text-info">Recommended size: 1600×900 (images of this size will look best)</div>
             </div>
             <div id="previewContainer" class="mb-3"></div>
             <button type="submit" class="btn btn-primary" id="submitBtn">Save</button>
