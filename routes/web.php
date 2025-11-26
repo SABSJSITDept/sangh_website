@@ -330,6 +330,9 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.photo_gallery.sangh');
     })->name('sangh_photo_gallery.view');
 
+    Route::get('/spf_photo_gallery', function () {
+        return view('dashboards.photo_gallery.spf_photos');
+    })->name('spf_photo_gallery.view');
 
     Route::get('/home_slider', function () {
         return view('dashboards.home_slider.add_home_slider');

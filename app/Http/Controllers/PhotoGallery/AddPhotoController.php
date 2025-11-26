@@ -12,7 +12,7 @@ class AddPhotoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category' => 'required|in:sangh,yuva,mahila',
+            'category' => 'required|in:sangh,yuva,mahila,spf',
             'event_name' => 'required|string|max:255',
             'photos' => 'required|array|max:10', // Max 10 photos allowed
             'photos.*' => 'required|image|max:200', // 200 KB max per photo
