@@ -557,6 +557,8 @@
                 <span class="link-text"> Gallery</span>
                 <i class="bi bi-chevron-down submenu-toggle"></i>
             </div>
+
+
             <div class="submenu">
                 <a href="{{ url('/spf_photo_gallery') }}" class="nav-link">
                     <i class="bi bi-camera-fill"></i>
@@ -568,6 +570,10 @@
                     <span>View Photos</span>
                 </a>
 
+                <a href="{{ url('/dashboard/spf/slider') }}" class="nav-link">
+                    <i class="bi bi-eye-fill"></i>
+                    <span>Slider</span>
+                </a>
             </div>
 
             <div class="nav-item">
