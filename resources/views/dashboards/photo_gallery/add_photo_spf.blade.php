@@ -394,8 +394,8 @@
             let files = photosInput.files;
 
             // Max 10 photos check
-            if (files.length > 10) {
-                showToast('आप अधिकतम 10 फोटो ही अपलोड कर सकते हैं!', 'error');
+            if (files.length > 9) {
+                showToast('आप अधिकतम 9 फोटो ही अपलोड कर सकते हैं!', 'error');
                 return;
             }
 
