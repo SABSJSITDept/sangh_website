@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\spf;
+namespace App\Http\Controllers\Spf;
 
 use App\Http\Controllers\Controller;
-use App\Models\spf\SpfSafarnama;
+use App\Models\Spf\SpfSafarnama;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -132,13 +132,32 @@ class SpfSafarnamaController extends Controller
             ];
 
             if ($request->hasFile('pdf')) {
+                $file = $request->file('pdf');
+                
+                // Check if file is valid
+                if (!$file->isValid()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'PDF file upload failed. Please try again.'
+                    ], 422);
+                }
+
                 // Delete old PDF
                 if ($safarnama->pdf) {
                     Storage::disk('public')->delete($safarnama->pdf);
                 }
 
                 // Store new PDF
-                $data['pdf'] = $request->file('pdf')->store('spf_safarnama', 'public');
+                $pdfPath = $file->store('spf_safarnama', 'public');
+                
+                if (!$pdfPath) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed to save PDF file'
+                    ], 500);
+                }
+
+                $data['pdf'] = $pdfPath;
             }
 
             $safarnama->update($data);

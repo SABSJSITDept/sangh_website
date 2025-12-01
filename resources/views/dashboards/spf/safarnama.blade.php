@@ -8,8 +8,8 @@
     <div class="container mt-4">
         <h3 class="mb-4">📚 SPF Safarnama</h3>
 
-        <!-- Safarnama Form -->
-        <form id="safarnamaForm" class="mb-4 card p-4 shadow-sm" enctype="multipart/form-data">
+        <!-- Edit Safarnama Form (Hidden by default) -->
+        <form id="safarnamaForm" class="mb-4 card p-4 shadow-sm d-none" enctype="multipart/form-data">
             <input type="hidden" id="safarnama_id">
 
             <div class="mb-3">
@@ -18,19 +18,17 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-bold">PDF File <span class="text-danger">*</span> <small
-                        class="text-muted">(Max: 5MB)</small></label>
-                <input type="file" class="form-control" id="pdf" name="pdf" accept=".pdf" required>
+                <label class="form-label fw-bold">PDF File <small class="text-muted">(Max: 5MB)</small></label>
+                <input type="file" class="form-control" id="pdf" name="pdf" accept=".pdf">
                 <div class="form-text">Only PDF files are allowed. Maximum file size: 5MB</div>
-                <div id="currentPdfInfo" class="mt-2 d-none">
-                    <small class="text-info">Current PDF: <a href="#" id="currentPdfLink" target="_blank">View
-                            PDF</a></small>
+                <div id="currentPdfInfo" class="mt-2">
+                    <small class="text-info">Current PDF: <a href="#" id="currentPdfLink" target="_blank">View PDF</a></small>
                 </div>
             </div>
 
             <div>
-                <button type="submit" class="btn btn-primary" id="submitBtn">Save Safarnama</button>
-                <button type="button" class="btn btn-secondary d-none" id="cancelBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">Update Safarnama</button>
+                <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
             </div>
         </form>
 
@@ -91,7 +89,6 @@
                                         </td>
                                         <td>
                                             <button class="btn btn-sm btn-warning me-1" onclick="editSafarnama(${safarnama.id})">✏️ Edit</button>
-                                            <button class="btn btn-sm btn-danger" onclick="deleteSafarnama(${safarnama.id})">🗑️ Delete</button>
                                         </td>
                                     </tr>`;
                     });
@@ -106,59 +103,69 @@
             }
         }
 
-        // Add / Update Safarnama
+        // Update Safarnama
         document.getElementById("safarnamaForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             let id = document.getElementById("safarnama_id").value;
 
+            if (!id) {
+                showAlert("No safarnama selected for editing", "error");
+                return;
+            }
+
             // Validate PDF file size (5MB = 5 * 1024 * 1024 bytes)
             const pdfFile = document.getElementById("pdf").files[0];
-            if (pdfFile && pdfFile.size > 5 * 1024 * 1024) {
-                showAlert("PDF file size must not exceed 5MB", "error");
-                return;
+            if (pdfFile) {
+                if (pdfFile.size > 5 * 1024 * 1024) {
+                    showAlert("PDF file size must not exceed 5MB", "error");
+                    return;
+                }
+                console.log('PDF File:', pdfFile.name, 'Size:', pdfFile.size, 'Type:', pdfFile.type);
             }
 
             // Create FormData for file upload
             let formData = new FormData();
             formData.append('title', document.getElementById("title").value);
+            formData.append('_method', 'PUT');
 
             if (pdfFile) {
                 formData.append('pdf', pdfFile);
             }
 
-            // For update, we need to add _method field
-            if (id) {
-                formData.append('_method', 'PUT');
-            }
+            let url = `${apiUrl}/${id}`;
 
-            let url = id ? `${apiUrl}/${id}` : apiUrl;
-            let method = "POST"; // Always POST for FormData
+            console.log('Updating safarnama ID:', id);
+            console.log('FormData entries:', Array.from(formData.entries()));
 
             try {
                 let res = await fetch(url, {
-                    method: method,
+                    method: "POST",
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
                     },
                     body: formData
                 });
 
                 let result = await res.json();
+                console.log('Response:', result);
+
                 if (res.ok && result.success) {
                     showAlert(result.message);
                     fetchSafarnama();
                     resetForm();
                 } else {
-                    let errorMsg = result.message || "Error saving safarnama!";
+                    let errorMsg = result.message || "Error updating safarnama!";
                     if (result.errors) {
                         errorMsg = Object.values(result.errors).flat().join(', ');
                     }
+                    console.error('Validation errors:', result.errors);
                     showAlert(errorMsg, "error");
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showAlert("Failed to save safarnama", "error");
+                showAlert("Failed to update safarnama", "error");
             }
         });
 
@@ -173,17 +180,13 @@
                     document.getElementById("safarnama_id").value = safarnama.id;
                     document.getElementById("title").value = safarnama.title;
 
-                    // Make PDF field optional for edit
-                    document.getElementById("pdf").removeAttribute('required');
-
                     // Show current PDF info
                     if (safarnama.pdf) {
-                        document.getElementById("currentPdfInfo").classList.remove("d-none");
                         document.getElementById("currentPdfLink").href = storageUrl + safarnama.pdf;
                     }
 
-                    document.getElementById("submitBtn").textContent = "Update Safarnama";
-                    document.getElementById("cancelBtn").classList.remove("d-none");
+                    // Show the form
+                    document.getElementById("safarnamaForm").classList.remove("d-none");
 
                     showAlert("You can now update this safarnama", "info");
                     document.getElementById("safarnamaForm").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -200,46 +203,7 @@
         function resetForm() {
             document.getElementById("safarnamaForm").reset();
             document.getElementById("safarnama_id").value = "";
-            document.getElementById("submitBtn").textContent = "Save Safarnama";
-            document.getElementById("cancelBtn").classList.add("d-none");
-            document.getElementById("pdf").setAttribute('required', 'required');
-            document.getElementById("currentPdfInfo").classList.add("d-none");
-        }
-
-        // Delete Safarnama
-        async function deleteSafarnama(id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "This safarnama and its PDF will be permanently deleted!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "Cancel",
-                confirmButtonColor: "#d33"
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    try {
-                        let res = await fetch(`${apiUrl}/${id}`, {
-                            method: "DELETE",
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        });
-
-                        let resultData = await res.json();
-                        if (res.ok && resultData.success) {
-                            showAlert(resultData.message);
-                            fetchSafarnama();
-                        } else {
-                            showAlert("Delete failed!", "error");
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        showAlert("Failed to delete safarnama", "error");
-                    }
-                }
-            });
+            document.getElementById("safarnamaForm").classList.add("d-none");
         }
 
         // Initial load
