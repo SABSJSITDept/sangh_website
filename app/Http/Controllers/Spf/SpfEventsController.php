@@ -15,7 +15,7 @@ class SpfEventsController extends Controller
      */
     public function index()
     {
-        $events = SpfEvents::orderBy('date', 'desc')->get();
+        $events = SpfEvents::with('project:id,title')->orderBy('date', 'desc')->get();
         return response()->json([
             'success' => true,
             'data' => $events
@@ -80,7 +80,7 @@ class SpfEventsController extends Controller
      */
     public function show(string $id)
     {
-        $event = SpfEvents::find($id);
+        $event = SpfEvents::with('project:id,title')->find($id);
 
         if (!$event) {
             return response()->json([
