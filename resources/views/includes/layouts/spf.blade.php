@@ -597,6 +597,13 @@
                 </a>
             </div>
 
+            <div class="nav-item">
+                <a href="{{ url('/dashboard/spf/downloads') }}" class="nav-link">
+                    <i class="bi bi-download"></i>
+                    <span class="link-text">Downloads</span>
+                </a>
+            </div>
+
 
             <div class="nav-item">
                 <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">

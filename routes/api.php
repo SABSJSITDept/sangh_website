@@ -61,6 +61,7 @@ use App\Http\Controllers\Spf\SpfSliderController;
 use App\Http\Controllers\Spf\SpfEventsController;
 use App\Http\Controllers\Spf\SpfProjectsController;
 use App\Http\Controllers\Spf\SpfSafarnamaController;
+use App\Http\Controllers\Spf\SpfDownloadsController;
 
 
 
@@ -425,6 +426,9 @@ Route::apiResource('spf-projects', SpfProjectsController::class);
 
 // SPF Safarnama API Resource
 Route::apiResource('spf-safarnama', SpfSafarnamaController::class);
+
+// SPF Downloads API Resource
+Route::apiResource('spf-downloads', SpfDownloadsController::class);
 
 
 

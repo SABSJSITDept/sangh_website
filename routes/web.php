@@ -522,3 +522,7 @@ Route::get('/dashboard/spf/projects', function () {
 Route::get('/dashboard/spf/safarnama', function () {
     return view('dashboards.spf.safarnama');
 })->name('dashboard.spf.safarnama');
+
+Route::get('/dashboard/spf/downloads', function () {
+    return view('dashboards.spf.spfdownloads');
+})->name('dashboard.spf.downloads');
