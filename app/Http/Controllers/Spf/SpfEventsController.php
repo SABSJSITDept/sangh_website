@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Spf;
 
 use App\Http\Controllers\Controller;
 use App\Models\Spf\SpfEvents;
+use App\Models\Spf\SpfProjects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,6 +23,18 @@ class SpfEventsController extends Controller
     }
 
     /**
+     * Get all projects for dropdown
+     */
+    public function getProjects()
+    {
+        $projects = SpfProjects::select('id', 'title')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $projects
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -33,6 +46,9 @@ class SpfEventsController extends Controller
             'location' => 'required|string|max:255',
             'description' => 'required|string',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'spf_project_id' => 'required|exists:spf_projects,id',
+            'event_reg_start' => 'nullable|date',
+            'event_reg_close' => 'nullable|date',
         ]);
 
         $photoPath = null;
@@ -47,6 +63,9 @@ class SpfEventsController extends Controller
             'location' => $request->location,
             'description' => $request->description,
             'photo' => $photoPath,
+            'spf_project_id' => $request->spf_project_id,
+            'event_reg_start' => $request->event_reg_start,
+            'event_reg_close' => $request->event_reg_close,
         ]);
 
         return response()->json([
@@ -97,6 +116,9 @@ class SpfEventsController extends Controller
             'location' => 'sometimes|required|string|max:255',
             'description' => 'sometimes|required|string',
             'photo' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'spf_project_id' => 'nullable|exists:spf_projects,id',
+            'event_reg_start' => 'nullable|date',
+            'event_reg_close' => 'nullable|date',
         ]);
 
         if ($request->hasFile('photo')) {

@@ -18,5 +18,16 @@ class SpfEvents extends Model
         'location',
         'description',
         'photo',
+        'spf_project_id',
+        'event_reg_start',
+        'event_reg_close',
     ];
+
+    /**
+     * Get the project associated with this event.
+     */
+    public function project()
+    {
+        return $this->belongsTo(SpfProjects::class, 'spf_project_id');
+    }
 }

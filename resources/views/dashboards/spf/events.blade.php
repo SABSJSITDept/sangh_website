@@ -36,6 +36,25 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label fw-bold">Project <span class="text-danger">*</span></label>
+                <select class="form-control" id="spf_project_id" name="spf_project_id" required>
+                    <option value="">-- Select a Project --</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Registration Start Date</label>
+                    <input type="date" class="form-control" id="event_reg_start" name="event_reg_start">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Registration Close Date</label>
+                    <input type="date" class="form-control" id="event_reg_close" name="event_reg_close">
+                </div>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label fw-bold">Description <span class="text-danger">*</span></label>
                 <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
             </div>
@@ -79,6 +98,7 @@
 
     <script>
         const apiUrl = "/api/spf-events";
+        const projectsApiUrl = "/api/spf-events-projects";
 
         // SweetAlert Wrapper
         function showAlert(message, type = "success") {
@@ -90,6 +110,26 @@
                 toast: true,
                 position: "top-end"
             });
+        }
+
+        // Fetch and populate projects dropdown
+        async function fetchProjects() {
+            try {
+                let res = await fetch(projectsApiUrl);
+                let result = await res.json();
+
+                if (result.success && result.data.length > 0) {
+                    const selectElement = document.getElementById("spf_project_id");
+                    result.data.forEach(project => {
+                        const option = document.createElement("option");
+                        option.value = project.id;
+                        option.textContent = project.title;
+                        selectElement.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+            }
         }
 
         // Preview Selected Image
@@ -162,6 +202,9 @@
             formData.append("time", document.getElementById("time").value);
             formData.append("location", document.getElementById("location").value);
             formData.append("description", document.getElementById("description").value);
+            formData.append("spf_project_id", document.getElementById("spf_project_id").value);
+            formData.append("event_reg_start", document.getElementById("event_reg_start").value);
+            formData.append("event_reg_close", document.getElementById("event_reg_close").value);
 
             let photoFile = document.getElementById("photo").files[0];
             if (photoFile) {
@@ -249,6 +292,9 @@
                     document.getElementById("time").value = event.time;
                     document.getElementById("location").value = event.location;
                     document.getElementById("description").value = event.description;
+                    document.getElementById("spf_project_id").value = event.spf_project_id || "";
+                    document.getElementById("event_reg_start").value = event.event_reg_start || "";
+                    document.getElementById("event_reg_close").value = event.event_reg_close || "";
 
                     const photoUrl = event.photo ? `/storage/${event.photo}` : '';
                     if (photoUrl) {
@@ -321,5 +367,6 @@
 
         // Initial load
         fetchEvents();
+        fetchProjects();
     </script>
 @endsection
