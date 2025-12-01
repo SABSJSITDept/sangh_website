@@ -518,3 +518,7 @@ Route::get('/spf_photo_gallery_view', function () {
 Route::get('/dashboard/spf/projects', function () {
     return view('dashboards.spf.projects');
 })->name('dashboard.spf.projects');
+
+Route::get('/dashboard/spf/safarnama', function () {
+    return view('dashboards.spf.safarnama');
+})->name('dashboard.spf.safarnama');

@@ -27,6 +27,8 @@ class SpfCommitteeController extends Controller
             'post' => 'required|string|max:255',
             'anchal_id' => 'nullable|exists:aanchal,id',
             'photo' => 'nullable|image|max:2048',
+            'city' => 'nullable|string|max:255',
+            'session' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -48,6 +50,8 @@ class SpfCommitteeController extends Controller
             'post' => 'required|string|max:255',
             'anchal_id' => 'nullable|exists:aanchal,id',
             'photo' => 'nullable|image|max:2048',
+            'city' => 'nullable|string|max:255',
+            'session' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('photo')) {

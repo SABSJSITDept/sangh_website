@@ -619,6 +619,16 @@
                         <label for="anchalSelect">Anchal</label>
                     </div>
 
+                    <div class="spf-form-floating">
+                        <input type="text" class="form-control" id="city" placeholder=" ">
+                        <label for="city">City</label>
+                    </div>
+
+                    <div class="spf-form-floating">
+                        <input type="text" class="form-control" id="session" placeholder=" ">
+                        <label for="session">Session</label>
+                    </div>
+
                     <div class="form-actions">
                         <button type="button" class="btn-secondary-custom" onclick="closeForm()">
                             <i class="bi bi-x-circle me-1"></i>Cancel
@@ -663,6 +673,8 @@
                                         <th style="width: 50px;">#</th>
                                         <th>Name</th>
                                         <th>Post</th>
+                                        <th>City</th>
+                                        <th>Session</th>
                                         <th style="width: 150px;">Actions</th>
                                     </tr>
                                 </thead>
@@ -680,6 +692,8 @@
                                         <th style="width: 50px;">#</th>
                                         <th>Name</th>
                                         <th>Post</th>
+                                        <th>City</th>
+                                        <th>Session</th>
                                         <th style="width: 150px;">Actions</th>
                                     </tr>
                                 </thead>
@@ -700,6 +714,8 @@
                                         <th style="width: 50px;">#</th>
                                         <th>Name</th>
                                         <th>Post</th>
+                                        <th>City</th>
+                                        <th>Session</th>
                                         <th style="width: 150px;">Actions</th>
                                     </tr>
                                 </thead>
@@ -735,7 +751,7 @@
             if (toast) toast.style.display = 'none';
         }
 
-        function openForm(id = null, name = '', post = '', anchal_id = '') {
+        function openForm(id = null, name = '', post = '', anchal_id = '', city = '', session = '') {
             const form = document.getElementById('spfForm');
             form.style.display = 'block';
             form.style.setProperty('display', 'block', 'important');
@@ -746,6 +762,8 @@
             document.getElementById('post').value = post || '';
             const anchalSelect = document.getElementById('anchalSelect');
             if (anchalSelect) anchalSelect.value = anchal_id || '';
+            document.getElementById('city').value = city || '';
+            document.getElementById('session').value = session || '';
             // photo input blank hi rahega edit ke time (optional)
         }
 
@@ -789,6 +807,8 @@
             const post = document.getElementById('post').value.trim();
             const anchalSelect = document.getElementById('anchalSelect');
             const anchal_id = (anchalSelect && anchalSelect.value) ? anchalSelect.value : null;
+            const city = document.getElementById('city').value.trim();
+            const session = document.getElementById('session').value.trim();
             const photoInput = document.getElementById('photo');
 
             const url = id ? `${apiUrl}/${id}` : apiUrl;
@@ -799,6 +819,8 @@
             formData.append('name', name);
             formData.append('post', post);
             if (anchal_id) formData.append('anchal_id', anchal_id);
+            if (city) formData.append('city', city);
+            if (session) formData.append('session', session);
 
             if (photoInput && photoInput.files.length > 0) {
                 formData.append('photo', photoInput.files[0]);
@@ -862,7 +884,7 @@
             const table = document.getElementById(tableId);
             if (!table) return;
 
-            table.innerHTML = '<tr class="loading-row"><td colspan="4">Loading...</td></tr>';
+            table.innerHTML = '<tr class="loading-row"><td colspan="6">Loading...</td></tr>';
 
             try {
                 const res = await fetch(endpoint);
@@ -870,10 +892,10 @@
                 table.innerHTML = '';
 
                 if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
-                    table.innerHTML = `<tr><td colspan="4" class="empty-state">
-                                    <i class="bi bi-inbox"></i>
-                                    <p>No members found</p>
-                                </td></tr>`;
+                    table.innerHTML = `<tr><td colspan="6" class="empty-state">
+                                        <i class="bi bi-inbox"></i>
+                                        <p>No members found</p>
+                                    </td></tr>`;
                     return;
                 }
 
@@ -881,35 +903,39 @@
                     const safeName = member.name ? member.name.replace(/'/g, "\\'") : '';
                     const safePost = member.post ? member.post.replace(/'/g, "\\'") : '';
                     const anchalId = member.anchal_id || '';
+                    const safeCity = member.city ? member.city.replace(/'/g, "\\'") : '';
+                    const safeSession = member.session ? member.session.replace(/'/g, "\\'") : '';
 
                     const photoUrl = member.photo ? `/storage/${member.photo}` : '/default-user.png';
 
                     table.innerHTML += `<tr>
-                                    <td>${idx + 1}</td>
-                                    <td>
-                                        <div class="member-info">
-                                            <img src="${photoUrl}" class="member-photo" alt="${member.name}">
-                                            <span>${member.name}</span>
-                                        </div>
-                                    </td>
-                                    <td>${member.post}</td>
-                                    <td>
-                                        <button class="spf-action-btn edit" title="Edit"
-                                            onclick="openForm(${member.id}, '${safeName}', '${safePost}', '${anchalId}')">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <button class="spf-action-btn delete" title="Delete"
-                                            onclick="deleteMember(${member.id})">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>`;
+                                        <td>${idx + 1}</td>
+                                        <td>
+                                            <div class="member-info">
+                                                <img src="${photoUrl}" class="member-photo" alt="${member.name}">
+                                                <span>${member.name}</span>
+                                            </div>
+                                        </td>
+                                        <td>${member.post}</td>
+                                        <td>${member.city || '-'}</td>
+                                        <td>${member.session || '-'}</td>
+                                        <td>
+                                            <button class="spf-action-btn edit" title="Edit"
+                                                onclick="openForm(${member.id}, '${safeName}', '${safePost}', '${anchalId}', '${safeCity}', '${safeSession}')">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="spf-action-btn delete" title="Delete"
+                                                onclick="deleteMember(${member.id})">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>`;
                 });
             } catch (err) {
-                table.innerHTML = `<tr><td colspan="4" class="empty-state">
-                                <i class="bi bi-exclamation-triangle"></i>
-                                <p>${err.message}</p>
-                            </td></tr>`;
+                table.innerHTML = `<tr><td colspan="6" class="empty-state">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                    <p>${err.message}</p>
+                                </td></tr>`;
             }
         }
 

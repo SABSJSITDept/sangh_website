@@ -60,6 +60,8 @@ use App\Http\Controllers\Spf\SpfSliderController;
 
 use App\Http\Controllers\Spf\SpfEventsController;
 use App\Http\Controllers\Spf\SpfProjectsController;
+use App\Http\Controllers\Spf\SpfSafarnamaController;
+
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -419,6 +421,10 @@ Route::apiResource('spf-events', SpfEventsController::class);
 
 // SPF Projects API Resource
 Route::apiResource('spf-projects', SpfProjectsController::class);
+
+// SPF Safarnama API Resource
+Route::apiResource('spf-safarnama', SpfSafarnamaController::class);
+
 
 
 

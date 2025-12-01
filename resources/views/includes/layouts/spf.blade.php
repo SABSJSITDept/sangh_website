@@ -590,6 +590,13 @@
                 </a>
             </div>
 
+            <div class="nav-item">
+                <a href="{{ url('/dashboard/spf/safarnama') }}" class="nav-link">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    <span class="link-text">Safarnama</span>
+                </a>
+            </div>
+
 
             <div class="nav-item">
                 <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
