@@ -604,6 +604,23 @@
                 </a>
             </div>
 
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-bell-fill"></i>
+                <span class="link-text">Notifications</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
+            </div>
+
+            <div class="submenu">
+                <a href="{{ url('/send_notification-spf') }}" class="nav-link">
+                    <i class="bi bi-send-fill"></i>
+                    <span>Send Notification</span>
+                </a>
+
+                <a href="{{ url('/view_notifications_spf') }}" class="nav-link">
+                    <i class="bi bi-eye-fill"></i>
+                    <span>View Notifications</span>
+                </a>               
+            </div>
 
             <div class="nav-item">
                 <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">

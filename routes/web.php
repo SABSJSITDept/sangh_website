@@ -472,6 +472,14 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('notifications.send_notifications.shree_sangh_notifications');
     })->name('notification_send.shree_sangh');
 
+    Route::get('/view_notifications_spf', function () {
+        return view('notifications.spf_notification');
+    })->name('notification_view.spf_view');
+
+    Route::get('/send_notification-spf', function () {
+        return view('notifications.send_notifications.spf_notification');
+    })->name('notification_send.spf');
+
     Route::get('/send_notification-mahila_Samiti', function () {
         return view('notifications.send_notifications.mahila_samiti_notifications');
     })->name('notification_send.mahila_samiti');
