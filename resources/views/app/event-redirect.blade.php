@@ -19,7 +19,7 @@
     <meta property="og:title" content="{{ $eventTitle ?? 'Event' }}">
     <meta property="og:description" content="View this event in Sadhumargi App">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://sadhumargi.in/app/event/{{ $eventId }}">
+    <meta property="og:url" content="https://website.sadhumargi.in/app/event/{{ $eventId }}">
     
     <style>
         * {
