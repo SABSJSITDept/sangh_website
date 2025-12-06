@@ -16,6 +16,7 @@ class AddPhotoController extends Controller
             'event_name' => 'required|string|max:255',
             'photos' => 'required|array|max:10', // Max 10 photos allowed
             'photos.*' => 'required|image|max:200', // 200 KB max per photo
+            'drive_link' => 'nullable|url|max:500', // Optional drive link
         ], [
             'photos.max' => 'आप अधिकतम 10 फोटो अपलोड कर सकते हैं।',
             'photos.*.max' => 'प्रत्येक फोटो 200 KB से अधिक नहीं होनी चाहिए।'
@@ -32,6 +33,7 @@ class AddPhotoController extends Controller
                 'category' => $request->category,
                 'event_name' => $request->event_name,
                 'photos' => $photoPaths,  // Store as array directly, model will cast
+                'drive_link' => $request->drive_link, // Store optional drive link
             ]);
 
             return response()->json(['message' => 'Photos uploaded successfully']);
@@ -112,12 +114,18 @@ public function deleteSinglePhoto(Request $request, $id)
     $request->validate([
         'event_name' => 'nullable|string|max:255',
         'new_photo' => 'nullable|image|max:2048',
-        'old_photo' => 'nullable|string'
+        'old_photo' => 'nullable|string',
+        'drive_link' => 'nullable|url|max:500'
     ]);
 
     // Update event name if provided
     if ($request->event_name) {
         $photo->event_name = $request->event_name;
+    }
+
+    // Update drive link if provided
+    if ($request->has('drive_link')) {
+        $photo->drive_link = $request->drive_link;
     }
 
     // Replace specific photo if new photo uploaded

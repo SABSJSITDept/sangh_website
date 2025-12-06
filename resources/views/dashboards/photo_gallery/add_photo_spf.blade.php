@@ -352,6 +352,13 @@
                                 required>
                         </div>
                         <div class="form-group">
+                            <label>Drive Link (Optional)</label>
+                            <input type="url" class="form-control-modern" name="drive_link" placeholder="Enter Google Drive link (optional)">
+                            <small class="text-muted d-block mt-1">
+                                <i class="bi bi-info-circle"></i> यह फील्ड वैकल्पिक है। आप Google Drive का लिंक यहां जोड़ सकते हैं।
+                            </small>
+                        </div>
+                        <div class="form-group">
                             <label>Photos (Max 10)</label>
                             <input type="file" class="file-input-modern" id="photosInput" name="photos[]" accept="image/*"
                                 multiple required>
