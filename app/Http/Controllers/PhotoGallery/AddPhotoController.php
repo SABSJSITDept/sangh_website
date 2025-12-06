@@ -51,6 +51,7 @@ class AddPhotoController extends Controller
             ->map(function ($group) {
                 return [
                     'event_name' => $group->first()->event_name,
+                    'drive_link' => $group->first()->drive_link,
                     'photos' => collect($group)->flatMap(function ($item) {
                         return collect($item->photos)->map(function ($photo) use ($item) {
                             // Convert URL properly and fix escaped slashes
