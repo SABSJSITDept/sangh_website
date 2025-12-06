@@ -534,3 +534,35 @@ Route::get('/dashboard/spf/safarnama', function () {
 Route::get('/dashboard/spf/downloads', function () {
     return view('dashboards.spf.spfdownloads');
 })->name('dashboard.spf.downloads');
+
+Route::get('/app/event/{id}', function ($id, Request $request) {
+    // Optional: Fetch event details from database for better meta tags
+    // $event = \App\Models\SpfEvent::find($id);
+
+    return view('app.event-redirect', [
+        'eventId' => $id,
+        'eventTitle' => 'Event', // Replace with: $event->title ?? 'Event'
+        'playStoreLink' => 'https://play.google.com/store/apps/details?id=com.sabsjs.laravel_auth_flutter',
+        'appStoreLink' => 'https://apps.apple.com/app/idYOUR_APP_ID', // Replace with your actual App Store ID
+    ]);
+})->name('app.event');
+
+
+
+Route::get('/api/event/{id}/share-info', function ($id) {
+    // Fetch event from database
+    // $event = \App\Models\SpfEvent::find($id);
+
+    // Return event info for meta tags
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'id' => $id,
+            'title' => 'Event Title', // $event->title
+            'description' => 'Event Description', // $event->description
+            'image' => null, // $event->photo ? asset('storage/' . $event->photo) : null
+            'date' => null, // $event->date
+            'location' => null, // $event->location
+        ]
+    ]);
+});
