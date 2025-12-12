@@ -164,4 +164,36 @@ class SpfEventsController extends Controller
             'message' => 'Event deleted successfully'
         ]);
     }
+
+    /**
+     * Toggle home page visibility for an event
+     * Only one event can be shown on home page at a time
+     */
+    public function toggleHomePage(string $id)
+    {
+        $event = SpfEvents::find($id);
+
+        if (!$event) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Event not found'
+            ], 404);
+        }
+
+        // If turning on, first turn off all other events
+        if (!$event->home_page) {
+            SpfEvents::where('home_page', true)->update(['home_page' => false]);
+            $event->home_page = true;
+        } else {
+            $event->home_page = false;
+        }
+
+        $event->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $event->home_page ? 'Event will now show on home page' : 'Event removed from home page',
+            'data' => $event
+        ]);
+    }
 }

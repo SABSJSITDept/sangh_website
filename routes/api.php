@@ -420,6 +420,7 @@ Route::apiResource('spf-slider', SpfSliderController::class);
 // SPF Events API Resource
 Route::apiResource('spf-events', SpfEventsController::class);
 Route::get('spf-events-projects', [SpfEventsController::class, 'getProjects']);
+Route::post('spf-events/{id}/toggle-home-page', [SpfEventsController::class, 'toggleHomePage']);
 
 // SPF Projects API Resource
 Route::apiResource('spf-projects', SpfProjectsController::class);

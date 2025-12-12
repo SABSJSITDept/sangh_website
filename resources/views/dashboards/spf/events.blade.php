@@ -5,6 +5,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <style>
+        .swal2-container {
+            z-index: 9999 !important;
+        }
+    </style>
+
     <div class="container mt-4">
         <h3 class="mb-4">📅 SPF Events</h3>
 
@@ -86,6 +92,7 @@
                                 <th style="width:120px;">Date</th>
                                 <th style="width:100px;">Time</th>
                                 <th>Location</th>
+                                <th style="width:150px;">Show on Home</th>
                                 <th style="width:200px;">Action</th>
                             </tr>
                         </thead>
@@ -166,6 +173,9 @@
                 if (result.success && result.data.length > 0) {
                     result.data.forEach(event => {
                         const photoUrl = event.photo ? `/storage/${event.photo}` : '/images/placeholder.jpg';
+                        const isHomePageActive = event.home_page ? 'checked' : '';
+                        const toggleBtnClass = event.home_page ? 'btn-success' : 'btn-outline-secondary';
+                        const toggleIcon = event.home_page ? '✓' : '✗';
                         rows += `
                             <tr>
                                 <td><img src="${photoUrl}" width="80" class="rounded border shadow-sm"></td>
@@ -174,6 +184,11 @@
                                 <td>${event.time}</td>
                                 <td>${event.location}</td>
                                 <td>
+                                    <button class="btn btn-sm ${toggleBtnClass}" onclick="toggleHomePage(${event.id})" title="Toggle home page visibility">
+                                        ${toggleIcon} ${event.home_page ? 'Yes' : 'No'}
+                                    </button>
+                                </td>
+                                <td>
                                     <button class="btn btn-sm btn-info me-1" onclick="viewEvent(${event.id})">👁️ View</button>
                                     <button class="btn btn-sm btn-warning me-1" onclick="editEvent(${event.id})">✏️ Edit</button>
                                     <button class="btn btn-sm btn-danger" onclick="deleteEvent(${event.id})">🗑️ Delete</button>
@@ -181,7 +196,7 @@
                             </tr>`;
                     });
                 } else {
-                    rows = '<tr><td colspan="6" class="text-center text-muted">No events found</td></tr>';
+                    rows = '<tr><td colspan="7" class="text-center text-muted">No events found</td></tr>';
                 }
 
                 document.getElementById("eventsTable").innerHTML = rows;
@@ -327,6 +342,31 @@
             document.getElementById("submitBtn").textContent = "Save Event";
             document.getElementById("cancelBtn").classList.add("d-none");
             document.getElementById("photo").setAttribute('required', 'required');
+        }
+
+        // Toggle Home Page
+        async function toggleHomePage(id) {
+            try {
+                let res = await fetch(`${apiUrl}/${id}/toggle-home-page`, {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                let result = await res.json();
+                if (res.ok && result.success) {
+                    showAlert(result.message);
+                    fetchEvents();
+                } else {
+                    showAlert(result.message || "Failed to toggle home page!", "error");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert("Failed to toggle home page", "error");
+            }
         }
 
         // Delete Event

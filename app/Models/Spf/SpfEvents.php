@@ -21,6 +21,7 @@ class SpfEvents extends Model
         'spf_project_id',
         'event_reg_start',
         'event_reg_close',
+        'home_page',
     ];
 
     /**
