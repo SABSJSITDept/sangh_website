@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Pst extends Model
 {
     protected $table = 'pst';
-    protected $fillable = ['name', 'post', 'photo'];
+    protected $fillable = ['name', 'post', 'session', 'photo'];
 }
 

@@ -32,6 +32,15 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label">सत्र (Session):</label>
+                                <select name="session" class="form-select form-select-sm" required>
+                                    <option value="">-- सत्र चुनें --</option>
+                                    <option value="2023-25">2023-25</option>
+                                    <option value="2025-27">2025-27</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label">फोटो (200KB तक, केवल छवि):</label>
                                 <input type="file" name="photo" accept="image/*" class="form-control form-control-sm"
                                     id="photoInput">
@@ -160,15 +169,35 @@
                         return;
                     }
 
+                    // Group by session
+                    const groupedBySession = {};
                     data.forEach(item => {
+                        const session = item.session || 'N/A';
+                        if (!groupedBySession[session]) {
+                            groupedBySession[session] = [];
+                        }
+                        groupedBySession[session].push(item);
+                    });
+
+                    // Display each session group
+                    Object.keys(groupedBySession).sort().reverse().forEach(session => {
                         container.innerHTML += `
+                                <div class="col-12 mb-3">
+                                    <h5 class="text-primary fw-bold border-bottom pb-2">
+                                        📅 सत्र: ${session}
+                                    </h5>
+                                </div>
+                            `;
+
+                        groupedBySession[session].forEach(item => {
+                            container.innerHTML += `
                                     <div class="col-md-6 mb-4">
                                         <div class="card shadow-sm h-100">
                                             <div class="card-body text-center">
                                                 <img src="${item.photo ? '/storage/' + item.photo : 'https://via.placeholder.com/80'}" class="rounded mb-2" width="80" height="80" style="object-fit: cover;">
                                                 <h6 class="fw-bold mb-1">${item.name}</h6>
-                                                <p class="text-muted small mb-2">${item.post}</p>
-                                                <div class="d-flex justify-content-center gap-2">
+                                                <p class="text-muted small mb-1">${item.post}</p>
+                                                <div class="d-flex justify-content-center gap-2 mt-2">
                                                     <button onclick="editPst(${item.id})" class="btn btn-sm btn-warning">✏️ Edit</button>
                                                     <button onclick="deletePst(${item.id})" class="btn btn-sm btn-danger">🗑️ Delete</button>
                                                 </div>
@@ -176,6 +205,7 @@
                                         </div>
                                     </div>
                                 `;
+                        });
                     });
                 });
         }
@@ -186,6 +216,7 @@
                 .then(data => {
                     document.querySelector('[name="name"]').value = data.name;
                     document.querySelector('[name="post"]').value = data.post;
+                    document.querySelector('[name="session"]').value = data.session || '';
                     document.getElementById('editId').value = data.id;
                     document.getElementById('formMethod').value = 'PUT';
                 });
