@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Validator;
 class SthayiSampatiSanwardhanSamitiController extends Controller
 {
     public function index()
-{
-    return SthayiSampatiSanwardhanSamiti::orderByRaw("
+    {
+        return SthayiSampatiSanwardhanSamiti::orderByRaw("
         FIELD(post, 'Sanyojak', 'Seh Sanyojak', 'Sanyojan Mandal Sadasy')
     ")->get();
-}
+    }
 
     public function store(Request $request)
     {
@@ -25,6 +25,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
             'city' => 'required|string|max:255',
             'mobile_number' => 'required|digits:10',
             'photo' => 'required|image|mimes:jpg,jpeg,png|max:200', // 200KB
+            'session' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -39,6 +40,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
             'city' => $request->city,
             'mobile_number' => $request->mobile_number,
             'photo' => '/storage/' . $photoPath,
+            'session' => $request->input('session', '2025-27')
         ]);
 
         return response()->json($data, 201);
@@ -54,6 +56,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
             'city' => 'required|string|max:255',
             'mobile_number' => 'required|digits:10',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:200',
+            'session' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -68,7 +71,7 @@ class SthayiSampatiSanwardhanSamitiController extends Controller
             $item->photo = '/storage/' . $photoPath;
         }
 
-        $item->update($request->only(['name', 'post', 'city', 'mobile_number']));
+        $item->update($request->only(['name', 'post', 'city', 'mobile_number', 'session']));
 
         return response()->json($item);
     }
