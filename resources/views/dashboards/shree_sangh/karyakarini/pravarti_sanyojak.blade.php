@@ -59,6 +59,13 @@
                     <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
                     <div id="preview" class="mt-2"></div>
                 </div>
+                <div class="col-md-4">
+                    <label>सत्र</label>
+                    <select class="form-control" id="session" name="session" required>
+                        <option value="">चयन करें</option>
+                        <option value="2025-27" selected>2025-27</option>
+                    </select>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-success px-4">💾 सेव करें</button>
@@ -177,6 +184,7 @@ async function loadData() {
                             <th>पद</th>
                             <th>शहर</th>
                             <th>मोबाइल</th>
+                            <th>सत्र</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -191,6 +199,7 @@ async function loadData() {
                                 <td>${d.post}</td>
                                 <td>${d.city}</td>
                                 <td>${d.mobile}</td>
+                                <td>${d.session || '2025-27'}</td>
                                 <td>
                                     <button onclick="editEntry(${d.id})" class="btn btn-sm btn-warning me-1">
                                         <i class="bi bi-pencil-fill"></i>
@@ -223,6 +232,7 @@ function editEntry(id) {
                 document.getElementById("city").value = d.city;
                 document.getElementById("pravarti_id").value = d.pravarti_id;
                 document.getElementById("mobile").value = d.mobile;
+                document.getElementById("session").value = d.session || '2025-27';
                 document.getElementById("preview").innerHTML = `<img src="/storage/${d.photo}" class="img-thumbnail" width="100">`;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
