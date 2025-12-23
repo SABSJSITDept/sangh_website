@@ -15,30 +15,32 @@ class SanyojanMandalAntrastriyaSadasyataController extends Controller
         return SanyojanMandalAntrastriyaSadasyata::all();
     }
 
-   public function store(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'name'   => 'required|string',
-        'city'   => 'required|string',
-        'mobile' => 'required|string',
-        'photo'  => 'required|image|max:200', // max size in KB
-    ]);
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'city' => 'required|string',
+            'mobile' => 'required|string',
+            'photo' => 'required|image|max:200', // max size in KB
+            'session' => 'nullable|string'
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $path = $request->file('photo')->store('sanyojan_mandal_antrastriya_sadasyata', 'public');
+
+        $sadasya = SanyojanMandalAntrastriyaSadasyata::create([
+            'name' => $request->name,
+            'city' => $request->city,
+            'mobile' => $request->mobile,
+            'photo' => $path,
+            'session' => $request->input('session', '2025-27')
+        ]);
+
+        return response()->json($sadasya, 201);
     }
-
-    $path = $request->file('photo')->store('sanyojan_mandal_antrastriya_sadasyata', 'public');
-
-    $sadasya = SanyojanMandalAntrastriyaSadasyata::create([
-        'name'   => $request->name,
-        'city'   => $request->city,
-        'mobile' => $request->mobile,
-        'photo'  => $path,
-    ]);
-
-    return response()->json($sadasya, 201);
-}
 
     public function show(SanyojanMandalAntrastriyaSadasyata $sadasya)
     {
@@ -46,34 +48,36 @@ class SanyojanMandalAntrastriyaSadasyataController extends Controller
     }
 
     public function update(Request $request, SanyojanMandalAntrastriyaSadasyata $sadasya)
-{
-    $validator = Validator::make($request->all(), [
-        'name'   => 'required|string',
-        'city'   => 'required|string',
-        'mobile' => 'required|string',
-        'photo'  => 'nullable|image|max:200', // optional but max 200 KB
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'city' => 'required|string',
+            'mobile' => 'required|string',
+            'photo' => 'nullable|image|max:200', // optional but max 200 KB
+            'session' => 'nullable|string'
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
-    }
-
-    if ($request->hasFile('photo')) {
-        if ($sadasya->photo) {
-            Storage::disk('public')->delete($sadasya->photo);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
-        $path = $request->file('photo')->store('sanyojan_mandal_antrastriya_sadasyata', 'public');
-        $sadasya->photo = $path;
+
+        if ($request->hasFile('photo')) {
+            if ($sadasya->photo) {
+                Storage::disk('public')->delete($sadasya->photo);
+            }
+            $path = $request->file('photo')->store('sanyojan_mandal_antrastriya_sadasyata', 'public');
+            $sadasya->photo = $path;
+        }
+
+        $sadasya->update([
+            'name' => $request->name,
+            'city' => $request->city,
+            'mobile' => $request->mobile,
+            'session' => $request->input('session')
+        ]);
+
+        return response()->json($sadasya);
     }
-
-    $sadasya->update([
-        'name'   => $request->name,
-        'city'   => $request->city,
-        'mobile' => $request->mobile,
-    ]);
-
-    return response()->json($sadasya);
-}
 
     public function destroy(SanyojanMandalAntrastriyaSadasyata $sadasya)
     {

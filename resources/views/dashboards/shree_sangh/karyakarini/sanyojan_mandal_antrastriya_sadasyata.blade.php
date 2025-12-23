@@ -76,6 +76,13 @@
                 <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
                 <div class="form-text form-text-small">* नई फ़ोटो चुनें यदि अपडेट करना हो</div>
             </div>
+            <div class="col-md-6 form-floating">
+                <select name="session" id="session" class="form-select" required>
+                    <option value="">सत्र चुनें</option>
+                    <option value="2025-27" selected>2025-27</option>
+                </select>
+                <label for="session">सत्र</label>
+            </div>
             <div class="col-12 text-end">
                 <button type="submit" class="btn btn-primary px-4" id="submitBtn">जमा करें</button>
             </div>
@@ -93,6 +100,7 @@
                     <th>🙍 नाम</th>
                     <th>🏙 शहर</th>
                     <th>📞 मोबाइल</th>
+                    <th>📅 सत्र</th>
                     <th>🛠 Actions</th>
                 </tr>
             </thead>
@@ -149,6 +157,7 @@
                             <td>${item.name}</td>
                             <td>${item.city}</td>
                             <td>${item.mobile}</td>
+                            <td>${item.session || '2025-27'}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" onclick="del(${item.id})">हटाएं</button>
                                 <button class="btn btn-warning btn-sm ms-2" onclick='edit(${JSON.stringify(item)})'>संपादित करें</button>
@@ -239,6 +248,7 @@
         document.getElementById('name').value = data.name;
         document.getElementById('city').value = data.city;
         document.getElementById('mobile').value = data.mobile;
+        document.getElementById('session').value = data.session || '2025-27';
         document.getElementById('submitBtn').innerText = 'अपडेट करें';
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
