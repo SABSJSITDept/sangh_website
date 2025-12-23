@@ -13,5 +13,5 @@ class SamtaJanKalyanPranayash extends Model
 
     protected $table = 'samta_jan_kalyan_pranayash';
 
-    protected $fillable = ['name', 'city', 'mobile', 'photo'];
+    protected $fillable = ['name', 'city', 'mobile', 'photo', 'session'];
 }

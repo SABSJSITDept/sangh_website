@@ -80,6 +80,13 @@
             <input type="file" id="photo" name="photo" accept="image/*" class="form-control border border-dark" />
             <small class="text-muted">* नई फ़ोटो चुनें यदि अपडेट करना हो (max 200 KB)</small>
         </div>
+        <div class="col-md-6">
+            <label class="form-label"><i class="bi bi-calendar-fill"></i> सत्र</label>
+            <select id="session" name="session" class="form-select border border-dark" required>
+                <option value="">सत्र चुनें</option>
+                <option value="2025-27" selected>2025-27</option>
+            </select>
+        </div>
         <div class="col-12 mt-3">
             <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> सेव करें</button>
             <button type="button" class="btn btn-secondary" id="cancelEdit" style="display:none;"><i class="bi bi-x-circle"></i> रद्द करें</button>
@@ -97,6 +104,7 @@
                     <th>नाम</th>
                     <th>शहर</th>
                     <th>मोबाइल</th>
+                    <th>📅 सत्र</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -225,6 +233,7 @@ async function fetchData() {
             <td>${item.name}</td>
             <td>${item.city}</td>
             <td>${item.mobile}</td>
+            <td>${item.session || '2025-27'}</td>
             <td>
                 <button onclick="editItem(${item.id})" class="btn btn-sm btn-warning">Edit</button>
                 <button onclick="deleteItem(${item.id})" class="btn btn-sm btn-danger">Delete</button>
@@ -244,6 +253,7 @@ async function editItem(id) {
     form.name.value = item.name;
     form.city.value = item.city;
     form.mobile.value = item.mobile;
+    form.session.value = item.session || '2025-27';
     form.photo.value = ''; // File input can't be preset
 
     isEditMode = true;

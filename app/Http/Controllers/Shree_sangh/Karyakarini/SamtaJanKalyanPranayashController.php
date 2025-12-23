@@ -15,55 +15,58 @@ class SamtaJanKalyanPranayashController extends Controller
         return SamtaJanKalyanPranayash::all();
     }
 
-public function store(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'name'   => 'required|string',
-        'city'   => 'required|string',
-        'mobile' => 'required|string',
-        'photo'  => 'required|image|max:200', // max 200 KB
-    ]);
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'city' => 'required|string',
+            'mobile' => 'required|string',
+            'photo' => 'required|image|max:200', // max 200 KB
+            'session' => 'nullable|string'
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
-    }
-
-    $data = $request->only(['name', 'city', 'mobile']);
-    $data['photo'] = $request->file('photo')->store('samta_jan_kalyan_pranayash', 'public');
-
-    $item = SamtaJanKalyanPranayash::create($data);
-
-    return response()->json($item, 201);
-}
-
-public function update(Request $request, $id)
-{
-    $item = SamtaJanKalyanPranayash::findOrFail($id);
-
-    $validator = Validator::make($request->all(), [
-        'name'   => 'required|string',
-        'city'   => 'required|string',
-        'mobile' => 'required|string',
-        'photo'  => 'nullable|image|max:200', // optional but max 200 KB
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
-    }
-
-    $data = $request->only(['name', 'city', 'mobile']);
-
-    if ($request->hasFile('photo')) {
-        if ($item->photo) {
-            Storage::disk('public')->delete($item->photo);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
+
+        $data = $request->only(['name', 'city', 'mobile']);
         $data['photo'] = $request->file('photo')->store('samta_jan_kalyan_pranayash', 'public');
+        $data['session'] = $request->input('session', '2025-27');
+
+        $item = SamtaJanKalyanPranayash::create($data);
+
+        return response()->json($item, 201);
     }
 
-    $item->update($data);
+    public function update(Request $request, $id)
+    {
+        $item = SamtaJanKalyanPranayash::findOrFail($id);
 
-    return response()->json(['message' => 'Updated successfully']);
-}
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'city' => 'required|string',
+            'mobile' => 'required|string',
+            'photo' => 'nullable|image|max:200', // optional but max 200 KB
+            'session' => 'nullable|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $data = $request->only(['name', 'city', 'mobile', 'session']);
+
+        if ($request->hasFile('photo')) {
+            if ($item->photo) {
+                Storage::disk('public')->delete($item->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('samta_jan_kalyan_pranayash', 'public');
+        }
+
+        $item->update($data);
+
+        return response()->json(['message' => 'Updated successfully']);
+    }
     public function destroy($id)
     {
         $item = SamtaJanKalyanPranayash::findOrFail($id);
