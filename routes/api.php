@@ -7,6 +7,13 @@ use App\Http\Controllers\Shree_sangh\ViharController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\ExPresidentController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\PstController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\VpSecController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\Pdf\VpSecPdfController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\Pdf\ItCellPdfController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\Pdf\PravartiSanyojakPdfController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\Pdf\SthayiSampatiPdfController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\Pdf\SanyojanMandalPdfController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\Pdf\SamtaJanKalyanPdfController;
+use App\Http\Controllers\Shree_sangh\Karyakarini\Pdf\KsmMembersPdfController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\ItCellController;
 use App\Http\Controllers\Pravarti\PravartiShreeSanghController;
 use App\Http\Controllers\Shree_sangh\Karyakarini\PravartiSanyojakController;
@@ -122,6 +129,10 @@ Route::prefix('vp-sec')->group(function () {
 });
 // ------------------vp/sec api ------------------------------------
 
+// ------------------vp/sec PDF api ------------------------------------
+Route::apiResource('vp-sec-pdf', VpSecPdfController::class);
+// ------------------vp/sec PDF api ------------------------------------
+
 
 // ------------------it cell api ------------------------------------
 Route::prefix('it-cell')->group(function () {
@@ -131,6 +142,10 @@ Route::prefix('it-cell')->group(function () {
     Route::delete('/{id}', [ItCellController::class, 'destroy']);
 });
 // ------------------it cell api ------------------------------------
+
+// ------------------it cell PDF api ------------------------------------
+Route::apiResource('it-cell-pdf', ItCellPdfController::class);
+// ------------------it cell PDF api ------------------------------------
 
 
 // -----------------pravarti api ------------------------------------
@@ -151,6 +166,26 @@ Route::prefix('pravarti-sanyojak')->group(function () {
     Route::delete('/{id}', [PravartiSanyojakController::class, 'destroy']);
 });
 // -----------------pravarti_sanyojak api ------------------------------------
+
+// -----------------pravarti sanyojak PDF api ------------------------------------
+Route::apiResource('pravarti-sanyojak-pdf', PravartiSanyojakPdfController::class);
+// -----------------pravarti sanyojak PDF api ------------------------------------
+
+// -----------------sthayi sampati PDF api ------------------------------------
+Route::apiResource('sthayi-sampati-pdf', SthayiSampatiPdfController::class);
+// -----------------sthayi sampati PDF api ------------------------------------
+
+// -----------------sanyojan mandal PDF api ------------------------------------
+Route::apiResource('sanyojan-mandal-pdf', SanyojanMandalPdfController::class);
+// -----------------sanyojan mandal PDF api ------------------------------------
+
+// -----------------samta jan kalyan PDF api ------------------------------------
+Route::apiResource('samta-jan-kalyan-pdf', SamtaJanKalyanPdfController::class);
+// -----------------samta jan kalyan PDF api ------------------------------------
+
+// -----------------ksm members PDF api ------------------------------------
+Route::apiResource('ksm-members-pdf', KsmMembersPdfController::class);
+// -----------------ksm members PDF api ------------------------------------
 
 
 // -----------------aanchal api ------------------------------------

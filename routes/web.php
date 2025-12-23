@@ -198,9 +198,17 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.shree_sangh.karyakarini.vp_sec');
     })->name('vp_sec.manage');
 
+    Route::get('/vp-sec-pdf', function () {
+        return view('dashboards.shree_sangh.karyakarini.pdf.VpSecPdf');
+    })->name('vp_sec_pdf.manage');
+
     Route::get('/admin/it-cell', function () {
         return view('dashboards.shree_sangh.karyakarini.it_cell');
     })->name('admin.it_cell');
+
+    Route::get('/it-cell-pdf', function () {
+        return view('dashboards.shree_sangh.karyakarini.pdf.ItCellPdf');
+    })->name('it_cell_pdf.manage');
 
     Route::get('/pravarti', function () {
         return view('pravarti.add_pravarti');
@@ -209,6 +217,26 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::get('/pravarti-sanyojak', function () {
         return view('dashboards.shree_sangh.karyakarini.pravarti_sanyojak');
     });
+
+    Route::get('/pravarti-sanyojak-pdf', function () {
+        return view('dashboards.shree_sangh.karyakarini.pdf.PravartiSanyojakPdf');
+    })->name('pravarti_sanyojak_pdf.manage');
+
+    Route::get('/sthayi-sampati-pdf', function () {
+        return view('dashboards.shree_sangh.karyakarini.pdf.SthayiSampatiPdf');
+    })->name('sthayi_sampati_pdf.manage');
+
+    Route::get('/sanyojan-mandal-pdf', function () {
+        return view('dashboards.shree_sangh.karyakarini.pdf.SanyojanMandalPdf');
+    })->name('sanyojan_mandal_pdf.manage');
+
+    Route::get('/samta-jan-kalyan-pdf', function () {
+        return view('dashboards.shree_sangh.karyakarini.pdf.SamtaJanKalyanPdf');
+    })->name('samta_jan_kalyan_pdf.manage');
+
+    Route::get('/ksm-members-pdf', function () {
+        return view('dashboards.shree_sangh.karyakarini.pdf.KsmMembersPdf');
+    })->name('ksm_members_pdf.manage');
 
     Route::get('/aanchal', function () {
         return view('aanchal.add_aanchal');
