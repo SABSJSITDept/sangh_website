@@ -11,46 +11,49 @@ use Illuminate\Support\Facades\Validator;
 class VpSecController extends Controller
 {
     public function index()
-{
-    $customOrder = [
-        'Mewar',
-        'Bikaner Marwar',
-        'Jaipur Beawar',
-        'Madhya Pradesh',
-        'Chattisgarh Odisha',
-        'Karnataka Andhra Pradesh',
-        'Tamil Nadu',
-        'Mumbai-Gujarat-UAE',
-        'Maharashtra Vidarbha Khandesh',
-        'Bengal-Bihar-Nepal-Bhutan-Jharkhand-Aanshik Orissa',
-        'Purvottar',
-        'Delhi-Punjab-Hariyana-Uttari',
-    ];
+    {
+        $customOrder = [
+            'Mewar',
+            'Bikaner Marwar',
+            'Jaipur Beawar',
+            'Madhya Pradesh',
+            'Chattisgarh Odisha',
+            'Karnataka Andhra Pradesh',
+            'Tamil Nadu',
+            'Mumbai-Gujarat-UAE',
+            'Maharashtra Vidarbha Khandesh',
+            'Bengal-Bihar-Nepal-Bhutan-Jharkhand-Aanshik Orissa',
+            'Purvottar',
+            'Delhi-Punjab-Hariyana-Uttari',
+        ];
 
-    $grouped = VpSec::orderByRaw("FIELD(post, 'उपाध्यक्ष', 'मंत्री')")
-        ->get()
-        ->groupBy('aanchal');
+        $grouped = VpSec::orderByRaw("FIELD(post, 'उपाध्यक्ष', 'मंत्री')")
+            ->get()
+            ->groupBy('aanchal');
 
-    // Custom sort by order
-    $sorted = collect($customOrder)->map(function ($aanchalName) use ($grouped) {
-        return $grouped[$aanchalName] ?? collect();
-    })->filter(function ($group) {
-        return $group->isNotEmpty();
-    })->values();
+        // Custom sort by order
+        $sorted = collect($customOrder)->map(function ($aanchalName) use ($grouped) {
+            $group = $grouped->get($aanchalName, collect());
+            // Ensure we always return a Collection
+            return is_object($group) && method_exists($group, 'isNotEmpty') ? $group : collect();
+        })->filter(function ($group) {
+            return is_object($group) && method_exists($group, 'isNotEmpty') && $group->isNotEmpty();
+        })->values();
 
-    return $sorted;
-}
+        return $sorted;
+    }
 
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'   => 'required',
-            'post'   => 'required',
-            'city'   => 'required',
-            'aanchal'=> 'nullable',
+            'name' => 'required',
+            'post' => 'required',
+            'city' => 'required',
+            'aanchal' => 'nullable',
             'mobile' => 'required',
-            'photo'  => 'nullable|image|max:250',
+            'photo' => 'nullable|image|max:250',
+            'session' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -70,8 +73,8 @@ class VpSecController extends Controller
             }
         }
 
-        $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile']);
-        
+        $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile', 'session']);
+
         // Ensure aanchal is set to null if empty
         if (empty($data['aanchal'])) {
             $data['aanchal'] = null;
@@ -98,12 +101,13 @@ class VpSecController extends Controller
         $vpSec = VpSec::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'name'   => 'required',
-            'post'   => 'required',
-            'city'   => 'required',
-            'aanchal'=> 'nullable',
+            'name' => 'required',
+            'post' => 'required',
+            'city' => 'required',
+            'aanchal' => 'nullable',
             'mobile' => 'required',
-            'photo'  => 'nullable|image|max:250',
+            'photo' => 'nullable|image|max:250',
+            'session' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -124,8 +128,8 @@ class VpSecController extends Controller
             }
         }
 
-        $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile']);
-        
+        $data = $request->only(['name', 'post', 'city', 'aanchal', 'mobile', 'session']);
+
         // Ensure aanchal is set to null if empty
         if (empty($data['aanchal'])) {
             $data['aanchal'] = null;
