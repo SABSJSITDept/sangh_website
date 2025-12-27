@@ -483,22 +483,22 @@
                 .then(data => {
                     if (data && data.thought) {
                         document.getElementById('vicharContent').innerHTML = `
-                                                <i class="bi bi-quote"></i>
-                                                <span>${data.thought}</span>
-                                            `;
+                                                    <i class="bi bi-quote"></i>
+                                                    <span>${data.thought}</span>
+                                                `;
                     } else {
                         document.getElementById('vicharContent').innerHTML = `
-                                                <i class="bi bi-quote"></i>
-                                                <span>आज का विचार उपलब्ध नहीं है</span>
-                                            `;
+                                                    <i class="bi bi-quote"></i>
+                                                    <span>आज का विचार उपलब्ध नहीं है</span>
+                                                `;
                     }
                 })
                 .catch(err => {
                     console.error('Error fetching vichar:', err);
                     document.getElementById('vicharContent').innerHTML = `
-                                            <i class="bi bi-quote"></i>
-                                            <span>आज का विचार उपलब्ध नहीं है</span>
-                                        `;
+                                                <i class="bi bi-quote"></i>
+                                                <span>आज का विचार उपलब्ध नहीं है</span>
+                                            `;
                 });
 
             // Fetch Today's Vihar Info
@@ -511,9 +511,9 @@
                     if (data && data.location) {
                         document.getElementById('viharDate').textContent = data.formatted_date || '{{ date("d M Y") }}';
                         document.getElementById('viharDetails').innerHTML = `
-                                                <strong>आदि ठाणा:</strong> ${data.aadi_thana || 'N/A'}<br>
-                                                <strong>स्थान:</strong> ${data.location || 'N/A'}
-                                            `;
+                                                    <strong>आदि ठाणा:</strong> ${data.aadi_thana || 'N/A'}<br>
+                                                    <strong>स्थान:</strong> ${data.location || 'N/A'}
+                                                `;
                     } else {
                         document.getElementById('viharLocation').textContent = 'विहार जानकारी उपलब्ध नहीं है';
                         document.getElementById('viharDetails').textContent = '';

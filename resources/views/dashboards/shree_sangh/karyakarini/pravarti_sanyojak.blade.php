@@ -32,6 +32,7 @@
                             <option value="संयोजिका">संयोजिका</option>
                             <option value="सह संयोजक">सह संयोजक</option>
                             <option value="संयोजन मण्डल सदस्य">संयोजन मण्डल सदस्य</option>
+                            <option value="अंचल संयोजक">अंचल संयोजक</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -90,11 +91,11 @@
             toast.className = `toast align-items-center text-white ${bg} border-0 show mb-2`;
             toast.role = 'alert';
             toast.innerHTML = `
-                                        <div class="d-flex">
-                                            <div class="toast-body">${message}</div>
-                                            <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
-                                        </div>
-                                    `;
+                                                <div class="d-flex">
+                                                    <div class="toast-body">${message}</div>
+                                                    <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
+                                                </div>
+                                            `;
             document.getElementById('toastBox').appendChild(toast);
             toast.querySelector('.btn-close').onclick = () => toast.remove();
             setTimeout(() => toast.remove(), 3000);
@@ -173,46 +174,46 @@
 
             for (const [pravartiName, members] of Object.entries(data)) {
                 const table = `
-                                            <h5 class="text-primary border-bottom pb-1 mt-4">${pravartiName}</h5>
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered table-hover align-middle">
-                                                    <thead class="table-light text-center">
-                                                        <tr>
-                                                            <th>फोटो</th>
-                                                            <th>नाम</th>
-                                                            <th>पद</th>
-                                                            <th>शहर</th>
-                                                            <th>मोबाइल</th>
-                                                            <th>सत्र</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        ${members.map(d => `
-                                                            <tr class="text-center">
-                                                                <td>
-                                                                    <img src="${d.photo ? '/storage/' + d.photo : 'https://via.placeholder.com/80x100?text=No+Image'}"
-                                                                        class="img-thumbnail" style="width: 80px; height: 100px; object-fit: cover;">
-                                                                </td>
-                                                                <td>${d.name}</td>
-                                                                <td>${d.post}</td>
-                                                                <td>${d.city}</td>
-                                                                <td>${d.mobile}</td>
-                                                                <td>${d.session || '2025-27'}</td>
-                                                                <td>
-                                                                    <button onclick="editEntry(${d.id})" class="btn btn-sm btn-warning me-1">
-                                                                        <i class="bi bi-pencil-fill"></i>
-                                                                    </button>
-                                                                    <button onclick="deleteEntry(${d.id})" class="btn btn-sm btn-outline-danger">
-                                                                        <i class="bi bi-trash-fill"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        `).join('')}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        `;
+                                                    <h5 class="text-primary border-bottom pb-1 mt-4">${pravartiName}</h5>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-hover align-middle">
+                                                            <thead class="table-light text-center">
+                                                                <tr>
+                                                                    <th>फोटो</th>
+                                                                    <th>नाम</th>
+                                                                    <th>पद</th>
+                                                                    <th>शहर</th>
+                                                                    <th>मोबाइल</th>
+                                                                    <th>सत्र</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                ${members.map(d => `
+                                                                    <tr class="text-center">
+                                                                        <td>
+                                                                            <img src="${d.photo ? '/storage/' + d.photo : 'https://via.placeholder.com/80x100?text=No+Image'}"
+                                                                                class="img-thumbnail" style="width: 80px; height: 100px; object-fit: cover;">
+                                                                        </td>
+                                                                        <td>${d.name}</td>
+                                                                        <td>${d.post}</td>
+                                                                        <td>${d.city}</td>
+                                                                        <td>${d.mobile}</td>
+                                                                        <td>${d.session || '2025-27'}</td>
+                                                                        <td>
+                                                                            <button onclick="editEntry(${d.id})" class="btn btn-sm btn-warning me-1">
+                                                                                <i class="bi bi-pencil-fill"></i>
+                                                                            </button>
+                                                                            <button onclick="deleteEntry(${d.id})" class="btn btn-sm btn-outline-danger">
+                                                                                <i class="bi bi-trash-fill"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                `).join('')}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                `;
                 container.innerHTML += table;
             }
         }

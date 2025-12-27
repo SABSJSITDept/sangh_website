@@ -13,7 +13,7 @@ class PravartiSanyojakController extends Controller
 {
     public function index()
     {
-        $postPriority = ['संयोजक', 'संयोजिका', 'सह संयोजक', 'संयोजन मण्डल सदस्य'];
+        $postPriority = ['संयोजक', 'संयोजिका', 'सह संयोजक', 'संयोजन मण्डल सदस्य', 'अंचल संयोजक'];
 
         // Fetch all with relation
         $data = PravartiSanyojak::with('pravarti')->get();

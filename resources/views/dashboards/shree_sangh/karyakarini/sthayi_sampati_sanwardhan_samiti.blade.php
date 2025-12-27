@@ -79,6 +79,7 @@
                             <option value="sanyojak">संयोजक</option>
                             <option value="seh sanyojak">सह संयोजक </option>
                             <option value="sanyojan mandal sadasy">संयोजन मण्डल सदस्य</option>
+                            <option value="अंचल संयोजक">अंचल संयोजक</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -136,18 +137,18 @@
                     let rows = '';
                     data.forEach(item => {
                         rows += `
-                    <tr>
-                        <td><img src="${item.photo}" class="table-img"></td>
-                        <td>${item.name}</td>
-                        <td>${item.post}</td>
-                        <td>${item.city}</td>
-                        <td>${item.mobile_number}</td>
-                        <td>${item.session || '2025-27'}</td>
-                        <td class="text-center">
-                            <button class="btn btn-warning btn-sm btn-icon" onclick="editItem(${item.id})"><i class="bi bi-pencil-square"></i> Edit</button>
-                            <button class="btn btn-danger btn-sm btn-icon" onclick="deleteItem(${item.id})"><i class="bi bi-trash"></i> Delete</button>
-                        </td>
-                    </tr>`;
+                                    <tr>
+                                        <td><img src="${item.photo}" class="table-img"></td>
+                                        <td>${item.name}</td>
+                                        <td>${item.post}</td>
+                                        <td>${item.city}</td>
+                                        <td>${item.mobile_number}</td>
+                                        <td>${item.session || '2025-27'}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-warning btn-sm btn-icon" onclick="editItem(${item.id})"><i class="bi bi-pencil-square"></i> Edit</button>
+                                            <button class="btn btn-danger btn-sm btn-icon" onclick="deleteItem(${item.id})"><i class="bi bi-trash"></i> Delete</button>
+                                        </td>
+                                    </tr>`;
                     });
                     document.querySelector("#dataTable tbody").innerHTML = rows;
                 });
