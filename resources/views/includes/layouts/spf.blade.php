@@ -460,12 +460,9 @@
 
                 <div style="height:14px"></div>
 
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="menu-item btn btn-blank w-100 text-start">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </button>
-                </form>
+                <a href="{{ url('/logout') }}" class="menu-item">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
             </nav>
         </div> <!-- /.sidebar-body -->
     </aside>

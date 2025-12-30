@@ -563,6 +563,10 @@ Route::get('/dashboard/spf/downloads', function () {
     return view('dashboards.spf.spfdownloads');
 })->name('dashboard.spf.downloads');
 
+Route::get('/dashboard/spf/event-registration', function () {
+    return view('dashboards.spf.SpfEventReg');
+})->name('dashboard.spf.event-registration');
+
 Route::get('/app/event/{id}', function ($id, Request $request) {
     // Optional: Fetch event details from database for better meta tags
     // $event = \App\Models\SpfEvent::find($id);

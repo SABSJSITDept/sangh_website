@@ -69,6 +69,7 @@ use App\Http\Controllers\Spf\SpfEventsController;
 use App\Http\Controllers\Spf\SpfProjectsController;
 use App\Http\Controllers\Spf\SpfSafarnamaController;
 use App\Http\Controllers\Spf\SpfDownloadsController;
+use App\Http\Controllers\Spf\SpfEventRegController;
 
 
 
@@ -465,6 +466,10 @@ Route::apiResource('spf-safarnama', SpfSafarnamaController::class);
 
 // SPF Downloads API Resource
 Route::apiResource('spf-downloads', SpfDownloadsController::class);
+
+// SPF Event Registration API Resource
+Route::apiResource('spf-event-reg', SpfEventRegController::class);
+Route::get('spf-event-reg-events', [SpfEventRegController::class, 'getEvents']);
 
 
 
