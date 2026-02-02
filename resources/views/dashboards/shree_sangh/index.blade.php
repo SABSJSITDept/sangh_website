@@ -511,7 +511,6 @@
                     if (data && data.location) {
                         document.getElementById('viharDate').textContent = data.formatted_date || '{{ date("d M Y") }}';
                         document.getElementById('viharDetails').innerHTML = `
-                                                    <strong>आदि ठाणा:</strong> ${data.aadi_thana || 'N/A'}<br>
                                                     <strong>स्थान:</strong> ${data.location || 'N/A'}
                                                 `;
                     } else {

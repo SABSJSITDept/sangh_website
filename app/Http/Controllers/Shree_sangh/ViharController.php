@@ -28,7 +28,6 @@ class ViharController extends Controller
     public function store(Request $request)
     {
         $vihar = Vihar::create($request->validate([
-            'aadi_thana' => 'required|string',  
             'location' => 'required|string',
         ]));
 
@@ -39,7 +38,6 @@ class ViharController extends Controller
     {
         $vihar = Vihar::findOrFail($id);
         $vihar->update($request->validate([
-            'aadi_thana' => 'required|string',
             'location' => 'required|string',
         ]));
 

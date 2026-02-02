@@ -80,13 +80,13 @@
             let rows = "";
             data.forEach(slider => {
                 rows += `
-                <tr>
-                    <td><img src="${slider.image}" width="120" class="rounded border shadow-sm"></td>
-                    <td>
-                        <button class="btn btn-sm btn-warning me-2" onclick="editSlider(${slider.id}, '${slider.image}')">✏️ Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteSlider(${slider.id})">🗑️ Delete</button>
-                    </td>
-                </tr>`;
+                    <tr>
+                        <td><img src="${slider.image}" width="120" class="rounded border shadow-sm"></td>
+                        <td>
+                            <button class="btn btn-sm btn-warning me-2" onclick="editSlider(${slider.id}, '${slider.image}')">✏️ Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSlider(${slider.id})">🗑️ Delete</button>
+                        </td>
+                    </tr>`;
             });
             document.getElementById("sliderTable").innerHTML = rows;
         }
@@ -136,9 +136,9 @@
         function editSlider(id, imageUrl) {
             document.getElementById("slider_id").value = id;
             document.getElementById("previewContainer").innerHTML = `
-            <img src="${imageUrl}" width="120" class="rounded border me-2 shadow-sm">
-            <span class="text-muted">Select a new image to replace</span>
-        `;
+                <img src="${imageUrl}" width="120" class="rounded border me-2 shadow-sm">
+                <span class="text-muted">Select a new image to replace</span>
+            `;
             document.getElementById("submitBtn").textContent = "Update";
             document.getElementById("cancelBtn").classList.remove("d-none");
 

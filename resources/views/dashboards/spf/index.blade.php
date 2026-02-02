@@ -180,25 +180,41 @@
                 <div class="card shadow">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-list"></i> Event Registrations
-                            </h5>
+                            <div>
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-list"></i> Event Registrations
+                                </h5>
+                                <div id="currentEventBadge" class="mt-1">
+                                    <span class="badge bg-success"><i class="fas fa-star"></i> Latest Event:</span>
+                                    <span id="currentEventName" class="text-dark fw-bold"></span>
+                                </div>
+                            </div>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-gradient" id="addNewBtn">
                                     <i class="fas fa-plus"></i> Add New Registration
                                 </button>
                                 <button class="btn btn-outline-primary" id="viewOtherEventsBtn">
-                                    <i class="fas fa-calendar-alt"></i> View Different Event
+                                    <i class="fas fa-calendar-alt"></i> View Other Events
                                 </button>
                             </div>
                         </div>
                         <div id="eventSelectContainer" class="mb-3" style="display:none;">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold">Select Event</label>
-                                    <select class="form-select" id="selectEventDropdown">
-                                        <option value="">-- Select Event --</option>
-                                    </select>
+                            <div class="card bg-light">
+                                <div class="card-body py-3">
+                                    <div class="row align-items-end">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold"><i class="fas fa-calendar-check"></i> Select
+                                                Different Event</label>
+                                            <select class="form-select" id="selectEventDropdown">
+                                                <option value="">-- Show Latest Event (Default) --</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-sm btn-outline-success" id="showLatestEventBtn">
+                                                <i class="fas fa-undo"></i> Back to Latest Event
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -322,6 +338,14 @@
         let memberCache = {}; // Cache member details to avoid repeated API calls
         let aanchalMap = {}; // Map anchal_id to anchal name
 
+        // Helper function to get latest event title
+        function getLatestEventTitle() {
+            if (allEvents.length > 0) {
+                return allEvents[allEvents.length - 1].title;
+            }
+            return 'Unknown Event';
+        }
+
         // Toast Alert Function
         function showToast(message, type = "success") {
             const iconMap = {
@@ -410,8 +434,20 @@
                 const res = await fetch(eventsApiUrl);
                 const result = await res.json();
                 if (result.success && result.data.length > 0) {
-                    allEvents = result.data;
-                    // For form dropdown
+                    // Sort events by ID (ascending) to ensure last item is the latest added
+                    allEvents = result.data.sort((a, b) => a.id - b.id);
+
+                    // Set latest event id (most recently added event - last in array)
+                    const latestEvent = allEvents[allEvents.length - 1];
+                    latestEventId = latestEvent.id;
+
+                    // Update current event name display
+                    const currentEventNameEl = document.getElementById("currentEventName");
+                    if (currentEventNameEl) {
+                        currentEventNameEl.textContent = latestEvent.title;
+                    }
+
+                    // For form dropdown - show all events
                     const selectElement = document.getElementById("event_id");
                     selectElement.innerHTML = '<option value="">-- Choose Event --</option>';
                     result.data.forEach(event => {
@@ -420,21 +456,39 @@
                         option.textContent = event.title;
                         selectElement.appendChild(option);
                     });
-                    // For event select dropdown (for viewing other events)
+
+                    // For event select dropdown (for viewing other events) - exclude latest event
                     const selectEventDropdown = document.getElementById("selectEventDropdown");
+                    const viewOtherEventsBtn = document.getElementById("viewOtherEventsBtn");
+
+                    // Show all events except the latest one in reverse order (newest first)
+                    const otherEvents = result.data.slice(0, -1).reverse();
+
                     if (selectEventDropdown) {
-                        selectEventDropdown.innerHTML = '<option value="">-- Select Event --</option>';
-                        result.data.forEach(event => {
+                        selectEventDropdown.innerHTML = '<option value="">-- Show Latest Event (Default) --</option>';
+                        otherEvents.forEach(event => {
                             const option = document.createElement("option");
                             option.value = event.id;
                             option.textContent = event.title;
                             selectEventDropdown.appendChild(option);
                         });
                     }
-                    // Set latest event id (most recently added event)
-                    latestEventId = result.data[result.data.length - 1].id;
+
+                    // Hide "View Other Events" button if there are no other events
+                    if (viewOtherEventsBtn) {
+                        if (otherEvents.length === 0) {
+                            viewOtherEventsBtn.style.display = "none";
+                        } else {
+                            viewOtherEventsBtn.style.display = "inline-block";
+                        }
+                    }
                 } else {
                     showToast("No events found. Please create events first.", "warning");
+                    // Hide the current event badge and "View Other Events" button if no events
+                    const currentEventBadge = document.getElementById("currentEventBadge");
+                    const viewOtherEventsBtn = document.getElementById("viewOtherEventsBtn");
+                    if (currentEventBadge) currentEventBadge.style.display = "none";
+                    if (viewOtherEventsBtn) viewOtherEventsBtn.style.display = "none";
                 }
             } catch (error) {
                 console.error("Error fetching events:", error);
@@ -531,80 +585,80 @@
                 const eventRegs = eventData.registrations;
 
                 html += `
-                                                                            <div class="card mb-4" id="event-card-${eventId}">
-                                                                                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                                                                    <h6 class="mb-0">
-                                                                                        <i class="fas fa-calendar"></i> ${eventData.title}
-                                                                                    </h6>
-                                                                                    <div class="d-flex align-items-center gap-2">
-                                                                                        <span class="badge bg-light text-dark">${eventRegs.length} Registrations</span>
-                                                                                        <button class="btn btn-sm btn-danger" onclick="downloadPDF('${eventId}', '${eventData.title}')" title="Download PDF">
-                                                                                            <i class="fas fa-file-pdf"></i>
-                                                                                        </button>
-                                                                                        <button class="btn btn-sm btn-success" onclick="downloadExcel('${eventId}', '${eventData.title}')" title="Download Excel">
-                                                                                            <i class="fas fa-file-excel"></i>
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card-body p-0">
-                                                                                    <div class="table-responsive">
-                                                                                        <table class="table table-hover table-striped mb-0">
-                                                                                            <thead class="table-light">
-                                                                                                <tr>
-                                                                                                    <th>#</th>
-                                                                                                    <th>MID</th>
-                                                                                                    <th>Name</th>
-                                                                                                    <th>Mobile</th>
-                                                                                                    <th>Anchal</th>
-                                                                                                    <th>City</th>
-                                                                                                    <th>Education</th>
-                                                                                                    <th>Occupation</th>
-                                                                                                    <th>Event</th>
-                                                                                                    <th>Response</th>
-                                                                                                    <th>Actions</th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody id="tbody-${eventId}">
-                                                                        `;
+                                                                                                                    <div class="card mb-4" id="event-card-${eventId}">
+                                                                                                                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                                                                                                            <h6 class="mb-0">
+                                                                                                                                <i class="fas fa-calendar"></i> ${eventData.title}
+                                                                                                                            </h6>
+                                                                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                                                                <span class="badge bg-light text-dark">${eventRegs.length} Registrations</span>
+                                                                                                                                <button class="btn btn-sm btn-danger" onclick="downloadPDF('${eventId}', '${eventData.title}')" title="Download PDF">
+                                                                                                                                    <i class="fas fa-file-pdf"></i>
+                                                                                                                                </button>
+                                                                                                                                <button class="btn btn-sm btn-success" onclick="downloadExcel('${eventId}', '${eventData.title}')" title="Download Excel">
+                                                                                                                                    <i class="fas fa-file-excel"></i>
+                                                                                                                                </button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="card-body p-0">
+                                                                                                                            <div class="table-responsive">
+                                                                                                                                <table class="table table-hover table-striped mb-0">
+                                                                                                                                    <thead class="table-light">
+                                                                                                                                        <tr>
+                                                                                                                                            <th>#</th>
+                                                                                                                                            <th>MID</th>
+                                                                                                                                            <th>Name</th>
+                                                                                                                                            <th>Mobile</th>
+                                                                                                                                            <th>Anchal</th>
+                                                                                                                                            <th>City</th>
+                                                                                                                                            <th>Education</th>
+                                                                                                                                            <th>Occupation</th>
+                                                                                                                                            <th>Event</th>
+                                                                                                                                            <th>Response</th>
+                                                                                                                                            <th>Actions</th>
+                                                                                                                                        </tr>
+                                                                                                                                    </thead>
+                                                                                                                                    <tbody id="tbody-${eventId}">
+                                                                                                                `;
 
                 eventRegs.forEach((reg, index) => {
                     const responseClass = reg.response === "yes" ? "response-yes" :
                         reg.response === "no" ? "response-no" : "response-maybe";
 
                     html += `
-                                                                                <tr id="row-${reg.id}">
-                                                                                    <td>${index + 1}</td>
-                                                                                    <td><strong>${reg.member_id || "N/A"}</strong></td>
-                                                                                    <td id="name-${reg.id}"><span class="loading-spinner"></span></td>
-                                                                                    <td id="mobile-${reg.id}"><span class="loading-spinner"></span></td>
-                                                                                    <td id="anchal-${reg.id}"><span class="loading-spinner"></span></td>
-                                                                                    <td id="city-${reg.id}"><span class="loading-spinner"></span></td>
-                                                                                    <td id="education-${reg.id}"><span class="loading-spinner"></span></td>
-                                                                                    <td id="occupation-${reg.id}"><span class="loading-spinner"></span></td>
-                                                                                    <td>${reg.event ? reg.event.title : "N/A"}</td>
-                                                                                    <td><span class="response-badge ${responseClass}">${reg.response}</span></td>
-                                                                                    <td>
-                                                                                        <button class="btn btn-sm btn-info me-1" onclick="viewRegistration(${reg.id})" title="View Details">
-                                                                                            <i class="fas fa-eye"></i>
-                                                                                        </button>
-                                                                                        <button class="btn btn-sm btn-warning me-1" onclick="editRegistration(${reg.id})" title="Edit">
-                                                                                            <i class="fas fa-edit"></i>
-                                                                                        </button>
-                                                                                        <button class="btn btn-sm btn-danger" onclick="deleteRegistration(${reg.id})" title="Delete">
-                                                                                            <i class="fas fa-trash"></i>
-                                                                                        </button>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            `;
+                                                                                                                        <tr id="row-${reg.id}">
+                                                                                                                            <td>${index + 1}</td>
+                                                                                                                            <td><strong>${reg.member_id || "N/A"}</strong></td>
+                                                                                                                            <td id="name-${reg.id}"><span class="loading-spinner"></span></td>
+                                                                                                                            <td id="mobile-${reg.id}"><span class="loading-spinner"></span></td>
+                                                                                                                            <td id="anchal-${reg.id}"><span class="loading-spinner"></span></td>
+                                                                                                                            <td id="city-${reg.id}"><span class="loading-spinner"></span></td>
+                                                                                                                            <td id="education-${reg.id}"><span class="loading-spinner"></span></td>
+                                                                                                                            <td id="occupation-${reg.id}"><span class="loading-spinner"></span></td>
+                                                                                                                            <td>${reg.event ? reg.event.title : "N/A"}</td>
+                                                                                                                            <td><span class="response-badge ${responseClass}">${reg.response}</span></td>
+                                                                                                                            <td>
+                                                                                                                                <button class="btn btn-sm btn-info me-1" onclick="viewRegistration(${reg.id})" title="View Details">
+                                                                                                                                    <i class="fas fa-eye"></i>
+                                                                                                                                </button>
+                                                                                                                                <button class="btn btn-sm btn-warning me-1" onclick="editRegistration(${reg.id})" title="Edit">
+                                                                                                                                    <i class="fas fa-edit"></i>
+                                                                                                                                </button>
+                                                                                                                                <button class="btn btn-sm btn-danger" onclick="deleteRegistration(${reg.id})" title="Delete">
+                                                                                                                                    <i class="fas fa-trash"></i>
+                                                                                                                                </button>
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                    `;
                 });
 
                 html += `
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        `;
+                                                                                                                                    </tbody>
+                                                                                                                                </table>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                `;
             }
 
             container.innerHTML = html;
@@ -848,22 +902,22 @@
                     Swal.fire({
                         title: `<strong>Registration Details</strong>`,
                         html: `
-                                                                                    <div class="text-start">
-                                                                                        <table class="table table-bordered" id="viewDetailsTable">
-                                                                                            <tr><th>ID</th><td>${reg.id}</td></tr>
-                                                                                            <tr><th>Member ID</th><td>${reg.member_id || "-"}</td></tr>
-                                                                                            <tr id="memberNameRow"><th>Name</th><td><span class="loading-spinner"></span></td></tr>
-                                                                                            <tr id="memberMobileRow"><th>Mobile</th><td><span class="loading-spinner"></span></td></tr>
-                                                                                            <tr id="memberAnchalRow"><th>Anchal</th><td><span class="loading-spinner"></span></td></tr>
-                                                                                            <tr id="memberCityRow"><th>City</th><td><span class="loading-spinner"></span></td></tr>
-                                                                                            <tr id="memberEducationRow"><th>Education</th><td><span class="loading-spinner"></span></td></tr>
-                                                                                            <tr id="memberOccupationRow"><th>Occupation</th><td><span class="loading-spinner"></span></td></tr>
-                                                                                            <tr><th>Event</th><td>${eventName}</td></tr>
-                                                                                            <tr><th>Response</th><td><span class="badge bg-${reg.response === 'yes' ? 'success' : reg.response === 'no' ? 'danger' : 'warning'}">${reg.response}</span></td></tr>
-                                                                                            <tr><th>Created At</th><td>${new Date(reg.created_at).toLocaleString()}</td></tr>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                `,
+                                                                                                                            <div class="text-start">
+                                                                                                                                <table class="table table-bordered" id="viewDetailsTable">
+                                                                                                                                    <tr><th>ID</th><td>${reg.id}</td></tr>
+                                                                                                                                    <tr><th>Member ID</th><td>${reg.member_id || "-"}</td></tr>
+                                                                                                                                    <tr id="memberNameRow"><th>Name</th><td><span class="loading-spinner"></span></td></tr>
+                                                                                                                                    <tr id="memberMobileRow"><th>Mobile</th><td><span class="loading-spinner"></span></td></tr>
+                                                                                                                                    <tr id="memberAnchalRow"><th>Anchal</th><td><span class="loading-spinner"></span></td></tr>
+                                                                                                                                    <tr id="memberCityRow"><th>City</th><td><span class="loading-spinner"></span></td></tr>
+                                                                                                                                    <tr id="memberEducationRow"><th>Education</th><td><span class="loading-spinner"></span></td></tr>
+                                                                                                                                    <tr id="memberOccupationRow"><th>Occupation</th><td><span class="loading-spinner"></span></td></tr>
+                                                                                                                                    <tr><th>Event</th><td>${eventName}</td></tr>
+                                                                                                                                    <tr><th>Response</th><td><span class="badge bg-${reg.response === 'yes' ? 'success' : reg.response === 'no' ? 'danger' : 'warning'}">${reg.response}</span></td></tr>
+                                                                                                                                    <tr><th>Created At</th><td>${new Date(reg.created_at).toLocaleString()}</td></tr>
+                                                                                                                                </table>
+                                                                                                                            </div>
+                                                                                                                        `,
                         width: '600px',
                         confirmButtonText: 'Close',
                         confirmButtonColor: '#667eea',
@@ -1018,15 +1072,53 @@
                     eventSelectContainer.style.display = eventSelectContainer.style.display === "none" ? "block" : "none";
                 });
             }
+            // Back to Latest Event button
+            const showLatestEventBtn = document.getElementById("showLatestEventBtn");
+            if (showLatestEventBtn) {
+                showLatestEventBtn.addEventListener("click", function () {
+                    if (latestEventId) {
+                        // Reset dropdown to default
+                        if (selectEventDropdown) {
+                            selectEventDropdown.value = "";
+                        }
+                        // Show latest event registrations
+                        const latestRegs = allRegistrations.filter(r => r.event && r.event.id == latestEventId);
+                        displayRegistrations(latestRegs);
+
+                        // Update badge to show latest event
+                        const currentEventBadge = document.getElementById("currentEventBadge");
+                        const currentEventNameEl = document.getElementById("currentEventName");
+                        if (currentEventBadge) {
+                            currentEventBadge.innerHTML = '<span class="badge bg-success"><i class="fas fa-star"></i> Latest Event:</span> <span id="currentEventName" class="text-dark fw-bold">' + getLatestEventTitle() + '</span>';
+                        }
+
+                        showToast("Showing latest event registrations", "info");
+                    }
+                });
+            }
+
             if (selectEventDropdown) {
                 selectEventDropdown.addEventListener("change", function () {
                     const selectedId = selectEventDropdown.value;
+                    const currentEventBadge = document.getElementById("currentEventBadge");
+
                     if (selectedId) {
+                        const selectedEvent = allEvents.find(e => e.id == selectedId);
                         const regs = allRegistrations.filter(r => r.event && r.event.id == selectedId);
                         displayRegistrations(regs);
+
+                        // Update badge to show selected event
+                        if (currentEventBadge && selectedEvent) {
+                            currentEventBadge.innerHTML = '<span class="badge bg-info"><i class="fas fa-calendar"></i> Viewing Event:</span> <span id="currentEventName" class="text-dark fw-bold">' + selectedEvent.title + '</span>';
+                        }
                     } else if (latestEventId) {
                         const latestRegs = allRegistrations.filter(r => r.event && r.event.id == latestEventId);
                         displayRegistrations(latestRegs);
+
+                        // Update badge back to latest event
+                        if (currentEventBadge) {
+                            currentEventBadge.innerHTML = '<span class="badge bg-success"><i class="fas fa-star"></i> Latest Event:</span> <span id="currentEventName" class="text-dark fw-bold">' + getLatestEventTitle() + '</span>';
+                        }
                     } else {
                         displayRegistrations(allRegistrations);
                     }

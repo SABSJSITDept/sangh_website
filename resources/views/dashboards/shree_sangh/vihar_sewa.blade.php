@@ -25,19 +25,7 @@
         <div class="card-body">
             <form id="viharForm">
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-5">
-                        <label for="aadi_thana" class="form-label">आदि थाना</label>
-                        <input type="number" 
-                               class="form-control shadow-sm" 
-                               id="aadi_thana" 
-                               placeholder="जैसे - 9" 
-                               min="0" 
-                               step="1"
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                               required>
-                    </div>
-
-                    <div class="col-md-5">
+                    <div class="col-md-10">
                         <label for="location" class="form-label">स्थान (रात्रि विश्राम हेतु)</label>
                         <input type="text" class="form-control shadow-sm" id="location" placeholder="स्थान लिखें" required>
                     </div>
@@ -58,7 +46,6 @@
                     <thead class="table-light">
                         <tr>
                             <th>📅 तारीख</th>
-                            <th>🏙️ आदि थाना</th>
                             <th>🛏️ स्थान</th>
                             <th>⚙️ क्रिया</th>
                         </tr>
@@ -80,10 +67,6 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="edit_aadi_thana" class="form-label">आदि थाना</label>
-            <input type="number" id="edit_aadi_thana" class="form-control" min="0" required>
-          </div>
           <div class="mb-3">
             <label for="edit_location" class="form-label">स्थान (रात्रि विश्राम हेतु)</label>
             <input type="text" id="edit_location" class="form-control" required>
@@ -132,10 +115,9 @@ function fetchVihar() {
                 rows += `
                     <tr>    
                         <td>${item.formatted_date ?? ''}</td>
-                        <td>${item.aadi_thana}</td>
                         <td>${item.location}</td>            
                         <td>
-                            <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${item.id}, '${item.aadi_thana}', '${item.location}')">✏️</button>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${item.id}, '${item.location}')">✏️</button>
                             <button class="btn btn-sm btn-outline-danger" onclick="deleteVihar(${item.id})">🗑️</button>
                         </td>
                     </tr>
@@ -152,7 +134,6 @@ function fetchLatestVihar() {
             if (data) {
                 document.getElementById('latestVihar').innerHTML = `
                     <strong>📅 तारीख:</strong> ${data.formatted_date}<br>
-                    <strong>🏙️ आदि थाना:</strong> ${data.aadi_thana}<br>
                     <strong>🛏️ रात्रि विश्राम हेतु:</strong> ${data.location}
                 `;
             } else {
@@ -163,7 +144,6 @@ function fetchLatestVihar() {
 
 document.getElementById('viharForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    let aadi_thana = document.getElementById('aadi_thana').value;
     let location = document.getElementById('location').value;
 
     fetch('/api/vihar', {
@@ -173,7 +153,7 @@ document.getElementById('viharForm').addEventListener('submit', function(e) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({ aadi_thana, location })
+        body: JSON.stringify({ location })
     })
     .then(res => res.json())
     .then(() => {
@@ -184,9 +164,8 @@ document.getElementById('viharForm').addEventListener('submit', function(e) {
     });
 });
 
-function openEditModal(id, aadi_thana, location) {
+function openEditModal(id, location) {
     document.getElementById('editViharId').value = id;
-    document.getElementById('edit_aadi_thana').value = aadi_thana;
     document.getElementById('edit_location').value = location;
     editModal.show();
 }
@@ -194,7 +173,6 @@ function openEditModal(id, aadi_thana, location) {
 document.getElementById('editViharForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let id = document.getElementById('editViharId').value;
-    let aadi_thana = document.getElementById('edit_aadi_thana').value;
     let location = document.getElementById('edit_location').value;
 
     fetch(`/api/vihar/${id}`, {
@@ -204,7 +182,7 @@ document.getElementById('editViharForm').addEventListener('submit', function(e) 
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({ aadi_thana, location })
+        body: JSON.stringify({ location })
     })
     .then(res => res.json())
     .then(() => {

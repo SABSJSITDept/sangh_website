@@ -11,7 +11,6 @@ class Vihar extends Model
     protected $table = 'vihar';
 
     protected $fillable = [
-        'aadi_thana',
         'location',
     ];
 }
