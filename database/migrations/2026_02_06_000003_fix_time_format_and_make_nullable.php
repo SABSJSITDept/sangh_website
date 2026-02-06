@@ -8,7 +8,14 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration {
     public function up(): void
     {
-        // Step 1: Convert invalid time formats to valid MySQL TIME format
+        // Step 1: First make columns nullable to avoid constraint violations
+        Schema::table('news', function (Blueprint $table) {
+            $table->date('date')->nullable()->change();
+            $table->time('time')->nullable()->change();
+            $table->string('photo')->nullable()->change();
+        });
+        
+        // Step 2: Now convert invalid time formats to valid MySQL TIME format
         $invalidTimes = DB::table('news')
             ->whereNotNull('time')
             ->where(function($query) {
@@ -25,12 +32,6 @@ return new class extends Migration {
                 ->where('id', $record->id)
                 ->update(['time' => $cleanTime]);
         }
-        
-        // Step 2: Make columns nullable
-        Schema::table('news', function (Blueprint $table) {
-            $table->date('date')->nullable()->change();
-            $table->time('time')->nullable()->change();
-        });
     }
     
     private function convertToValidTime($timeString)
