@@ -12,7 +12,7 @@
     <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
         <i class="bi bi-info-circle-fill me-2"></i>
         <div>
-            ⚠️ IMAGE size 200 KB से ज़्यादा नहीं होना चाहिए। <br>
+            📸 IMAGE upload वैकल्पिक है। अगर upload करते हैं तो size 200 KB से ज़्यादा नहीं होना चाहिए। <br>
             📝 Title और Description डालना अनिवार्य है।
         </div>
     </div>
@@ -41,7 +41,7 @@
 
         <div class="col-md-6">
             <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
-            <small class="text-muted">Only image under 200KB</small>
+            <small class="text-muted">Optional: Only image under 200KB</small>
         </div>
 
         <div class="col-12">
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="border rounded p-2 mb-2 d-flex align-items-center justify-content-between shadow-sm">
                             <div class="d-flex align-items-center">
                                 <!-- Photo -->
-                                <img src="/storage/${item.photo}" 
+                                <img src="${item.photo ? '/storage/' + item.photo : 'https://via.placeholder.com/60x60?text=No+Image'}" 
                                      class="rounded me-2" 
                                      style="height:60px; width:60px; object-fit:cover;">
                                 
