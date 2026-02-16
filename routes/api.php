@@ -70,6 +70,8 @@ use App\Http\Controllers\Spf\SpfProjectsController;
 use App\Http\Controllers\Spf\SpfSafarnamaController;
 use App\Http\Controllers\Spf\SpfDownloadsController;
 use App\Http\Controllers\Spf\SpfEventRegController;
+use App\Http\Controllers\FeedBack\FeedBackController;
+
 
 
 
@@ -474,3 +476,5 @@ Route::get('spf-event-reg-events', [SpfEventRegController::class, 'getEvents']);
 
 
 
+
+Route::post('/app-feedback', [FeedBackController::class, 'store']);

@@ -11,6 +11,8 @@ use App\Http\Controllers\Shree_sangh\Karyakarini\ExPresidentController;
 use App\Models\Aanchal\Aanchal;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\FeedBack\FeedBackController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -567,6 +569,11 @@ Route::get('/dashboard/spf/event-registration', function () {
     return view('dashboards.spf.SpfEventReg');
 })->name('dashboard.spf.event-registration');
 
+
+Route::get('/sahitya-news', function () {
+    return view('dashboards.sahitya_publication.news');
+});
+
 Route::get('/app/event/{id}', function ($id, Request $request) {
     // Optional: Fetch event details from database for better meta tags
     // $event = \App\Models\SpfEvent::find($id);
@@ -598,3 +605,5 @@ Route::get('/api/event/{id}/share-info', function ($id) {
         ]
     ]);
 });
+
+Route::get('/feedback', [FeedBackController::class, 'index'])->name('feedback.index');
