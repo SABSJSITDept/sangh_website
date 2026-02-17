@@ -13,7 +13,7 @@ class NewsUpdateController extends Controller
 {
     public function index()
     {
-        return response()->json(News::latest()->take(10)->get());
+        return response()->json(News::orderBy('date', 'asc')->take(10)->get());
     }
 
    public function store(Request $request)
