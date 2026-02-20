@@ -10,25 +10,26 @@ use App\Models\ShreeSangh\Vihar;
 
 class ViharController extends Controller
 {
-  public function index()
-{
-    $vihars = Vihar::orderBy('created_at', 'desc')
-                   ->take(14)
-                   ->get();
+    public function index()
+    {
+        $vihars = Vihar::orderBy('created_at', 'desc')
+            ->take(14)
+            ->get();
 
-    $vihars->map(function ($item) {
-        $item->formatted_date = $item->created_at->format('d-m-Y');
-        return $item;
-    });
+        $vihars->map(function ($item) {
+            $item->formatted_date = $item->created_at->format('d-m-Y');
+            return $item;
+        });
 
-    return response()->json($vihars);
-}
+        return response()->json($vihars);
+    }
 
 
     public function store(Request $request)
     {
         $vihar = Vihar::create($request->validate([
             'location' => 'required|string',
+            'location_link' => 'nullable|url',
         ]));
 
         return response()->json($vihar);
@@ -39,6 +40,7 @@ class ViharController extends Controller
         $vihar = Vihar::findOrFail($id);
         $vihar->update($request->validate([
             'location' => 'required|string',
+            'location_link' => 'nullable|url',
         ]));
 
         return response()->json($vihar);
@@ -50,14 +52,14 @@ class ViharController extends Controller
         return response()->json(['message' => 'Deleted successfully']);
     }
     public function latest()
-{
-    $vihar = Vihar::orderBy('created_at', 'desc')->first();
+    {
+        $vihar = Vihar::orderBy('created_at', 'desc')->first();
 
-    if ($vihar) {
-        $vihar->formatted_date = $vihar->created_at->format('d-m-Y');
+        if ($vihar) {
+            $vihar->formatted_date = $vihar->created_at->format('d-m-Y');
+        }
+
+        return response()->json($vihar);
     }
-
-    return response()->json($vihar);
-}
 
 }

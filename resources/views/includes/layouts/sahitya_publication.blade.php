@@ -499,6 +499,13 @@ main.content {
                         <span class="link-text">ADD SAHITYA</span>
                     </a>
                 </div>
+                
+                <div class="nav-item">
+                     <a href="{{ url('/sahitya-news') }}"  class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="link-text">ADD NEWS SAHITYA</span>
+                    </a>
+                </div>
              
                  <div class="nav-item">
     <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">

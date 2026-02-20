@@ -12,6 +12,7 @@ class Vihar extends Model
 
     protected $fillable = [
         'location',
+        'location_link',
     ];
 }
 
