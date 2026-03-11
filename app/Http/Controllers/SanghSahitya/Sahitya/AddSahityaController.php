@@ -16,103 +16,138 @@ class AddSahityaController extends Controller
         return Sahitya::orderBy('preference')->get();
     }
 
-public function store(Request $request)
-{
-   $request->validate([
-    'category' => 'required|string',
-    'name' => 'nullable|string|max:255',
-    'cover_photo' => 'required|image|max:200',
-    'file_type' => 'required|in:pdf,drive',
-    'pdf' => 'nullable|required_if:file_type,pdf|mimes:pdf|max:20480',
-    'drive_link' => 'nullable|required_if:file_type,drive|url',
-    'preference' => 'nullable|integer',
-    'show_on_homepage' => 'nullable|boolean',
-]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'category' => 'required|string',
+            'name' => 'nullable|string|max:255',
+            'cover_photo' => 'required|image|max:200',
+            'file_type' => 'required|in:pdf,drive',
+            'pdf' => 'nullable|required_if:file_type,pdf|mimes:pdf|max:20480',
+            'drive_link' => 'nullable|required_if:file_type,drive|url',
+            'preference' => 'required|integer',
+            'show_on_homepage' => 'nullable|boolean',
+        ]);
 
-$coverPath = $request->file('cover_photo')->store('public/sahitya/covers');
-$pdfPath = null;
+        $coverPath = $request->file('cover_photo')->store('public/sahitya/covers');
+        $pdfPath = null;
 
-if ($request->file_type === 'pdf' && $request->hasFile('pdf')) {
-    $pdfPath = $request->file('pdf')->store("public/sahitya/{$request->category}");
-}
+        if ($request->file_type === 'pdf' && $request->hasFile('pdf')) {
+            $pdfPath = $request->file('pdf')->store("public/sahitya/{$request->category}");
+        }
 
-$sahitya = Sahitya::create([
-    'category' => $request->category,
-    'name' => $request->name,
-    'cover_photo' => Storage::url($coverPath),
-    'pdf' => $pdfPath ? Storage::url($pdfPath) : null,
-    'drive_link' => $request->file_type === 'drive' ? $request->drive_link : null,
-    'file_type' => $request->file_type,
-    'preference' => $request->preference,
-    'show_on_homepage' => $request->show_on_homepage,
-]);
+        if ($request->show_on_homepage == 1) {
+            Sahitya::where('show_on_homepage', 1)->update(['show_on_homepage' => 0]);
+        }
 
-    return response()->json(['success' => true, 'data' => $sahitya], 201);
-}
+        try {
+            $sahitya = Sahitya::create([
+                'category' => $request->category,
+                'name' => $request->name,
+                'cover_photo' => Storage::url($coverPath),
+                'pdf' => $pdfPath ? Storage::url($pdfPath) : null,
+                'drive_link' => $request->file_type === 'drive' ? $request->drive_link : null,
+                'file_type' => $request->file_type,
+                'preference' => $request->preference,
+                'show_on_homepage' => $request->show_on_homepage ?? 0,
+            ]);
 
-
-
-  public function update(Request $request, $id)
-{
-    $sahitya = Sahitya::findOrFail($id);
-
-   $request->validate([
-    'category' => 'required|string',
-    'name' => 'nullable|string|max:255',
-    'cover_photo' => 'nullable|image|max:200',
-    'file_type' => 'required|in:pdf,drive',
-    'pdf' => 'nullable|required_if:file_type,pdf|mimes:pdf|max:20480',
-    'drive_link' => 'nullable|required_if:file_type,drive|url',
-    'preference' => 'nullable|integer',
-    'show_on_homepage' => 'nullable|boolean',
-]);
-
-if ($request->hasFile('cover_photo')) {
-    Storage::delete(str_replace('/storage/', 'public/', $sahitya->cover_photo));
-    $sahitya->cover_photo = Storage::url($request->file('cover_photo')->store('public/sahitya/covers'));
-}
-
-if ($request->file_type === 'pdf' && $request->hasFile('pdf')) {
-    if ($sahitya->pdf) {
-        Storage::delete(str_replace('/storage/', 'public/', $sahitya->pdf));
+            return response()->json(['success' => true, 'data' => $sahitya], 201);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Database Error in Add Sahitya: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to save book data. Please make sure all required fields are correctly filled.'
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error('Error in Add Sahitya: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred while saving the book.'
+            ], 500);
+        }
     }
-    $sahitya->pdf = Storage::url($request->file('pdf')->store("public/sahitya/{$request->category}"));
-    $sahitya->drive_link = null;
-} else if ($request->file_type === 'drive') {
-    if ($sahitya->pdf) {
-        Storage::delete(str_replace('/storage/', 'public/', $sahitya->pdf));
+
+
+
+    public function update(Request $request, $id)
+    {
+        $sahitya = Sahitya::findOrFail($id);
+
+        $request->validate([
+            'category' => 'required|string',
+            'name' => 'nullable|string|max:255',
+            'cover_photo' => 'nullable|image|max:200',
+            'file_type' => 'required|in:pdf,drive',
+            'pdf' => 'nullable|required_if:file_type,pdf|mimes:pdf|max:20480',
+            'drive_link' => 'nullable|required_if:file_type,drive|url',
+            'preference' => 'required|integer',
+            'show_on_homepage' => 'nullable|boolean',
+        ]);
+
+        if ($request->hasFile('cover_photo')) {
+            Storage::delete(str_replace('/storage/', 'public/', $sahitya->cover_photo));
+            $sahitya->cover_photo = Storage::url($request->file('cover_photo')->store('public/sahitya/covers'));
+        }
+
+        if ($request->file_type === 'pdf' && $request->hasFile('pdf')) {
+            if ($sahitya->pdf) {
+                Storage::delete(str_replace('/storage/', 'public/', $sahitya->pdf));
+            }
+            $sahitya->pdf = Storage::url($request->file('pdf')->store("public/sahitya/{$request->category}"));
+            $sahitya->drive_link = null;
+        } else if ($request->file_type === 'drive') {
+            if ($sahitya->pdf) {
+                Storage::delete(str_replace('/storage/', 'public/', $sahitya->pdf));
+            }
+            $sahitya->pdf = null;
+            $sahitya->drive_link = $request->drive_link;
+        }
+
+        if ($request->show_on_homepage == 1) {
+            Sahitya::where('show_on_homepage', 1)->update(['show_on_homepage' => 0]);
+        }
+
+        $sahitya->file_type = $request->file_type;
+        $sahitya->category = $request->category;
+        $sahitya->name = $request->name;
+        $sahitya->preference = $request->preference;
+        $sahitya->show_on_homepage = $request->show_on_homepage ?? 0;
+
+        try {
+            $sahitya->save();
+            return response()->json(['success' => true]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Database Error in Update Sahitya: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update book data. Please make sure all required fields are correctly filled.'
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error('Error in Update Sahitya: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred while updating the book.'
+            ], 500);
+        }
     }
-    $sahitya->pdf = null;
-    $sahitya->drive_link = $request->drive_link;
-}
 
-$sahitya->file_type = $request->file_type;
-$sahitya->category = $request->category;
-$sahitya->name = $request->name;
-$sahitya->preference = $request->preference;
-$sahitya->show_on_homepage = $request->show_on_homepage;
+    private function shiftPreferences($category, $newPref, $exceptId = null)
+    {
+        while (true) {
+            $conflict = Sahitya::where('category', $category)
+                ->where('preference', $newPref)
+                ->when($exceptId, fn($q) => $q->where('id', '!=', $exceptId))
+                ->first();
 
-$sahitya->save();
+            if (!$conflict)
+                break;
 
-
-    return response()->json(['success' => true]);
-}
-
-private function shiftPreferences($category, $newPref, $exceptId = null)
-{
-    while (true) {
-        $conflict = Sahitya::where('category', $category)
-            ->where('preference', $newPref)
-            ->when($exceptId, fn($q) => $q->where('id', '!=', $exceptId))
-            ->first();
-
-        if (!$conflict) break;
-
-        $newPref += 1; // push next
-        $conflict->preference = $newPref;
-        $conflict->save();
+            $newPref += 1; // push next
+            $conflict->preference = $newPref;
+            $conflict->save();
+        }
     }
-}
 
 
 
@@ -134,8 +169,8 @@ private function shiftPreferences($category, $newPref, $exceptId = null)
     public function getByCategory($category)
     {
         return Sahitya::where('category', $category)
-                      ->orderBy('preference')
-                      ->get();
+            ->orderBy('preference')
+            ->get();
     }
 
     // 🏠 Homepage books fetch

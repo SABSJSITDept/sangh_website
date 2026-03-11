@@ -93,8 +93,8 @@
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label">Preference</label>
-                        <input type="number" name="preference" class="form-control" />
+                        <label class="form-label">Preference <span class="text-danger">*</span></label>
+                        <input type="number" name="preference" class="form-control" required />
                     </div>
 
                     <div class="col-md-3">
@@ -316,11 +316,23 @@
         try {
             const res = await fetch(url, {
                 method: 'POST',
-                headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+                headers: { 
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
                 body: formData
             });
 
-            if (!res.ok) throw new Error();
+            if (!res.ok) {
+                const errData = await res.json();
+                let errorMessage = 'Something went wrong';
+                if (errData.errors) {
+                    errorMessage = Object.values(errData.errors).flat().join('<br>');
+                } else if (errData.message) {
+                    errorMessage = errData.message;
+                }
+                throw new Error(errorMessage);
+            }
 
             Swal.fire('✅ Success', editId ? 'Updated successfully' : 'Book added', 'success');
             form.reset();
@@ -328,8 +340,12 @@
             toggleFileType();
             fetchHomepageBook();
             fetchByCategory(document.getElementById('categorySelector').value);
-        } catch {
-            Swal.fire('❌ Error', 'Something went wrong', 'error');
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '❌ Error',
+                html: error.message || 'Something went wrong'
+            });
         } finally {
             document.getElementById('loadingOverlay').style.display = 'none';
             document.getElementById('mainContainer').classList.remove('blurred');
