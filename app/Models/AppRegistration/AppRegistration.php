@@ -44,6 +44,7 @@ class AppRegistration extends Model
         'family_id',
         'app_status',
         'registration',
+        'password',
     ];
 
     protected $casts = [

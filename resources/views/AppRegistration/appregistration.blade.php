@@ -85,6 +85,14 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                            <small class="text-danger" id="password-error"></small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label for="gender" class="form-label">Gender</label>
                             <select class="form-select" id="gender" name="gender">
                                 <option value="">Select Gender</option>
