@@ -12,6 +12,7 @@ use App\Models\Aanchal\Aanchal;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FeedBack\FeedBackController;
+use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 
 
 /*
@@ -607,3 +608,9 @@ Route::get('/api/event/{id}/share-info', function ($id) {
 });
 
 Route::get('/feedback', [FeedBackController::class, 'index'])->name('feedback.index');
+
+// App Registration Routes (Super Admin Only)
+Route::middleware('web', 'checkSession', 'matchRole:super_admin')->group(function () {
+    Route::get('/app-registration', [AddAppRegistrationController::class, 'create'])->name('app-registration.index');
+    Route::get('/app-registration/{id}/edit', [AddAppRegistrationController::class, 'edit'])->name('app-registration.edit');
+});

@@ -71,6 +71,7 @@ use App\Http\Controllers\Spf\SpfSafarnamaController;
 use App\Http\Controllers\Spf\SpfDownloadsController;
 use App\Http\Controllers\Spf\SpfEventRegController;
 use App\Http\Controllers\FeedBack\FeedBackController;
+use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 
 
 
@@ -476,5 +477,8 @@ Route::get('spf-event-reg-events', [SpfEventRegController::class, 'getEvents']);
 
 
 
+
+// App Registration API Resource
+Route::apiResource('app-registrations', AddAppRegistrationController::class);
 
 Route::post('/app-feedback', [FeedBackController::class, 'store']);
