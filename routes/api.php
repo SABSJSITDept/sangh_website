@@ -481,4 +481,8 @@ Route::get('spf-event-reg-events', [SpfEventRegController::class, 'getEvents']);
 // App Registration API Resource
 Route::apiResource('app-registrations', AddAppRegistrationController::class);
 
+// Registration Status API Resource
+use App\Http\Controllers\AppRegistration\RegistrationStatusController;
+Route::apiResource('registration-statuses', RegistrationStatusController::class);
+
 Route::post('/app-feedback', [FeedBackController::class, 'store']);

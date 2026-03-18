@@ -13,6 +13,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FeedBack\FeedBackController;
 use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
+use App\Http\Controllers\AppRegistration\RegistrationStatusController;
 
 
 /*
@@ -613,4 +614,7 @@ Route::get('/feedback', [FeedBackController::class, 'index'])->name('feedback.in
 Route::middleware('web', 'checkSession', 'matchRole:super_admin')->group(function () {
     Route::get('/app-registration', [AddAppRegistrationController::class, 'create'])->name('app-registration.index');
     Route::get('/app-registration/{id}/edit', [AddAppRegistrationController::class, 'edit'])->name('app-registration.edit');
+    
+    // Registration Status Routes
+    Route::get('/registration-status', [RegistrationStatusController::class, 'create'])->name('registration-status.index');
 });
