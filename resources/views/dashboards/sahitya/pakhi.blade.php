@@ -64,9 +64,10 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-semibold">Replace PDF (Optional, Max 2MB)</label>
-                <input type="file" name="pdf" id="edit_pdf" class="form-control" accept="application/pdf">
+                <label class="form-label fw-semibold">Replace PDF (Optional, Max 5MB)</label>
+                <input type="file" name="pdf" id="edit_pdf" class="form-control" accept="application/pdf" onchange="checkFileSize(this)">
                 <div class="form-text text-muted">If left empty, existing PDF will remain.</div>
+                <div id="fileSizeError" class="text-danger small mt-2" style="display:none;"></div>
             </div>
 
             <div class="d-flex justify-content-end">
@@ -79,6 +80,23 @@
 </div>
 
 <script>
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB in bytes
+
+function checkFileSize(input) {
+    const fileSizeError = document.getElementById('fileSizeError');
+    
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        if (file.size > MAX_FILE_SIZE) {
+            fileSizeError.textContent = `File size is ${(file.size / 1024 / 1024).toFixed(2)}MB. Maximum allowed is 5MB.`;
+            fileSizeError.style.display = 'block';
+            input.value = ''; // Clear the input
+        } else {
+            fileSizeError.style.display = 'none';
+        }
+    }
+}
+
 document.addEventListener("DOMContentLoaded", fetchPakhi);
 
 function fetchPakhi() {

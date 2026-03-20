@@ -326,7 +326,7 @@ Route::apiResource('home_slider', App\Http\Controllers\HomeSlider\AddHomeSlider:
 
 
 // -----------------Pakhi Ka Panna api ------------------------------------
-Route::apiResource('pakhi', AddPakhiController::class);
+Route::apiResource('pakhi', AddPakhiController::class)->only(['index', 'store', 'update', 'destroy']);
 // -----------------Pakhi Ka Panna api ------------------------------------
 
 
