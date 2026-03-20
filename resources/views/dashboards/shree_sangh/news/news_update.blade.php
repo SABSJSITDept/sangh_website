@@ -13,7 +13,8 @@
             <i class="bi bi-info-circle-fill me-2"></i>
             <div>
                 📸 IMAGE upload वैकल्पिक है। अगर upload करते हैं तो size 200 KB से ज़्यादा नहीं होना चाहिए। <br>
-                📝 Title और Description डालना अनिवार्य है।
+                📝 Title और Description डालना अनिवार्य है। <br>
+                🔗 अगर Offline mode चुनते हैं तो Google Location Link अनिवार्य है।
             </div>
         </div>
 
@@ -47,6 +48,25 @@
                 <input type="text" class="form-control" name="location" id="location" placeholder="Location">
             </div>
 
+            <!-- Online/Offline Toggle -->
+            <div class="col-md-6">
+                <label class="form-label">Event Type</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="modeToggle" name="mode_toggle">
+                    <label class="form-check-label" for="modeToggle">
+                        <span id="modeLabel">Offline</span>
+                    </label>
+                    <input type="hidden" name="mode" id="mode" value="offline">
+                </div>
+            </div>
+
+            <!-- Location Link (Google Maps) -->
+            <div class="col-md-6" id="locationLinkContainer" style="display: block;">
+                <label class="form-label">Google Location Link <span class="text-danger" id="locationLinkRequired">*</span></label>
+                <input type="url" class="form-control" name="location_link" id="location_link" placeholder="https://maps.google.com/...">
+                <small class="text-muted">Required for Offline events</small>
+            </div>
+
             <!-- Event DTP (Photo Upload) -->
             <div class="col-md-6">
                 <label class="form-label">Event DTP</label>
@@ -78,6 +98,24 @@
             const form = document.getElementById('newsForm');
             const newsList = document.getElementById('newsList');
             const submitBtn = document.getElementById('submitBtn');
+            const modeToggle = document.getElementById('modeToggle');
+            const modeInput = document.getElementById('mode');
+            const modeLabel = document.getElementById('modeLabel');
+            const locationLinkInput = document.getElementById('location_link');
+            const locationLinkRequired = document.getElementById('locationLinkRequired');
+
+            // Toggle handler for online/offline
+            modeToggle.addEventListener('change', function () {
+                if (this.checked) {
+                    modeInput.value = 'online';
+                    modeLabel.textContent = 'Online';
+                    locationLinkRequired.style.display = 'none';
+                } else {
+                    modeInput.value = 'offline';
+                    modeLabel.textContent = 'Offline';
+                    locationLinkRequired.style.display = 'inline';
+                }
+            });
 
             // Fetch News
             function fetchNews() {
@@ -91,6 +129,11 @@
                         }
 
                         data.forEach(item => {
+                            const modeLabel = item.mode === 'online' ? '🌐 Online' : '📍 Offline';
+                            const locationDisplay = item.mode === 'online' 
+                                ? (item.location_link ? `<a href="${item.location_link}" target="_blank"><i class="bi bi-link-45deg"></i> Join Online</a>` : '')
+                                : (item.location_link ? `<a href="${item.location_link}" target="_blank"><i class="bi bi-geo-alt"></i> Location</a> - ${item.location || ''}` : (item.location || ''));
+
                             newsList.innerHTML += `
                                                                             <div class="border rounded p-2 mb-2 d-flex align-items-center justify-content-between shadow-sm">
                                                                                 <div class="d-flex align-items-center">
@@ -102,10 +145,15 @@
                                                                                     <!-- Details -->
                                                                                     <div>
                                                                                         <h6 class="mb-1 text-primary fw-bold">${item.title}</h6>
+                                                                                        <small class="text-muted badge ${item.mode === 'online' ? 'bg-success' : 'bg-info'}">${modeLabel}</small>
+                                                                                        <br>
                                                                                         <small class="text-muted">
                                                                                             <i class="bi bi-calendar-event"></i> ${item.date ?? '-'}  
                                                                                             ${item.time ? ` | <i class="bi bi-clock"></i> ${item.time}` : ''}
-                                                                                            ${item.location ? ` | <i class="bi bi-geo-alt"></i> ${item.location}` : ''}
+                                                                                        </small>
+                                                                                        <br>
+                                                                                        <small class="text-muted">
+                                                                                            ${locationDisplay}
                                                                                         </small>
                                                                                         <p class="mb-0 small">${item.description ?? ''}</p>
                                                                                     </div>
@@ -133,9 +181,21 @@
                 const formData = new FormData(form);
                 const photo = formData.get('photo');
                 const newsId = document.getElementById('news_id').value;
+                const mode = modeInput.value;
+                const locationLink = locationLinkInput.value;
 
                 if (!formData.get('title') || !formData.get('description')) {
                     Swal.fire('Error', 'Title और Description डालना ज़रूरी है!', 'error');
+                    return;
+                }
+
+                if (mode === 'offline' && !locationLink) {
+                    Swal.fire('Error', 'Offline event के लिए Google Location Link ज़रूरी है!', 'error');
+                    return;
+                }
+
+                if (!locationLink.startsWith('http')) {
+                    Swal.fire('Error', 'Location Link एक valid URL होना चाहिए!', 'error');
                     return;
                 }
 
@@ -186,6 +246,10 @@
                         Swal.fire('Success', newsId ? 'News updated successfully!' : 'News added successfully!', 'success');
                         form.reset();
                         document.getElementById('news_id').value = '';
+                        modeToggle.checked = false;
+                        modeInput.value = 'offline';
+                        modeLabel.textContent = 'Offline';
+                        locationLinkRequired.style.display = 'inline';
                         submitBtn.innerHTML = `<i class="bi bi-plus-circle"></i> Add News`;
                         fetchNews();
                     })
@@ -199,7 +263,21 @@
                 document.getElementById('date').value = data.date;
                 document.getElementById('time').value = data.time;
                 document.getElementById('location').value = data.location;
+                document.getElementById('location_link').value = data.location_link || '';
                 document.getElementById('description').value = data.description;
+                
+                // Set toggle based on mode
+                if (data.mode === 'online') {
+                    modeToggle.checked = true;
+                    modeLabel.textContent = 'Online';
+                    locationLinkRequired.style.display = 'none';
+                } else {
+                    modeToggle.checked = false;
+                    modeLabel.textContent = 'Offline';
+                    locationLinkRequired.style.display = 'inline';
+                }
+                modeInput.value = data.mode || 'offline';
+                
                 submitBtn.innerHTML = `<i class="bi bi-arrow-repeat"></i> Update News`;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }

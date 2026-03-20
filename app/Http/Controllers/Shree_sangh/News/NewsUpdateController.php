@@ -18,16 +18,25 @@ class NewsUpdateController extends Controller
 
    public function store(Request $request)
 {
-    $request->validate([
+    $rules = [
         'title'       => 'required|string',
         'description' => 'required|string',
         'date'        => 'nullable|date',
         'time'        => 'nullable|string',
         'location'    => 'nullable|string',
-        'photo'       => 'nullable|image|max:200' // 20KB
-    ]);
+        'mode'        => 'required|in:online,offline',
+        'location_link' => 'nullable|url',
+        'photo'       => 'nullable|image|max:200' // 200KB
+    ];
 
-    $data = $request->only(['title', 'date', 'time', 'location', 'description']);
+    // If mode is offline, location_link is required
+    if ($request->input('mode') === 'offline') {
+        $rules['location_link'] = 'required|url';
+    }
+
+    $request->validate($rules);
+
+    $data = $request->only(['title', 'date', 'time', 'location', 'mode', 'location_link', 'description']);
 
     if ($request->hasFile('photo')) {
         $data['photo'] = $request->file('photo')->store('news', 'public');
@@ -42,14 +51,23 @@ class NewsUpdateController extends Controller
 {
     $news = News::findOrFail($id);
 
-    $data = $request->validate([
+    $rules = [
         'title'       => 'required|string',
         'description' => 'required|string',
         'date'        => 'nullable|date',
         'time'        => 'nullable|string',
         'location'    => 'nullable|string',
-        'photo'       => 'nullable|image|max:200' // 20KB
-    ]);
+        'mode'        => 'required|in:online,offline',
+        'location_link' => 'nullable|url',
+        'photo'       => 'nullable|image|max:200' // 200KB
+    ];
+
+    // If mode is offline, location_link is required
+    if ($request->input('mode') === 'offline') {
+        $rules['location_link'] = 'required|url';
+    }
+
+    $data = $request->validate($rules);
 
     if ($request->hasFile('photo')) {
         Storage::disk('public')->delete($news->photo);
