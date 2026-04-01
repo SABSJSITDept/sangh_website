@@ -548,6 +548,33 @@ main.content {
             </div>
         </div>
 
+        <!-- App Registration -->
+        <div class="nav-item">
+            <div class="nav-link menu-item d-flex align-items-center" onclick="toggleSubmenu(this)">
+                <i class="bi bi-person-plus"></i>
+                <span class="link-text">App Registration</span>
+                <i class="bi bi-chevron-down submenu-toggle"></i>
+            </div>
+            <div class="submenu">
+                <a href="{{ url('/app-registration') }}" class="nav-link">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Add Registration</span>
+                </a>
+                <a href="{{ url('/registration-status') }}" class="nav-link">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>Registration Status</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="nav-item">
+            <a href="{{ url('/status') }}" class="nav-link">
+                <i class="bi bi-toggle-on"></i>
+                <span class="link-text">Status</span>
+            </a>
+        </div>
+
         <!-- Logout -->
         <div class="nav-item">
             <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link">

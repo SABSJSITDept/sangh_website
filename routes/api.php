@@ -486,3 +486,13 @@ use App\Http\Controllers\AppRegistration\RegistrationStatusController;
 Route::apiResource('registration-statuses', RegistrationStatusController::class);
 
 Route::post('/app-feedback', [FeedBackController::class, 'store']);
+
+// ------------------Status api ------------------------------------
+use App\Http\Controllers\Status\StatusController;
+Route::prefix('status')->group(function () {
+    Route::get('/', [StatusController::class, 'index']);
+    Route::post('/', [StatusController::class, 'store']);
+    Route::put('/{id}', [StatusController::class, 'update']);
+    Route::delete('/{id}', [StatusController::class, 'destroy']);
+});
+// ------------------Status api ------------------------------------

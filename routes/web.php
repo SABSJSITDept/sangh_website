@@ -523,6 +523,10 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::get('/mobile_app_version', function () {
         return view('app_version.app_version');
     })->name('mobile_app_version');
+
+    Route::middleware('matchRole:super_admin')->get('/status', function () {
+        return view('status.Status');
+    })->name('status.manage');
 });
 
 Route::get('/yuva_content', function () {
