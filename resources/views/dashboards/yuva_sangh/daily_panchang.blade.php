@@ -5,6 +5,42 @@
 
 @section('content')
 
+@php
+    $tithis = [
+        'Pratipada' => 'प्रतिपदा',
+        'Dwitiya' => 'द्वितीया',
+        'Tritiya' => 'तृतीया',
+        'Chaturthi' => 'चतुर्थी',
+        'Panchami' => 'पंचमी',
+        'Shashti' => 'षष्ठी',
+        'Saptami' => 'सप्तमी',
+        'Ashtami' => 'अष्टमी',
+        'Navami' => 'नवमी',
+        'Dashami' => 'दशमी',
+        'Ekadashi' => 'एकादशी',
+        'Dwadashi' => 'द्वादशी',
+        'Trayodashi' => 'त्रयोदशी',
+        'Chaturdashi' => 'चतुर्दशी',
+        'Purnima' => 'पूर्णिमा',
+        'Amavasya' => 'अमावस्या',
+    ];
+
+    $months = [
+        'Chaitra' => 'चैत्र',
+        'Vaisakha' => 'वैशाख',
+        'Jyeshtha' => 'ज्येष्ठ',
+        'Ashadha' => 'आषाढ़',
+        'Shravana' => 'श्रावण',
+        'Bhadrapada' => 'भाद्रपद',
+        'Ashvina' => 'आश्विन',
+        'Kartika' => 'कार्तिक',
+        'Margashirsha' => 'मार्गशीर्ष',
+        'Pausha' => 'पौष',
+        'Magha' => 'माघ',
+        'Phalguna' => 'फाल्गुन',
+    ];
+@endphp
+
 <style>
     /* ───── Page Header ───── */
     .panchang-header {
@@ -184,14 +220,14 @@
                             <small class="text-muted">{{ $p->date->format('l') }}</small>
                         </td>
                         <td>
-                            <span class="badge-p bg-blue">{{ $p->lunar_month_name }}</span><br>
+                            <span class="badge-p bg-blue">{{ $months[$p->lunar_month_name] ?? $p->lunar_month_name }}</span><br>
                             <small class="text-muted">{{ $p->vikram_samvat }}</small>
                         </td>
                         <td>
                             <span class="tithi-num me-1">{{ $p->tithi_number }}</span>
-                            <span class="badge-p bg-orange">{{ $p->tithi }}</span>
+                            <span class="badge-p bg-orange">{{ $tithis[$p->tithi] ?? $p->tithi }}</span>
                         </td>
-                        <td><span class="badge-p bg-pink">{{ $p->tithi_two }}</span></td>
+                        <td><span class="badge-p bg-pink">{{ $tithis[$p->tithi_two] ?? $p->tithi_two }}</span></td>
                         <td>
                             @if(strtolower($p->paksha) == 'krishna')
                                 <span class="badge-p bg-dark-blue">🌑 {{ $p->paksha }}</span>
@@ -240,7 +276,12 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Lunar Month</label>
-                        <input type="text" name="lunar_month_name" class="form-control" placeholder="e.g. Vaisakha">
+                        <select name="lunar_month_name" class="form-select">
+                            <option value="">Select Month</option>
+                            @foreach($months as $key => $val)
+                                <option value="{{ $key }}">{{ $val }} ({{ $key }})</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Vikram Samvat</label>
@@ -252,11 +293,21 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Tithi (Sunrise)</label>
-                        <input type="text" name="tithi" class="form-control" placeholder="e.g. Purnima">
+                        <select name="tithi" class="form-select">
+                            <option value="">Select Tithi</option>
+                            @foreach($tithis as $key => $val)
+                                <option value="{{ $key }}">{{ $val }} ({{ $key }})</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Tithi (12 Noon)</label>
-                        <input type="text" name="tithi_two" class="form-control" placeholder="e.g. Purnima">
+                        <select name="tithi_two" class="form-select">
+                            <option value="">Select Tithi</option>
+                            @foreach($tithis as $key => $val)
+                                <option value="{{ $key }}">{{ $val }} ({{ $key }})</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Paksha</label>
@@ -303,7 +354,12 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Lunar Month</label>
-                        <input type="text" name="lunar_month_name" id="edit_month" class="form-control">
+                        <select name="lunar_month_name" id="edit_month" class="form-select">
+                            <option value="">Select Month</option>
+                            @foreach($months as $key => $val)
+                                <option value="{{ $key }}">{{ $val }} ({{ $key }})</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Vikram Samvat</label>
@@ -315,11 +371,21 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Tithi (Sunrise)</label>
-                        <input type="text" name="tithi" id="edit_tithi" class="form-control">
+                        <select name="tithi" id="edit_tithi" class="form-select">
+                            <option value="">Select Tithi</option>
+                            @foreach($tithis as $key => $val)
+                                <option value="{{ $key }}">{{ $val }} ({{ $key }})</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Tithi (12 Noon)</label>
-                        <input type="text" name="tithi_two" id="edit_tithi_two" class="form-control">
+                        <select name="tithi_two" id="edit_tithi_two" class="form-select">
+                            <option value="">Select Tithi</option>
+                            @foreach($tithis as $key => $val)
+                                <option value="{{ $key }}">{{ $val }} ({{ $key }})</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Paksha</label>
