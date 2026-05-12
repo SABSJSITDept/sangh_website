@@ -349,6 +349,8 @@ Route::middleware(['web', 'checkSession'])->group(function () {
 
     // Daily Panchang
     Route::get('/daily-panchang', [DailyPanchangController::class, 'index'])->name('daily.panchang');
+    Route::post('/daily-panchang/fetch', [DailyPanchangController::class, 'fetchForDate'])->name('daily.panchang.fetch');
+    Route::delete('/daily-panchang/{id}', [DailyPanchangController::class, 'destroy'])->name('daily.panchang.delete');
 
 
     Route::get('/chaturmas-suchi', function () {
