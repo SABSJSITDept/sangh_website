@@ -94,7 +94,6 @@
     /* Actions */
     .btn-action { background: none; border: none; padding: 5px; cursor: pointer; transition: transform 0.2s; }
     .btn-edit { color: #667eea; }
-    .btn-delete { color: #f5576c; }
     .btn-action:hover { transform: scale(1.2); }
 
     .tithi-num {
@@ -174,7 +173,7 @@
                         <th>Tithi (12 Noon)</th>
                         <th>Paksha / Pakhi</th>
                         <th>Event</th>
-                        <th class="text-center pe-4">Actions</th>
+                        <th class="text-center pe-4">Edit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -209,15 +208,9 @@
                             </div>
                         </td>
                         <td class="text-center pe-4">
-                            <button class="btn-action btn-edit" onclick="openEditModal({{ json_encode($p) }})" title="Edit">
+                            <button class="btn-action btn-edit" onclick='openEditModal({!! $p->toJson() !!})' title="Edit">
                                 <i class="bi bi-pencil-square fs-5"></i>
                             </button>
-                            <form action="{{ route('daily.panchang.delete', $p->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this record?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn-action btn-delete" title="Delete">
-                                    <i class="bi bi-trash3 fs-5"></i>
-                                </button>
-                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -358,8 +351,12 @@
 
 <script>
     function openEditModal(data) {
-        document.getElementById('editForm').action = "{{ url('/daily-panchang/update') }}/" + data.id;
-        document.getElementById('edit_date').value = data.date.split('T')[0];
+        if (!data) return;
+        
+        const form = document.getElementById('editForm');
+        form.action = "{{ url('/daily-panchang/update') }}/" + data.id;
+        
+        document.getElementById('edit_date').value = data.date ? data.date.split('T')[0] : '';
         document.getElementById('edit_month').value = data.lunar_month_name || '';
         document.getElementById('edit_samvat').value = data.vikram_samvat || '';
         document.getElementById('edit_tithi_num').value = data.tithi_number || '';
@@ -369,7 +366,8 @@
         document.getElementById('edit_is_pakhi').value = data.is_pakhi ? 1 : 0;
         document.getElementById('edit_today_event').value = data.today_event || '';
         
-        new bootstrap.Modal(document.getElementById('editPanchangModal')).show();
+        const editModal = new bootstrap.Modal(document.getElementById('editPanchangModal'));
+        editModal.show();
     }
 
     // Auto-hide alerts
