@@ -14,11 +14,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        // Har roz raat 12 baje IST (18:30 UTC) panchang fetch karo
-        // Agar server Indian timezone pe hai toh dailyAt('00:00') use karo
-        // Agar server UTC pe hai toh '18:30' use karo (18:30 UTC = 00:00 IST)
+        // Har roz DOPAHAR 12:00 baje IST cron chalti hai
+        // Aur KAL (agle din) ki date ka panchang data fetch hota hai
+        // 12:00 IST = 06:30 UTC
         $schedule->command('panchang:fetch')
-                 ->dailyAt('18:30')                    // 18:30 UTC = 00:00 IST (midnight India)
+                 ->dailyAt('06:30')                    // 06:30 UTC = 12:00 IST (dopahar)
                  ->timezone('UTC')
                  ->withoutOverlapping()
                  ->runInBackground()

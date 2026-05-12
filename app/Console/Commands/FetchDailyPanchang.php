@@ -18,7 +18,7 @@ class FetchDailyPanchang extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Fetch daily Vedic Panchang data from freeastroapi.com and store in database';
+    protected $description = 'Fetch NEXT day Vedic Panchang data from freeastroapi.com — cron dopahar 12 baje chalti hai aur KAL ki date ka data save karta hai';
 
     /**
      * Panchang API endpoint.
@@ -35,12 +35,13 @@ class FetchDailyPanchang extends Command
      */
     public function handle(): int
     {
-        // Agar --date option diya ho toh woh use karo, warna aaj ki date
+        // Agar --date option diya ho toh woh use karo,
+        // warna DEFAULT = KAL ki date (agle din)
+        // Logic: cron aaj dopahar 12 baje chalti hai → kal ka data pehle se ready rehta hai
         $targetDate = $this->option('date')
-            ? Carbon::parse($this->option('date'))
-            : Carbon::now('Asia/Kolkata');
+            ? Carbon::parse($this->option('date'), 'Asia/Kolkata')
+            : Carbon::tomorrow('Asia/Kolkata');          // ← KAL ki date
 
-        // Time hamesha 12:00 (noon) rehni chahiye jaise request ne bataya
         $year   = (int) $targetDate->format('Y');
         $month  = (int) $targetDate->format('m');
         $day    = (int) $targetDate->format('d');
@@ -49,7 +50,8 @@ class FetchDailyPanchang extends Command
 
         $dateString = $targetDate->format('Y-m-d');
 
-        $this->info("Fetching Panchang for date: {$dateString} at {$hour}:{$minute}");
+        $this->info("[Cron] Aaj: " . Carbon::now('Asia/Kolkata')->format('Y-m-d d-M-Y H:i') . " IST");
+        $this->info("[Cron] Fetch ho raha hai KAL ki date ke liye: {$dateString}");
 
         // Check karo kya is date ka record pehle se hai
         if (DailyPanchang::where('date', $dateString)->exists()) {
