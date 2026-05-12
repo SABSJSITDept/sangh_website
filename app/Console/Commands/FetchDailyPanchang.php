@@ -42,10 +42,10 @@ class FetchDailyPanchang extends Command
             ? Carbon::parse($this->option('date'), 'Asia/Kolkata')
             : Carbon::tomorrow('Asia/Kolkata');          // ← KAL ki date
 
-        $year   = (int) $targetDate->format('Y');
-        $month  = (int) $targetDate->format('m');
-        $day    = (int) $targetDate->format('d');
-        $hour   = 12;
+        $year = (int) $targetDate->format('Y');
+        $month = (int) $targetDate->format('m');
+        $day = (int) $targetDate->format('d');
+        $hour = 12;
         $minute = 0;
 
         $dateString = $targetDate->format('Y-m-d');
@@ -61,34 +61,34 @@ class FetchDailyPanchang extends Command
 
         // API request body
         $requestBody = [
-            'year'         => $year,
-            'month'        => $month,
-            'day'          => $day,
-            'hour'         => $hour,
-            'minute'       => $minute,
-            'city'         => 'Bikaner',
-            'lat'          => 28.0271,
-            'lng'          => 73.3022,
-            'tz_str'       => 'Asia/Kolkata',
-            'ayanamsha'    => 'lahiri',
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
+            'hour' => $hour,
+            'minute' => $minute,
+            'city' => 'Bikaner',
+            'lat' => 28.0271,
+            'lng' => 73.3022,
+            'tz_str' => 'Asia/Kolkata',
+            'ayanamsha' => 'lahiri',
             'house_system' => 'whole_sign',
-            'node_type'    => 'mean',
+            'node_type' => 'mean',
         ];
 
         try {
             $response = Http::withHeaders([
-                'x-api-key'    => self::API_KEY,
+                'x-api-key' => self::API_KEY,
                 'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
+                'Accept' => 'application/json',
             ])->post(self::API_URL, $requestBody);
 
             if (!$response->successful()) {
                 $this->error("API request failed. Status: {$response->status()}");
                 $this->error("Response: {$response->body()}");
                 Log::error('PanchangFetch: API request failed', [
-                    'status'   => $response->status(),
+                    'status' => $response->status(),
                     'response' => $response->body(),
-                    'date'     => $dateString,
+                    'date' => $dateString,
                 ]);
                 return Command::FAILURE;
             }
@@ -96,24 +96,24 @@ class FetchDailyPanchang extends Command
             $data = $response->json();
 
             // Required fields extract karo
-            $date            = $data['date']                                        ?? $dateString;
-            $lunarMonthName  = $data['lunar_month']['name']                         ?? null;
-            $vikramSamvat    = $data['lunar_month']['vikram_samvat']                ?? null;
-            $tithiNumber     = $data['tithi']['number']                             ?? null;
-            $tithi           = $data['tithi']['name']                               ?? null;
-            $paksha          = $data['tithi']['paksha']                             ?? null;
-            $tithiTwo        = $data['request_time_panchang']['tithi']['name']      ?? null;
+            $date = $data['date'] ?? $dateString;
+            $lunarMonthName = $data['lunar_month']['name'] ?? null;
+            $vikramSamvat = $data['lunar_month']['vikram_samvat'] ?? null;
+            $tithiNumber = $data['tithi']['number'] ?? null;
+            $tithi = $data['tithi']['name'] ?? null;
+            $paksha = $data['tithi']['paksha'] ?? null;
+            $tithiTwo = $data['request_time_panchang']['tithi']['name'] ?? null;
 
             // Database mein save karo (updateOrCreate - duplicate avoid karne ke liye)
             DailyPanchang::updateOrCreate(
                 ['date' => $date],
                 [
                     'lunar_month_name' => $lunarMonthName,
-                    'vikram_samvat'    => $vikramSamvat,
-                    'tithi_number'     => $tithiNumber,
-                    'tithi'            => $tithi,
-                    'paksha'           => $paksha,
-                    'tithi_two'        => $tithiTwo,
+                    'vikram_samvat' => $vikramSamvat,
+                    'tithi_number' => $tithiNumber,
+                    'tithi' => $tithi,
+                    'paksha' => $paksha,
+                    'tithi_two' => $tithiTwo,
                 ]
             );
 
@@ -121,22 +121,22 @@ class FetchDailyPanchang extends Command
             $this->table(
                 ['Field', 'Value'],
                 [
-                    ['Date',            $date],
-                    ['Lunar Month',     $lunarMonthName],
-                    ['Vikram Samvat',   $vikramSamvat],
-                    ['Tithi Number',    $tithiNumber],
-                    ['Tithi',           $tithi],
-                    ['Paksha',          $paksha],
-                    ['Tithi Two',       $tithiTwo],
+                    ['Date', $date],
+                    ['Lunar Month', $lunarMonthName],
+                    ['Vikram Samvat', $vikramSamvat],
+                    ['Tithi Number', $tithiNumber],
+                    ['Tithi', $tithi],
+                    ['Paksha', $paksha],
+                    ['Tithi Two', $tithiTwo],
                 ]
             );
 
             Log::info('PanchangFetch: Successfully fetched and saved', [
-                'date'           => $date,
-                'lunar_month'    => $lunarMonthName,
-                'vikram_samvat'  => $vikramSamvat,
-                'tithi'          => $tithi,
-                'paksha'         => $paksha,
+                'date' => $date,
+                'lunar_month' => $lunarMonthName,
+                'vikram_samvat' => $vikramSamvat,
+                'tithi' => $tithi,
+                'paksha' => $paksha,
             ]);
 
             return Command::SUCCESS;
@@ -145,8 +145,8 @@ class FetchDailyPanchang extends Command
             $this->error("Exception occurred: {$e->getMessage()}");
             Log::error('PanchangFetch: Exception', [
                 'message' => $e->getMessage(),
-                'trace'   => $e->getTraceAsString(),
-                'date'    => $dateString,
+                'trace' => $e->getTraceAsString(),
+                'date' => $dateString,
             ]);
             return Command::FAILURE;
         }

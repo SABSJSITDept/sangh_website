@@ -72,6 +72,7 @@ use App\Http\Controllers\Spf\SpfDownloadsController;
 use App\Http\Controllers\Spf\SpfEventRegController;
 use App\Http\Controllers\FeedBack\FeedBackController;
 use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
+use App\Http\Controllers\Panchang\PanchangApiController;
 
 
 
@@ -496,3 +497,10 @@ Route::prefix('status')->group(function () {
     Route::delete('/{id}', [StatusController::class, 'destroy']);
 });
 // ------------------Status api ------------------------------------
+
+// ------------------Panchang api ------------------------------------
+Route::prefix('panchang')->group(function () {
+    Route::get('/', [PanchangApiController::class, 'index']);        // sab records date wise
+    Route::get('/today', [PanchangApiController::class, 'today']);   // sirf aaj ka record
+});
+// ------------------Panchang api ------------------------------------
