@@ -166,9 +166,18 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     })->name('dashboard.sahitya_publication');
 
     // Yuva Sangh Dashboard
-    Route::middleware('matchRole:yuva_sangh,super_admin')->get('/dashboard/yuva_sangh', function () {
-        return view('dashboards.yuva_sangh.index');
-    })->name('dashboard.yuva_sangh');
+    Route::middleware('matchRole:yuva_sangh,super_admin')->group(function () {
+        Route::get('/dashboard/yuva_sangh', function () {
+            return view('dashboards.yuva_sangh.index');
+        })->name('dashboard.yuva_sangh');
+
+        // Daily Panchang (Yuva Sangh)
+        Route::get('/daily-panchang', [DailyPanchangController::class, 'index'])->name('daily.panchang');
+        Route::post('/daily-panchang/store', [DailyPanchangController::class, 'store'])->name('daily.panchang.store');
+        Route::post('/daily-panchang/update/{id}', [DailyPanchangController::class, 'update'])->name('daily.panchang.update');
+        Route::post('/daily-panchang/fetch', [DailyPanchangController::class, 'fetchForDate'])->name('daily.panchang.fetch');
+        Route::delete('/daily-panchang/{id}', [DailyPanchangController::class, 'destroy'])->name('daily.panchang.delete');
+    });
 
     // Mahila Samiti Dashboard
     Route::middleware('matchRole:mahila_samiti,super_admin')->get('/dashboard/mahila_samiti', function () {
@@ -347,10 +356,7 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.shree_sangh.daily_thoughts');
     })->name('daily.thoughts');
 
-    // Daily Panchang
-    Route::get('/daily-panchang', [DailyPanchangController::class, 'index'])->name('daily.panchang');
-    Route::post('/daily-panchang/fetch', [DailyPanchangController::class, 'fetchForDate'])->name('daily.panchang.fetch');
-    Route::delete('/daily-panchang/{id}', [DailyPanchangController::class, 'destroy'])->name('daily.panchang.delete');
+
 
 
     Route::get('/chaturmas-suchi', function () {

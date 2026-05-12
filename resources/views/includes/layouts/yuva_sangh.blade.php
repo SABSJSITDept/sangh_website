@@ -493,9 +493,13 @@ main.content {
                     <i class="bi bi-broadcast"></i>
                     <span>PRAVARTIYA</span>
                 </a>
-                  <a href="{{ url('/yuva_content') }}" class="nav-link">
+                <a href="{{ url('/yuva_content') }}" class="nav-link">
                     <i class="bi bi-phone"></i>
                     <span>Update The Content</span>
+                </a>
+                <a href="{{ route('daily.panchang') }}" class="nav-link">
+                    <i class="bi bi-calendar-check"></i>
+                    <span>दैनिक पंचांग</span>
                 </a>
             </div>
         </div>

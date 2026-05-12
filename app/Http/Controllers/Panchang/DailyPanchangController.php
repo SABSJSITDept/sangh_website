@@ -28,7 +28,54 @@ class DailyPanchangController extends Controller
 
         $panchangs = $query->paginate(15)->withQueryString();
 
-        return view('dashboards.shree_sangh.daily_panchang', compact('panchangs'));
+        return view('dashboards.yuva_sangh.daily_panchang', compact('panchangs'));
+    }
+
+    /**
+     * Manually add a new panchang record
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'date'             => 'required|date|unique:daily_panchangs,date',
+            'lunar_month_name' => 'nullable|string',
+            'vikram_samvat'    => 'nullable|string',
+            'tithi_number'     => 'nullable|integer',
+            'tithi'            => 'nullable|string',
+            'paksha'           => 'nullable|string',
+            'tithi_two'        => 'nullable|string',
+            'is_pakhi'         => 'nullable|boolean',
+            'today_event'      => 'nullable|string',
+        ]);
+
+        DailyPanchang::create($request->all());
+
+        return redirect()->back()->with('success', '✅ Panchang record manually add ho gaya!');
+    }
+
+    /**
+     * Update an existing panchang record
+     */
+    public function update(Request $request, $id)
+    {
+        $record = DailyPanchang::findOrFail($id);
+
+        $request->validate([
+            'date'             => 'required|date|unique:daily_panchangs,date,' . $id,
+            'lunar_month_name' => 'nullable|string',
+            'vikram_samvat'    => 'nullable|string',
+            'tithi_number'     => 'nullable|integer',
+            'tithi'            => 'nullable|string',
+            'paksha'           => 'nullable|string',
+            'tithi_two'        => 'nullable|string',
+            'is_pakhi'         => 'nullable|boolean',
+            'today_event'      => 'nullable|string',
+        ]);
+
+
+        $record->update($request->all());
+
+        return redirect()->back()->with('success', '✅ Panchang record update ho gaya!');
     }
 
     /**

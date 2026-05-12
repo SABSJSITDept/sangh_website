@@ -19,10 +19,13 @@ class DailyPanchang extends Model
         'tithi',
         'paksha',
         'tithi_two',
+        'is_pakhi',
+        'today_event',
     ];
 
     protected $casts = [
-        'date'         => 'date',
+        'date'          => 'date',
+        'is_pakhi'      => 'boolean',
         'vikram_samvat' => 'integer',
         'tithi_number'  => 'integer',
     ];

@@ -41,6 +41,8 @@ class PanchangApiController extends Controller
                 'tithi'           => $p->tithi,
                 'tithi_two'       => $p->tithi_two,
                 'paksha'          => $p->paksha,
+                'is_pakhi'        => $p->is_pakhi,
+                'today_event'     => $p->today_event,
             ];
         });
 
@@ -78,6 +80,8 @@ class PanchangApiController extends Controller
                 'tithi'         => $record->tithi,
                 'tithi_two'     => $record->tithi_two,
                 'paksha'        => $record->paksha,
+                'is_pakhi'      => $record->is_pakhi,
+                'today_event'   => $record->today_event,
             ],
         ]);
     }
