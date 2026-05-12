@@ -13,6 +13,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // Har roz raat 12 baje IST (18:30 UTC) panchang fetch karo
+        // Agar server Indian timezone pe hai toh dailyAt('00:00') use karo
+        // Agar server UTC pe hai toh '18:30' use karo (18:30 UTC = 00:00 IST)
+        $schedule->command('panchang:fetch')
+                 ->dailyAt('18:30')                    // 18:30 UTC = 00:00 IST (midnight India)
+                 ->timezone('UTC')
+                 ->withoutOverlapping()
+                 ->runInBackground()
+                 ->appendOutputTo(storage_path('logs/panchang-cron.log'));
     }
 
     /**

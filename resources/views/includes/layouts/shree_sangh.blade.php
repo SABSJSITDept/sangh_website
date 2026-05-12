@@ -545,6 +545,9 @@
                         <a href="{{ url('/aavedan_patra') }}">
                             <i class="bi bi-file-earmark-text"></i> आवेदन पत्र
                         </a>
+                        <a href="{{ url('/daily-panchang') }}">
+                            <i class="bi bi-calendar3"></i> 🕉️ दैनिक पंचांग
+                        </a>
                     </div>
                 </div>
 

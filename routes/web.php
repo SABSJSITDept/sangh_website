@@ -14,6 +14,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FeedBack\FeedBackController;
 use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 use App\Http\Controllers\AppRegistration\RegistrationStatusController;
+use App\Http\Controllers\Panchang\DailyPanchangController;
 
 
 /*
@@ -345,6 +346,9 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::get('/daily-thoughts', function () {
         return view('dashboards.shree_sangh.daily_thoughts');
     })->name('daily.thoughts');
+
+    // Daily Panchang
+    Route::get('/daily-panchang', [DailyPanchangController::class, 'index'])->name('daily.panchang');
 
 
     Route::get('/chaturmas-suchi', function () {
