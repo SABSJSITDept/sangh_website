@@ -158,6 +158,7 @@ const csrfHeaders = {
     'X-Requested-With': 'XMLHttpRequest'
 };
 
+let allData = [];
 let usedPosts = new Set();
 const MAX_BYTES = 200 * 1024;
 
@@ -194,6 +195,7 @@ function fetchPst(){
     fetch("/api/yuva-pst")
     .then(res => res.json())
     .then(data => {
+        allData = data;
         usedPosts = new Set(data.map(x => x.post));
         document.getElementById('pstCount').textContent = `${data.length} Members`;
         
@@ -216,7 +218,7 @@ function fetchPst(){
                             <img src="${item.photo}" class="card-img-top" style="height: 200px; object-fit: cover;">
                             <div class="position-absolute top-0 end-0 p-2">
                                 <div class="btn-group-vertical shadow-sm rounded-3 overflow-hidden">
-                                    <button class="btn btn-sm btn-white border px-2 py-1" onclick='openEdit(${JSON.stringify(item)})' title="Edit">
+                                    <button class="btn btn-sm btn-white border px-2 py-1" onclick="openEdit(${item.id})" title="Edit">
                                         <i class="bi bi-pencil-square text-primary"></i>
                                     </button>
                                     <button class="btn btn-sm btn-white border px-2 py-1" onclick="deletePst(${item.id})" title="Delete">
@@ -297,9 +299,14 @@ function deletePst(id){
     });
 }
 
-const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+let editModal;
+document.addEventListener("DOMContentLoaded", function() {
+    editModal = new bootstrap.Modal(document.getElementById('editModal'));
+});
 
-function openEdit(item){
+function openEdit(id){
+    const item = allData.find(x => x.id == id);
+    if(!item) return;
     document.getElementById('editId').value = item.id;
     document.getElementById('editName').value = item.name;
     document.getElementById('editPost').value = item.post;

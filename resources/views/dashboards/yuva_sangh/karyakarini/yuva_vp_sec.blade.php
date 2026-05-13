@@ -231,7 +231,7 @@ function renderTable(){
       </td>
       <td class="pe-4 py-3 text-end">
         <div class="btn-group shadow-sm rounded-3 overflow-hidden">
-            <button class="btn btn-sm btn-white border px-3" onclick='openEdit(${JSON.stringify(r)})' title="Edit">
+            <button class="btn btn-sm btn-white border px-3" onclick="openEdit(${r.id})" title="Edit">
                 <i class="bi bi-pencil-square text-primary"></i>
             </button>
             <button class="btn btn-sm btn-white border px-3" onclick="deleteRow(${r.id})" title="Delete">
@@ -260,9 +260,14 @@ document.querySelectorAll('#postTabs .nav-link').forEach(btn => {
   });
 });
 
-const entryModal = new bootstrap.Modal('#entryModal');
+let entryModal;
+document.addEventListener("DOMContentLoaded", function() {
+    entryModal = new bootstrap.Modal('#entryModal');
+});
 
-function openEdit(r){
+function openEdit(id){
+  const r = allData.find(x => x.id == id);
+  if(!r) return;
   document.getElementById('modalTitle').innerText = 'Edit Member Details';
   document.getElementById('editId').value = r.id;
   document.getElementById('name').value = r.name || '';

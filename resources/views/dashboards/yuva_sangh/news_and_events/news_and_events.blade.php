@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Updating...';
 
-        fetch(\`/api/yuva-news/\${id}\`, {
+        fetch(`/api/yuva-news/${id}`, {
             method: "POST",
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -214,12 +214,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+let allNews = [];
 function fetchNews() {
     fetch("/api/yuva-news")
         .then(res => res.json())
         .then(data => {
+            allNews = data;
             let container = document.getElementById("newsList");
-            document.getElementById("newsCount").textContent = \`\${data.length} Updates\`;
+            document.getElementById("newsCount").textContent = `${data.length} Updates`;
             
             let html = '<div class="table-responsive"><table class="table table-hover align-middle mb-0">';
             html += '<thead class="bg-light text-muted small text-uppercase"><tr>';
@@ -231,37 +233,37 @@ function fetchNews() {
                 html += '<tr><td colspan="3" class="text-center py-5 text-muted">No news added yet.</td></tr>';
             } else {
                 data.forEach((item, index) => {
-                    html += \`
+                    html += `
                         <tr class="transition-all">
                             <td class="ps-4 py-3">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="position-relative">
-                                        \${item.photo 
-                                            ? \`<img src="\${item.photo}" class="rounded-3 shadow-sm" style="width:50px;height:50px;object-fit:cover;">\`
-                                            : \`<div class="bg-light rounded-3 d-flex align-items-center justify-content-center text-muted" style="width:50px;height:50px;"><i class="bi bi-image"></i></div>\`
+                                        ${item.photo 
+                                            ? `<img src="${item.photo}" class="rounded-3 shadow-sm" style="width:50px;height:50px;object-fit:cover;">`
+                                            : `<div class="bg-light rounded-3 d-flex align-items-center justify-content-center text-muted" style="width:50px;height:50px;"><i class="bi bi-image"></i></div>`
                                         }
                                     </div>
                                     <div>
-                                        <h6 class="mb-0 fw-bold outfit-font text-dark">\${item.title ?? ""}</h6>
-                                        <small class="text-muted">ID: #\${item.id}</small>
+                                        <h6 class="mb-0 fw-bold outfit-font text-dark">${item.title ?? ""}</h6>
+                                        <small class="text-muted">ID: #${item.id}</small>
                                     </div>
                                 </div>
                             </td>
                             <td class="py-3">
-                                <p class="mb-0 small text-muted text-truncate" style="max-width:300px;">\${item.description ?? "No description provided."}</p>
+                                <p class="mb-0 small text-muted text-truncate" style="max-width:300px;">${item.description ?? "No description provided."}</p>
                             </td>
                             <td class="py-3 text-center pe-4">
                                 <div class="btn-group shadow-sm rounded-3 overflow-hidden">
-                                    <button class="btn btn-sm btn-white border px-3" onclick="openEdit(\${item.id}, '\${item.title ?? ''}', \`\${item.description ?? ''}\`, '\${item.photo ?? ''}')">
+                                    <button class="btn btn-sm btn-white border px-3" onclick="openEdit(${index})">
                                         <i class="bi bi-pencil-square text-primary"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-white border px-3" onclick="deleteNews(\${item.id})">
+                                    <button class="btn btn-sm btn-white border px-3" onclick="deleteNews(${item.id})">
                                         <i class="bi bi-trash3 text-danger"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
-                    \`;
+                    `;
                 });
             }
             html += '</tbody></table></div>';
@@ -282,7 +284,7 @@ function deleteNews(id) {
         borderRadius: '1rem'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(\`/api/yuva-news/\${id}\`, {
+            fetch(`/api/yuva-news/${id}`, {
                 method: "DELETE",
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -298,11 +300,13 @@ function deleteNews(id) {
     });
 }
 
-function openEdit(id, title, description, photo) {
-    document.getElementById("editNewsId").value = id;
-    document.getElementById("editTitle").value = title;
-    document.getElementById("editDescription").value = description;
-    document.getElementById("editPreview").innerHTML = photo ? \`<img src="\${photo}" class="img-fluid rounded-3 border shadow-sm mt-2" style="max-height:150px;">\` : "";
+function openEdit(index) {
+    const item = allNews[index];
+    if(!item) return;
+    document.getElementById("editNewsId").value = item.id;
+    document.getElementById("editTitle").value = item.title ?? '';
+    document.getElementById("editDescription").value = item.description ?? '';
+    document.getElementById("editPreview").innerHTML = item.photo ? `<img src="${item.photo}" class="img-fluid rounded-3 border shadow-sm mt-2" style="max-height:150px;">` : "";
     let modal = new bootstrap.Modal(document.getElementById("editNewsModal"));
     modal.show();
 }

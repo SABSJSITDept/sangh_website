@@ -243,7 +243,7 @@ function deleteSlider(id) {
         borderRadius: '1rem'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(\`/api/yuva-slider/\${id}\`, {
+            fetch(`/api/yuva-slider/${id}`, {
                 method: "DELETE",
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

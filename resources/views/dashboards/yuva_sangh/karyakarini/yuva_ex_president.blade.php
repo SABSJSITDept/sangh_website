@@ -142,10 +142,12 @@ document.getElementById('photo').addEventListener('change', function() {
     }
 });
 
+let allData = [];
 function fetchList() {
     fetch("/api/yuva-ex-president")
         .then(res => res.json())
         .then(data => {
+            allData = data;
             let container = document.getElementById("exPresidentTable");
             document.getElementById("recordCount").textContent = `${data.length} Records`;
             
@@ -168,7 +170,7 @@ function fetchList() {
                         </td>
                         <td class="pe-4 py-3 text-end">
                             <div class="btn-group shadow-sm rounded-3 overflow-hidden">
-                                <button class="btn btn-sm btn-white border px-3" onclick="editItem(${item.id}, '${item.name}', '${item.karyakal ?? ''}', '${item.city ?? ''}', '${item.photo}')" title="Edit">
+                                <button class="btn btn-sm btn-white border px-3" onclick="editItem(${item.id})" title="Edit">
                                     <i class="bi bi-pencil-square text-primary"></i>
                                 </button>
                                 <button class="btn btn-sm btn-white border px-3" onclick="deleteItem(${item.id})" title="Delete">
@@ -221,11 +223,13 @@ document.getElementById("exPresidentForm").addEventListener("submit", function(e
     });
 });
 
-function editItem(id, name, karyakal, city, photo){
-    document.getElementById("editId").value = id;
-    document.getElementById("name").value = name;
-    document.getElementById("karyakal").value = karyakal;
-    document.getElementById("city").value = city;
+function editItem(id){
+    const item = allData.find(x => x.id == id);
+    if(!item) return;
+    document.getElementById("editId").value = item.id;
+    document.getElementById("name").value = item.name;
+    document.getElementById("karyakal").value = item.karyakal ?? '';
+    document.getElementById("city").value = item.city ?? '';
 
     document.getElementById("formTitle").innerText = "Edit Ex-President";
     document.getElementById("submitBtn").innerHTML = '<i class="bi bi-arrow-repeat me-2"></i> Update Record';
@@ -233,7 +237,7 @@ function editItem(id, name, karyakal, city, photo){
     
     const preview = document.getElementById('photoPreview');
     const previewImg = preview.querySelector('img');
-    previewImg.src = photo;
+    previewImg.src = item.photo;
     preview.classList.remove('d-none');
     document.getElementById("photo").required = false;
 

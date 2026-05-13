@@ -144,6 +144,7 @@ function clearForm() {
     document.getElementById('formTitle').textContent = "Create New Entry";
 }
 
+let allData = [];
 function fetchAll() {
     fetch(API_BASE, {
         headers: {
@@ -152,7 +153,10 @@ function fetchAll() {
         }
     })
     .then(r => r.json())
-    .then(data => renderTable(data))
+    .then(data => {
+        allData = data;
+        renderTable(data);
+    })
     .catch(() => toast('error','Failed to load data'));
 }
 
@@ -173,7 +177,7 @@ function renderTable(data) {
                 <td class="text-center">${imgHtml}</td>
                 <td class="pe-4 text-end">
                     <div class="btn-group shadow-sm rounded-3 overflow-hidden">
-                        <button class="btn btn-sm btn-white border px-3" onclick='editItem(${JSON.stringify(item)})' title="Edit">
+                        <button class="btn btn-sm btn-white border px-3" onclick="editItem(${idx})" title="Edit">
                             <i class="bi bi-pencil-square text-primary"></i>
                         </button>
                         <button class="btn btn-sm btn-white border px-3" onclick="delItem(${item.id})" title="Delete">
@@ -193,7 +197,9 @@ function escapeHtml(str) {
     }[s]));
 }
 
-function editItem(item) {
+function editItem(index) {
+    const item = allData[index];
+    if(!item) return;
     document.getElementById('edit_id').value = item.id;
     document.getElementById('heading').value = item.heading ?? '';
     document.getElementById('content').value = item.content ?? '';
@@ -207,7 +213,7 @@ function delItem(id) {
     confirmBox("Delete this entry?")
     .then(res => {
         if (!res.isConfirmed) return;
-        return fetch(\`\${API_BASE}/\${id}\`, {
+        return fetch(`${API_BASE}/${id}`, {
             method: "DELETE",
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -243,7 +249,7 @@ document.getElementById('pravartiyaForm').addEventListener('submit', function(e)
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
 
-    fetch(isUpdate ? \`\${API_BASE}/\${id}\` : API_BASE, {
+    fetch(isUpdate ? `${API_BASE}/${id}` : API_BASE, {
         method: "POST",
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
