@@ -201,6 +201,17 @@
             transform: rotate(180deg);
         }
 
+        /* Collapsed Sidebar Adjustments */
+        .sidebar.collapsed .sidebar-logo span {
+            display: none;
+        }
+        .sidebar.collapsed .submenu-arrow {
+            display: none !important;
+        }
+        .sidebar.collapsed .submenu {
+            display: none !important;
+        }
+
         /* Header Styling */
         .main-content {
             flex: 1;
