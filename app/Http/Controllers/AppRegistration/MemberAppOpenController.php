@@ -17,9 +17,7 @@ class MemberAppOpenController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'member_id' => 'required|integer|exists:mrm_app,member_id',
-        ], [
-            'member_id.exists' => 'The provided member_id is invalid or not registered.',
+            'member_id' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
