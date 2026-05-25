@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
         ->name('change-password.sahitya');
     Route::view('/change-password_super_admin', 'change_password_dashboards.change_password_super_admin')
         ->name('change-password.super_admin');
+    Route::view('/change-password_app_user', 'change_password_dashboards.change_password_super_admin')
+        ->name('change-password.app_user');
     Route::view('/change-password_spf', 'change_password_dashboards.change_password_spf')
         ->name('change-password.spf');
 
@@ -66,7 +68,7 @@ Route::post('/register', function (Request $request) {
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|string|min:8|confirmed',
-        'role' => 'required|in:super_admin,shree_sangh,yuva_sangh,spf,mahila_samiti,sahitya,sahitya_publication'
+        'role' => 'required|in:super_admin,shree_sangh,yuva_sangh,spf,mahila_samiti,sahitya,sahitya_publication,app_user'
     ]);
 
     try {
@@ -116,6 +118,8 @@ Route::post('/login', function (Request $request) {
     switch ($user->role) {
         case 'super_admin':
             return redirect()->route('dashboard.super_admin');
+        case 'app_user':
+            return redirect()->route('dashboard.app_user');
         case 'sahitya':
             return redirect()->route('dashboard.sahitya');
         case 'sahitya_publication':
@@ -154,6 +158,11 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::middleware('matchRole:super_admin')->get('/dashboard/super_admin', function () {
         return view('dashboards.super_admin.index');
     })->name('dashboard.super_admin');
+
+    // App User Dashboard
+    Route::middleware('matchRole:app_user')->get('/dashboard/app_user', function () {
+        return view('dashboards.app_user.index');
+    })->name('dashboard.app_user');
 
     // Sahitya Dashboard
     Route::middleware('matchRole:sahitya,super_admin')->get('/dashboard/sahitya', function () {
@@ -492,13 +501,23 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.yuva_sangh.pravartiya.yuva_pravartiya');
     })->name('yuva_sangh_pravartiya.view');
 
-    Route::get('/send_notification-form', function () {
-        return view('notifications.send_notifications.send');
-    })->name('notification_send.view');
+    Route::middleware('matchRole:app_user')->group(function () {
+        Route::get('/send_notification-form', function () {
+            return view('notifications.send_notifications.send');
+        })->name('notification_send.view');
 
-    Route::get('/view_notifications_all', function () {
-        return view('notifications.super_admin_notifications');
-    })->name('notification_view.all_view');
+        Route::get('/view_notifications_all', function () {
+            return view('notifications.super_admin_notifications');
+        })->name('notification_view.all_view');
+
+        Route::get('/mobile_app_version', function () {
+            return view('app_version.app_version');
+        })->name('mobile_app_version');
+
+        Route::get('/status', function () {
+            return view('status.Status');
+        })->name('status.manage');
+    });
 
     Route::get('/view_notifications_shree_sangh', function () {
         return view('notifications.view_notifications');
@@ -531,14 +550,6 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::get('/send_notification-yuva_sangh', function () {
         return view('notifications.send_notifications.yuva_sangh_notifications');
     })->name('notification_send.yuva_sangh');
-
-    Route::get('/mobile_app_version', function () {
-        return view('app_version.app_version');
-    })->name('mobile_app_version');
-
-    Route::middleware('matchRole:super_admin')->get('/status', function () {
-        return view('status.Status');
-    })->name('status.manage');
 });
 
 Route::get('/yuva_content', function () {
@@ -626,8 +637,8 @@ Route::get('/api/event/{id}/share-info', function ($id) {
 
 Route::get('/feedback', [FeedBackController::class, 'index'])->name('feedback.index');
 
-// App Registration Routes (Super Admin Only)
-Route::middleware('web', 'checkSession', 'matchRole:super_admin')->group(function () {
+// App Registration Routes (App User Only)
+Route::middleware('web', 'checkSession', 'matchRole:app_user')->group(function () {
     Route::get('/app-registration', [AddAppRegistrationController::class, 'create'])->name('app-registration.index');
     Route::get('/app-registration/{id}/edit', [AddAppRegistrationController::class, 'edit'])->name('app-registration.edit');
     

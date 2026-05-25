@@ -410,6 +410,7 @@
             </div>
 
             <div class="sidebar-content">
+                @if(auth()->user() && auth()->user()->role === 'super_admin')
                 <span class="nav-group-label">Core Dashboard</span>
                 <div class="nav-item">
                     <a href="{{ url('dashboard/super_admin') }}" class="nav-link {{ Request::is('dashboard/super_admin*') ? 'active' : '' }}">
@@ -451,6 +452,16 @@
                         <span>Sahitya Pubs</span>
                     </a>
                 </div>
+                @endif
+
+                @if(auth()->user() && auth()->user()->role === 'app_user')
+                <span class="nav-group-label">Core Dashboard</span>
+                <div class="nav-item">
+                    <a href="{{ url('dashboard/app_user') }}" class="nav-link {{ Request::is('dashboard/app_user*') ? 'active' : '' }}">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
 
                 <span class="nav-group-label">Management</span>
                 <div class="nav-item">
@@ -485,6 +496,7 @@
                         <span>System Status</span>
                     </a>
                 </div>
+                @endif
 
                 <div class="nav-item mt-4">
                     <a href="javascript:void(0)" onclick="logoutFunction()" class="nav-link text-danger">
@@ -517,13 +529,13 @@
                     <div class="dropdown">
                         <div class="user-profile-dropdown" data-bs-toggle="dropdown">
                             <div class="user-info d-none d-md-block">
-                                <span class="user-name">Hello Admin</span>
-                                <span class="user-role">Super User</span>
+                                <span class="user-name">Hello {{ auth()->user()->name ?? 'Admin' }}</span>
+                                <span class="user-role">{{ auth()->user() ? ucwords(str_replace('_', ' ', auth()->user()->role)) : 'Super User' }}</span>
                             </div>
-                            <img src="https://ui-avatars.com/api/?name=Admin&background=f59e0b&color=fff" alt="User" class="user-avatar">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}&background=f59e0b&color=fff" alt="User" class="user-avatar">
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2" style="border-radius: 12px;">
-                            <li><a class="dropdown-item rounded-3 py-2" href="{{ url('/change-password_super_admin') }}"><i class="bi bi-key me-2"></i> Change Password</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="{{ url('/change-password_' . (auth()->user()->role ?? 'super_admin')) }}"><i class="bi bi-key me-2"></i> Change Password</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item rounded-3 py-2 text-danger" href="javascript:void(0)" onclick="logoutFunction()"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
                         </ul>
