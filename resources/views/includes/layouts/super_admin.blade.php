@@ -475,6 +475,7 @@
                     <ul class="submenu">
                         <li><a href="{{ url('/app-registration') }}" class="nav-link">Add New</a></li>
                         <li><a href="{{ url('/registration-status') }}" class="nav-link">Status List</a></li>
+                        <li><a href="{{ url('/app-opens-dashboard') }}" class="nav-link {{ Request::is('app-opens-dashboard*') ? 'active' : '' }}">App Open Logs</a></li>
                     </ul>
                 </div>
 

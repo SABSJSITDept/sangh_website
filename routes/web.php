@@ -633,4 +633,9 @@ Route::middleware('web', 'checkSession', 'matchRole:super_admin')->group(functio
     
     // Registration Status Routes
     Route::get('/registration-status', [RegistrationStatusController::class, 'create'])->name('registration-status.index');
+
+    // App Opens Dashboard Route
+    Route::get('/app-opens-dashboard', function () {
+        return view('dashboards.super_admin.app_opens');
+    })->name('admin.app_opens');
 });

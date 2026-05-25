@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('mrm_app', function (Blueprint $table) {
-            $table->string('password')->nullable()->after('registration');
+        Schema::create('member_app_opens', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('member_id');
+            $table->timestamps();
+
+            $table->index('member_id');
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('mrm_app', function (Blueprint $table) {
-            $table->dropColumn('password');
-        });
+        Schema::dropIfExists('member_app_opens');
     }
 };

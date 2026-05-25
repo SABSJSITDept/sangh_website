@@ -72,6 +72,7 @@ use App\Http\Controllers\Spf\SpfDownloadsController;
 use App\Http\Controllers\Spf\SpfEventRegController;
 use App\Http\Controllers\FeedBack\FeedBackController;
 use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
+use App\Http\Controllers\AppRegistration\MemberAppOpenController;
 use App\Http\Controllers\Panchang\PanchangApiController;
 
 
@@ -487,6 +488,10 @@ use App\Http\Controllers\AppRegistration\RegistrationStatusController;
 Route::apiResource('registration-statuses', RegistrationStatusController::class);
 
 Route::post('/app-feedback', [FeedBackController::class, 'store']);
+
+// Member App Open Track API
+Route::post('member-app-opens', [MemberAppOpenController::class, 'store']);
+Route::get('member-app-opens/today', [MemberAppOpenController::class, 'getTodayOpens']);
 
 // ------------------Status api ------------------------------------
 use App\Http\Controllers\Status\StatusController;
