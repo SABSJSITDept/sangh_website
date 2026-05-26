@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class DailyThought extends Model
 {
-    protected $fillable = ['thought'];
+    protected $fillable = ['thought', 'date'];
 }

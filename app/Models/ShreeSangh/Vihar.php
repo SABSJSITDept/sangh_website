@@ -11,6 +11,7 @@ class Vihar extends Model
     protected $table = 'vihar';
 
     protected $fillable = [
+        'date',
         'location',
         'location_link',
     ];

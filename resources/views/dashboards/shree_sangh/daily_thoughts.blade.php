@@ -25,6 +25,10 @@
                     <label for="thought" class="form-label">New Thought</label>
                     <textarea class="form-control" id="thought" name="thought" required></textarea>
                 </div>
+                <div class="mb-3">
+                    <label for="thought_date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="thought_date" name="date" required>
+                </div>
                 <input type="hidden" id="thoughtId">
                 <button type="submit" class="btn btn-success">Save Thought</button>
             </form>
@@ -55,9 +59,24 @@ function showToast(icon, title) {
     });
 }
 
+function getLocalDateString(date) {
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+    return localDate.toISOString().split('T')[0];
+}
+
 function formatDate(dateString) {
-    const options = { day: '2-digit', month: 'short', year: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-GB', options);
+    if (!dateString) return '';
+    if (dateString.includes('T') || dateString.includes(' ')) {
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-GB', options);
+    }
+    const parts = dateString.split('-');
+    if (parts.length === 3) {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${parts[2]} ${months[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
+    }
+    return dateString;
 }
 
 function fetchLatestThought() {
@@ -66,7 +85,7 @@ function fetchLatestThought() {
         .then(latest => {
             const box = document.getElementById('latestThoughtBox');
             if (latest && latest.thought) {
-                const date = formatDate(latest.created_at);
+                const date = latest.date ? formatDate(latest.date) : formatDate(latest.created_at);
                 box.innerHTML = `<strong>${latest.thought}</strong><br><small class="text-muted">${date}</small>`;
             } else {
                 box.innerHTML = `<em>No thought found.</em>`;
@@ -82,7 +101,7 @@ function fetchThoughts(page = 1) {
             list.innerHTML = '';
 
             data.data.forEach(thought => {
-                const date = formatDate(thought.created_at);
+                const date = thought.date ? formatDate(thought.date) : formatDate(thought.created_at);
                 list.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between align-items-start">
                         <div>
@@ -90,7 +109,7 @@ function fetchThoughts(page = 1) {
                             <small class="text-muted">${date}</small>
                         </div>
                         <div>
-                            <button class="btn btn-sm btn-primary me-2" onclick="editThought(${thought.id}, \`${thought.thought}\`)">Edit</button>
+                            <button class="btn btn-sm btn-primary me-2" onclick="editThought(${thought.id}, \`${thought.thought}\`, '${thought.date || ''}')">Edit</button>
                             <button class="btn btn-sm btn-danger" onclick="deleteThought(${thought.id})">Delete</button>
                         </div>
                     </li>
@@ -128,9 +147,16 @@ function renderPagination(data) {
     pagination.innerHTML = html;
 }
 
-function editThought(id, text) {
+function editThought(id, text, date) {
     document.getElementById('thought').value = text;
     document.getElementById('thoughtId').value = id;
+    
+    const dateInput = document.getElementById('thought_date');
+    if (date) {
+        dateInput.value = date;
+    } else {
+        dateInput.value = getLocalDateString(new Date());
+    }
 
     // 🔽 Smooth scroll to form
     document.getElementById('thoughtForm').scrollIntoView({
@@ -176,9 +202,15 @@ document.getElementById('thoughtForm').addEventListener('submit', function(e) {
 
     const id = document.getElementById('thoughtId').value;
     const thought = document.getElementById('thought').value.trim();
+    const date = document.getElementById('thought_date').value;
 
     if (!thought) {
         showToast('error', 'Thought cannot be empty!');
+        return;
+    }
+
+    if (!date) {
+        showToast('error', 'Date cannot be empty!');
         return;
     }
 
@@ -192,22 +224,45 @@ document.getElementById('thoughtForm').addEventListener('submit', function(e) {
             'X-CSRF-TOKEN': token,
             'X-Requested-With': 'XMLHttpRequest',
         },
-        body: JSON.stringify({ thought })
+        body: JSON.stringify({ thought, date })
     })
-    .then(res => res.json())
+    .then(async res => {
+        if (!res.ok) {
+            const errData = await res.json();
+            throw new Error(errData.message || 'Validation failed');
+        }
+        return res.json();
+    })
     .then(() => {
         showToast('success', id ? 'Updated successfully!' : 'Added successfully!');
         this.reset();
         document.getElementById('thoughtId').value = '';
+        initDatePicker();
         fetchThoughts();
         fetchLatestThought();
     })
-    .catch(() => {
-        showToast('error', 'Something went wrong!');
+    .catch((err) => {
+        showToast('error', err.message || 'Something went wrong!');
     });
 });
 
+function initDatePicker() {
+    const today = new Date();
+    const todayStr = getLocalDateString(today);
+    const maxDate = new Date();
+    maxDate.setDate(today.getDate() + 7);
+    const maxDateStr = getLocalDateString(maxDate);
+
+    const dateInput = document.getElementById('thought_date');
+    if (dateInput) {
+        dateInput.min = todayStr;
+        dateInput.max = maxDateStr;
+        dateInput.value = todayStr;
+    }
+}
+
 // Initial load
+initDatePicker();
 fetchLatestThought();
 fetchThoughts();
 </script>

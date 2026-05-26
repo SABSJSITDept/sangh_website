@@ -25,12 +25,16 @@
             <div class="card-body">
                 <form id="viharForm">
                     <div class="row g-3 align-items-end">
-                        <div class="col-md-5">
+                        <div class="col-md-3">
+                            <label for="vihar_date" class="form-label">📅 तारीख</label>
+                            <input type="date" class="form-control shadow-sm" id="vihar_date" required>
+                        </div>
+                        <div class="col-md-4">
                             <label for="location" class="form-label">स्थान (रात्रि विश्राम हेतु)</label>
                             <input type="text" class="form-control shadow-sm" id="location" placeholder="स्थान लिखें"
                                 required>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <label for="location_link" class="form-label">📍 लोकेशन लिंक</label>
                             <input type="url" class="form-control shadow-sm" id="location_link"
                                 placeholder="Google Maps लिंक पेस्ट करें">
@@ -74,6 +78,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="edit_vihar_date" class="form-label">📅 तारीख</label>
+                            <input type="date" id="edit_vihar_date" class="form-control" required>
+                        </div>
                         <div class="mb-3">
                             <label for="edit_location" class="form-label">स्थान (रात्रि विश्राम हेतु)</label>
                             <input type="text" id="edit_location" class="form-control" required>
@@ -123,6 +131,33 @@
             return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
+        function getLocalDateString(date) {
+            const offset = date.getTimezoneOffset();
+            const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+            return localDate.toISOString().split('T')[0];
+        }
+
+        function initDatePickers() {
+            const today = new Date();
+            const todayStr = getLocalDateString(today);
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+            const tomorrowStr = getLocalDateString(tomorrow);
+
+            const dateInput = document.getElementById('vihar_date');
+            if (dateInput) {
+                dateInput.min = todayStr;
+                dateInput.max = tomorrowStr;
+                dateInput.value = todayStr;
+            }
+
+            const editDateInput = document.getElementById('edit_vihar_date');
+            if (editDateInput) {
+                editDateInput.min = todayStr;
+                editDateInput.max = tomorrowStr;
+            }
+        }
+
         function fetchVihar() {
             fetch('/api/vihar')
                 .then(res => res.json())
@@ -138,7 +173,7 @@
                             <td>${item.location}</td>
                             <td>${linkCell}</td>
                             <td>
-                                <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${item.id}, '${escapeHtml(item.location)}', '${escapeHtml(item.location_link ?? '')}')">✏️</button>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditModal(${item.id}, '${escapeHtml(item.location)}', '${escapeHtml(item.location_link ?? '')}', '${item.date || ''}')">✏️</button>
                                 <button class="btn btn-sm btn-outline-danger" onclick="deleteVihar(${item.id})">🗑️</button>
                             </td>
                         </tr>
@@ -152,7 +187,7 @@
             fetch('/api/vihar/latest')
                 .then(res => res.json())
                 .then(data => {
-                    if (data) {
+                    if (data && data.location) {
                         let linkHtml = data.location_link
                             ? `<br><strong>📍 लोकेशन:</strong> <a href="${escapeHtml(data.location_link)}" target="_blank">मैप पर देखें</a>`
                             : '';
@@ -171,6 +206,7 @@
             e.preventDefault();
             let location = document.getElementById('location').value;
             let location_link = document.getElementById('location_link').value;
+            let date = document.getElementById('vihar_date').value;
 
             fetch('/api/vihar', {
                 method: 'POST',
@@ -179,21 +215,40 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ location, location_link: location_link || null })
+                body: JSON.stringify({ location, location_link: location_link || null, date })
             })
-                .then(res => res.json())
+                .then(async res => {
+                    if (!res.ok) {
+                        const errData = await res.json();
+                        throw new Error(errData.message || 'Validation failed');
+                    }
+                    return res.json();
+                })
                 .then(() => {
                     document.getElementById('viharForm').reset();
+                    initDatePickers();
                     showToast('विहार सूचना जोड़ी गई!');
                     fetchVihar();
                     fetchLatestVihar();
+                })
+                .catch(err => {
+                    showToast(err.message || 'विहार सूचना नहीं जोड़ी जा सकी।', 'error');
                 });
         });
 
-        function openEditModal(id, location, location_link) {
+        function openEditModal(id, location, location_link, date) {
             document.getElementById('editViharId').value = id;
             document.getElementById('edit_location').value = location;
             document.getElementById('edit_location_link').value = location_link || '';
+            
+            const editDateInput = document.getElementById('edit_vihar_date');
+            if (editDateInput) {
+                if (date) {
+                    editDateInput.value = date;
+                } else {
+                    editDateInput.value = getLocalDateString(new Date());
+                }
+            }
             editModal.show();
         }
 
@@ -202,6 +257,7 @@
             let id = document.getElementById('editViharId').value;
             let location = document.getElementById('edit_location').value;
             let location_link = document.getElementById('edit_location_link').value;
+            let date = document.getElementById('edit_vihar_date').value;
 
             fetch(`/api/vihar/${id}`, {
                 method: 'PUT',
@@ -210,14 +266,23 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ location, location_link: location_link || null })
+                body: JSON.stringify({ location, location_link: location_link || null, date })
             })
-                .then(res => res.json())
+                .then(async res => {
+                    if (!res.ok) {
+                        const errData = await res.json();
+                        throw new Error(errData.message || 'Validation failed');
+                    }
+                    return res.json();
+                })
                 .then(() => {
                     editModal.hide();
                     showToast('विहार सूचना अपडेट हुई!');
                     fetchVihar();
                     fetchLatestVihar();
+                })
+                .catch(err => {
+                    showToast(err.message || 'विहार सूचना अपडेट नहीं हो सकी।', 'error');
                 });
         });
 
@@ -239,6 +304,7 @@
         }
 
         // Initial load
+        initDatePickers();
         fetchVihar();
         fetchLatestVihar();
     </script>
