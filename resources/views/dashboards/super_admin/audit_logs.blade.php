@@ -109,8 +109,8 @@
                             </td>
                             <td>
                                 <div class="small">
-                                    <span class="d-block fw-semibold text-dark">{{ $log->created_at->format('Y-m-d H:i:s') }}</span>
-                                    <span class="d-block text-muted">{{ $log->created_at->diffForHumans() }}</span>
+                                    <span class="d-block fw-semibold text-dark">{{ $log->created_at ? $log->created_at->format('Y-m-d H:i:s') : 'N/A' }}</span>
+                                    <span class="d-block text-muted">{{ $log->created_at ? $log->created_at->diffForHumans() : 'N/A' }}</span>
                                 </div>
                             </td>
                             <td class="pe-4 text-center">
