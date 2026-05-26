@@ -439,6 +439,12 @@
                         <span>Audit Logs</span>
                     </a>
                 </div>
+                <div class="nav-item">
+                    <a href="{{ route('dashboard.users.index') }}" class="nav-link {{ Request::is('dashboard/users*') ? 'active' : '' }}">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Users</span>
+                    </a>
+                </div>
 
                 <span class="nav-group-label">Organization Units</span>
                 <div class="nav-item">

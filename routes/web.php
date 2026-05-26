@@ -16,6 +16,7 @@ use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 use App\Http\Controllers\AppRegistration\RegistrationStatusController;
 use App\Http\Controllers\Panchang\DailyPanchangController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -161,6 +162,12 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     })->name('dashboard.super_admin');
 
     Route::middleware('matchRole:super_admin')->get('/dashboard/audit-logs', [AuditLogController::class, 'index'])->name('dashboard.audit_logs');
+
+    // Super Admin User Management
+    Route::middleware('matchRole:super_admin')->get('/dashboard/users', [UserController::class, 'index'])->name('dashboard.users.index');
+    Route::middleware('matchRole:super_admin')->get('/dashboard/users/create', [UserController::class, 'create'])->name('dashboard.users.create');
+    Route::middleware('matchRole:super_admin')->post('/dashboard/users/store', [UserController::class, 'store'])->name('dashboard.users.store');
+    Route::middleware('matchRole:super_admin')->delete('/dashboard/users/{id}', [UserController::class, 'destroy'])->name('dashboard.users.delete');
 
     // App User Dashboard
     Route::middleware('matchRole:app_user')->get('/dashboard/app_user', function () {
