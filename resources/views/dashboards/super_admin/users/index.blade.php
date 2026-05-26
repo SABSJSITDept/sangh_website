@@ -106,6 +106,9 @@
                                 </div>
                             </td>
                             <td class="pe-4 text-center">
+                                <a href="{{ route('dashboard.users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary border-2 px-3 rounded-pill me-1">
+                                    <i class="bi bi-pencil-fill me-1"></i> Edit
+                                </a>
                                 @if(auth()->id() !== $user->id)
                                     <form action="{{ route('dashboard.users.delete', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user? All their audit log entries will remain but their account will be permanently deactivated.');" class="d-inline">
                                         @csrf

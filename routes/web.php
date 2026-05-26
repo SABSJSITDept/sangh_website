@@ -167,6 +167,8 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::middleware('matchRole:super_admin')->get('/dashboard/users', [UserController::class, 'index'])->name('dashboard.users.index');
     Route::middleware('matchRole:super_admin')->get('/dashboard/users/create', [UserController::class, 'create'])->name('dashboard.users.create');
     Route::middleware('matchRole:super_admin')->post('/dashboard/users/store', [UserController::class, 'store'])->name('dashboard.users.store');
+    Route::middleware('matchRole:super_admin')->get('/dashboard/users/{id}/edit', [UserController::class, 'edit'])->name('dashboard.users.edit');
+    Route::middleware('matchRole:super_admin')->put('/dashboard/users/{id}', [UserController::class, 'update'])->name('dashboard.users.update');
     Route::middleware('matchRole:super_admin')->delete('/dashboard/users/{id}', [UserController::class, 'destroy'])->name('dashboard.users.delete');
 
     // App User Dashboard
