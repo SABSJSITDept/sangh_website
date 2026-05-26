@@ -433,6 +433,12 @@
                         <span>Super Admin</span>
                     </a>
                 </div>
+                <div class="nav-item">
+                    <a href="{{ url('dashboard/audit-logs') }}" class="nav-link {{ Request::is('dashboard/audit-logs*') ? 'active' : '' }}">
+                        <i class="bi bi-list-check"></i>
+                        <span>Audit Logs</span>
+                    </a>
+                </div>
 
                 <span class="nav-group-label">Organization Units</span>
                 <div class="nav-item">

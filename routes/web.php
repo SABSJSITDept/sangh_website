@@ -15,6 +15,7 @@ use App\Http\Controllers\FeedBack\FeedBackController;
 use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 use App\Http\Controllers\AppRegistration\RegistrationStatusController;
 use App\Http\Controllers\Panchang\DailyPanchangController;
+use App\Http\Controllers\AuditLogController;
 
 
 /*
@@ -158,6 +159,8 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     Route::middleware('matchRole:super_admin')->get('/dashboard/super_admin', function () {
         return view('dashboards.super_admin.index');
     })->name('dashboard.super_admin');
+
+    Route::middleware('matchRole:super_admin')->get('/dashboard/audit-logs', [AuditLogController::class, 'index'])->name('dashboard.audit_logs');
 
     // App User Dashboard
     Route::middleware('matchRole:app_user')->get('/dashboard/app_user', function () {
