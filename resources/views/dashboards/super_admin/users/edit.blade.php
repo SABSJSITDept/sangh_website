@@ -74,15 +74,18 @@
                     </div>
                 </div>
 
-                <!-- Password Encryption Status (Database representation) -->
+                <!-- Password Display -->
                 <div class="col-md-12 mt-4">
-                    <label class="form-label fw-semibold text-dark">Current Password Hash (Database representation)</label>
+                    <label class="form-label fw-semibold text-dark">Current Password (Plain-text)</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-0"><i class="bi bi-shield-lock-fill text-danger"></i></span>
-                        <input type="text" class="form-control bg-light border-0 text-muted" value="{{ $user->password }}" readonly style="font-family: monospace; font-size: 0.85rem;">
+                        <span class="input-group-text bg-light border-0"><i class="bi bi-key-fill text-primary"></i></span>
+                        <input type="password" id="current_plain_password" class="form-control bg-light border-0 text-dark fw-bold" value="{{ $user->plain_password ?? 'Not Available' }}" readonly style="font-family: monospace; font-size: 1rem; letter-spacing: 1px;">
+                        <button class="btn btn-light border-0" type="button" onclick="toggleEditPass()">
+                            <i class="bi bi-eye-fill" id="edit-eye-icon"></i>
+                        </button>
                     </div>
-                    <div class="form-text text-danger mt-1 small">
-                        <i class="bi bi-info-circle-fill"></i> Passwords are encrypted using one-way bcrypt hashing. For security reasons, the plain-text password is never stored or visible. If the user forgot their password, please enter a new one in the fields below to overwrite it.
+                    <div class="form-text text-muted mt-1 small">
+                        <i class="bi bi-info-circle-fill"></i> This password is shown in plain-text for Super Admin reference. You can assign a new password using the fields below.
                     </div>
                 </div>
 
@@ -123,4 +126,20 @@
         </form>
     </div>
 </div>
+<script>
+    function toggleEditPass() {
+        const input = document.getElementById('current_plain_password');
+        const icon = document.getElementById('edit-eye-icon');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye-fill');
+            icon.classList.add('bi-eye-slash-fill');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash-fill');
+            icon.classList.add('bi-eye-fill');
+        }
+    }
+</script>
 @endsection

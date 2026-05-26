@@ -60,6 +60,7 @@
                     <tr>
                         <th class="ps-4 py-3 text-uppercase fs-7 text-muted fw-bold">User Information</th>
                         <th class="py-3 text-uppercase fs-7 text-muted fw-bold">Email</th>
+                        <th class="py-3 text-uppercase fs-7 text-muted fw-bold">Password</th>
                         <th class="py-3 text-uppercase fs-7 text-muted fw-bold">Assigned Role</th>
                         <th class="py-3 text-uppercase fs-7 text-muted fw-bold">Registered Date</th>
                         <th class="pe-4 py-3 text-center text-uppercase fs-7 text-muted fw-bold">Actions</th>
@@ -81,6 +82,18 @@
                             </td>
                             <td>
                                 <span class="fw-semibold text-dark">{{ $user->email }}</span>
+                            </td>
+                            <td>
+                                @if($user->plain_password)
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="password-text text-dark fw-bold" id="pass-{{ $user->id }}" data-password="{{ $user->plain_password }}">••••••••</span>
+                                        <button class="btn btn-sm btn-light border-0 p-1 rounded-circle" type="button" onclick="togglePass({{ $user->id }})">
+                                            <i class="bi bi-eye-fill" id="eye-{{ $user->id }}"></i>
+                                        </button>
+                                    </div>
+                                @else
+                                    <span class="text-muted italic small">No plain record</span>
+                                @endif
                             </td>
                             <td>
                                 @php
@@ -160,5 +173,27 @@
     .btn-outline-danger:hover {
         transform: scale(1.05);
     }
+    .password-text {
+        font-family: monospace;
+        letter-spacing: 1px;
+    }
 </style>
+
+<script>
+    function togglePass(id) {
+        const span = document.getElementById('pass-' + id);
+        const icon = document.getElementById('eye-' + id);
+        const plainPassword = span.getAttribute('data-password');
+        
+        if (span.innerText === '••••••••') {
+            span.innerText = plainPassword;
+            icon.classList.remove('bi-eye-fill');
+            icon.classList.add('bi-eye-slash-fill');
+        } else {
+            span.innerText = '••••••••';
+            icon.classList.remove('bi-eye-slash-fill');
+            icon.classList.add('bi-eye-fill');
+        }
+    }
+</script>
 @endsection
