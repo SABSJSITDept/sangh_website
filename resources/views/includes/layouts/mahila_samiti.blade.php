@@ -8,58 +8,55 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
 /* =============================================================
-   DESIGN SYSTEM — MAHILA SAMITI PROFESSIONAL ADMIN
-   Palette: Deep Slate sidebar · Rose accent · Clean white content
+   DESIGN TOKENS — LIGHT THEME
    ============================================================= */
-
-/* ---------- TOKENS ---------- */
 :root {
-    /* Layout */
+    /* Layout dims */
     --sb-w:   256px;
-    --sb-col: 68px;
-    --hdr-h:  56px;
-    --ftr-h:  40px;
+    --sb-col: 66px;
+    --hdr-h:  58px;
+    --ftr-h:  42px;
 
-    /* Sidebar */
-    --sb-bg:          #0f1623;   /* deep navy-slate */
-    --sb-border:      rgba(255,255,255,0.055);
-    --sb-text:        #94a3b8;   /* slate-400 */
-    --sb-text-active: #f1f5f9;   /* slate-100 */
-    --sb-label:       #475569;   /* slate-600 */
-    --sb-hover-bg:    rgba(226,34,72,0.10);
-    --sb-active-bg:   rgba(226,34,72,0.18);
-    --sb-active-bar:  #e11d48;   /* rose-600 */
+    /* Sidebar — white/light */
+    --sb-bg:          #ffffff;
+    --sb-border:      #e8ecf2;
+    --sb-text:        #64748b;       /* slate-500 */
+    --sb-text-active: #1e293b;       /* slate-800 */
+    --sb-label:       #94a3b8;       /* slate-400 */
+    --sb-hover-bg:    #f1f5f9;       /* slate-100 */
+    --sb-active-bg:   #fdf2f5;       /* rose tinted */
+    --sb-active-bar:  #e11d48;       /* rose-600 */
+    --sb-active-text: #e11d48;
 
     /* Brand / Accent */
-    --rose:      #e11d48;
-    --rose-dark: #be123c;
-    --rose-soft: rgba(225,29,72,0.10);
+    --accent:        #e11d48;
+    --accent-dark:   #be123c;
+    --accent-light:  #fdf2f5;
+    --accent-mid:    rgba(225,29,72,0.12);
 
     /* Content */
-    --bg:        #f8fafc;        /* slate-50 */
+    --bg:        #f4f6fb;
     --card:      #ffffff;
-    --border:    #e2e8f0;        /* slate-200 */
-    --text-1:    #0f172a;        /* slate-900 */
-    --text-2:    #475569;        /* slate-600 */
-    --text-3:    #94a3b8;        /* slate-400 */
+    --border:    #e8ecf2;
+    --text-1:    #1e293b;
+    --text-2:    #475569;
+    --text-3:    #94a3b8;
 
     /* Shadows */
-    --shadow-xs: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
-    --shadow-sm: 0 2px 8px rgba(15,23,42,0.08);
-    --shadow-md: 0 4px 20px rgba(15,23,42,0.10);
-    --shadow-rose: 0 4px 16px rgba(225,29,72,0.28);
+    --shadow-xs:   0 1px 3px rgba(15,23,42,0.06);
+    --shadow-sm:   0 2px 10px rgba(15,23,42,0.07);
+    --shadow-md:   0 4px 20px rgba(15,23,42,0.09);
+    --shadow-rose: 0 4px 14px rgba(225,29,72,0.25);
 
-    /* Transition */
     --ease: 0.22s cubic-bezier(.4,0,.2,1);
 }
 
 /* ---------- RESET ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html, body {
     font-family: 'Inter', system-ui, sans-serif;
     background: var(--bg);
@@ -71,11 +68,11 @@ html, body {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.3); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--rose); }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
 /* =============================================================
-   SIDEBAR
+   SIDEBAR — WHITE / LIGHT
    ============================================================= */
 #ms-sidebar {
     position: fixed !important;
@@ -88,10 +85,11 @@ html, body {
     z-index: 1200 !important;
     overflow: hidden !important;
     border-right: 1px solid var(--sb-border) !important;
+    box-shadow: 2px 0 12px rgba(15,23,42,0.06) !important;
 }
-#ms-sidebar.sb-collapsed { width: 68px !important; }
+#ms-sidebar.sb-collapsed { width: 66px !important; }
 
-/* ---- Logo / Brand bar ---- */
+/* ---- Brand ---- */
 .sb-brand {
     height: var(--hdr-h);
     flex-shrink: 0;
@@ -103,12 +101,12 @@ html, body {
     overflow: hidden;
 }
 .sb-brand-logo {
-    width: 32px; height: 32px; flex-shrink: 0;
-    border-radius: 8px;
-    background: var(--rose);
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.95rem; color: #fff;
-    box-shadow: var(--shadow-rose);
+    font-size: 1rem; color: #fff;
+    box-shadow: 0 2px 8px rgba(225,29,72,0.3);
     flex-shrink: 0;
 }
 .sb-brand-text {
@@ -117,17 +115,15 @@ html, body {
 }
 .sb-brand-name {
     font-family: 'Poppins', sans-serif;
-    font-size: 0.82rem; font-weight: 700;
-    color: #f1f5f9;
-    white-space: nowrap;
-    line-height: 1.2;
+    font-size: 0.83rem; font-weight: 700;
+    color: var(--text-1);
+    white-space: nowrap; line-height: 1.2;
 }
 .sb-brand-sub {
-    font-size: 0.65rem; font-weight: 500;
+    font-size: 0.63rem; font-weight: 600;
     color: var(--sb-label);
-    white-space: nowrap;
-    text-transform: uppercase; letter-spacing: 0.6px;
-    margin-top: 1px;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-top: 1px; white-space: nowrap;
 }
 #ms-sidebar.sb-collapsed .sb-brand-text { opacity: 0; width: 0; pointer-events: none; }
 
@@ -136,50 +132,50 @@ html, body {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 16px 12px;
+    padding: 14px 16px 13px;
     border-bottom: 1px solid var(--sb-border);
     flex-shrink: 0;
     overflow: hidden;
+    background: #fcfcfd;
 }
 .sb-avatar {
-    width: 36px; height: 36px; flex-shrink: 0;
+    width: 36px; height: 36px;
     border-radius: 10px;
-    background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.92rem; color: #fff; font-weight: 700;
-    letter-spacing: -0.5px;
+    font-size: 0.85rem; font-weight: 700; color: #fff;
     flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(225,29,72,0.25);
 }
 .sb-user-info { overflow: hidden; transition: opacity var(--ease); }
 .sb-user-name {
     font-size: 0.82rem; font-weight: 600;
-    color: var(--sb-text-active);
-    white-space: nowrap;
+    color: var(--text-1); white-space: nowrap;
 }
 .sb-user-role {
     display: flex; align-items: center; gap: 5px;
-    font-size: 0.67rem; color: var(--sb-label);
+    font-size: 0.67rem; color: var(--text-3);
     margin-top: 2px; white-space: nowrap;
 }
 .sb-online-dot {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: #22c55e; flex-shrink: 0;
+    width: 5px; height: 5px;
+    border-radius: 50%; background: #22c55e; flex-shrink: 0;
 }
 #ms-sidebar.sb-collapsed .sb-user-info { opacity: 0; pointer-events: none; }
 
-/* ---- Nav scroll area ---- */
+/* ---- Nav scroll ---- */
 .sb-nav {
     flex: 1;
     overflow-y: auto; overflow-x: hidden;
-    padding: 10px 10px;
+    padding: 8px 10px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(148,163,184,0.15) transparent;
+    scrollbar-color: #e2e8f0 transparent;
 }
 
 /* ---- Section label ---- */
 .sb-section {
     font-size: 0.60rem; font-weight: 700;
-    letter-spacing: 1.4px; text-transform: uppercase;
+    letter-spacing: 1.3px; text-transform: uppercase;
     color: var(--sb-label);
     padding: 14px 8px 5px;
     white-space: nowrap;
@@ -193,10 +189,10 @@ html, body {
     align-items: center !important;
     gap: 10px !important;
     padding: 8px 10px !important;
-    border-radius: 7px !important;
+    border-radius: 8px !important;
     color: var(--sb-text) !important;
     text-decoration: none !important;
-    font-size: 0.835rem !important;
+    font-size: 0.83rem !important;
     font-weight: 500 !important;
     cursor: pointer !important;
     white-space: nowrap !important;
@@ -215,7 +211,8 @@ html, body {
 }
 .sb-link.sb-active {
     background: var(--sb-active-bg) !important;
-    color: #fda4af !important;   /* rose-300 */
+    color: var(--sb-active-text) !important;
+    font-weight: 600 !important;
     box-shadow: inset 3px 0 0 var(--sb-active-bar) !important;
 }
 
@@ -225,10 +222,10 @@ html, body {
     min-width: 20px !important;
     text-align: center !important;
     flex-shrink: 0 !important;
-    opacity: 0.75;
+    color: #cbd5e1 !important;
 }
-.sb-link:hover .sb-icon,
-.sb-link.sb-active .sb-icon { opacity: 1; }
+.sb-link:hover .sb-icon { color: var(--accent) !important; }
+.sb-link.sb-active .sb-icon { color: var(--accent) !important; }
 
 /* ---- Text ---- */
 .sb-txt {
@@ -241,171 +238,162 @@ html, body {
 /* ---- Arrow ---- */
 .sb-arrow {
     font-size: 0.65rem !important;
-    color: var(--sb-label) !important;
-    margin-left: auto !important;
-    flex-shrink: 0 !important;
+    color: #cbd5e1 !important;
     transition: transform var(--ease), opacity var(--ease) !important;
+    flex-shrink: 0 !important;
+    margin-left: auto !important;
 }
-.sb-arrow.open { transform: rotate(180deg) !important; color: var(--sb-text) !important; }
+.sb-arrow.open { transform: rotate(180deg) !important; color: var(--accent) !important; }
 #ms-sidebar.sb-collapsed .sb-arrow { opacity: 0 !important; pointer-events: none !important; }
 
 /* ---- Submenu ---- */
 .sb-sub {
     display: none !important;
     flex-direction: column !important;
-    padding-left: 12px !important;
+    padding-left: 10px !important;
     gap: 0 !important;
     margin-top: 1px !important;
-    border-left: 1px solid var(--sb-border) !important;
     margin-left: 16px !important;
+    border-left: 1.5px solid #e8ecf2 !important;
 }
 .sb-sub.open { display: flex !important; }
 #ms-sidebar.sb-collapsed .sb-sub { display: none !important; }
 
 .sb-sub .sb-link {
     padding: 6px 10px !important;
-    font-size: 0.8rem !important;
+    font-size: 0.79rem !important;
     min-height: 32px !important;
     border-radius: 6px !important;
-    color: var(--sb-label) !important;
+    color: #64748b !important;
 }
-.sb-sub .sb-link:hover { color: var(--sb-text-active) !important; }
-.sb-sub .sb-link.sb-active { color: #fda4af !important; }
+.sb-sub .sb-link:hover { color: var(--text-1) !important; }
+.sb-sub .sb-link.sb-active {
+    color: var(--accent) !important;
+    background: var(--sb-active-bg) !important;
+    box-shadow: inset 3px 0 0 var(--sb-active-bar) !important;
+}
 
 /* Collapsed tooltip */
 #ms-sidebar.sb-collapsed .sb-link[data-tip]:hover::after {
     content: attr(data-tip);
-    position: fixed;
-    left: 76px;
-    background: #1e293b;
-    color: #f1f5f9;
+    position: fixed; left: 74px;
+    background: #1e293b; color: #f1f5f9;
     font-size: 0.77rem; font-weight: 500;
-    white-space: nowrap;
-    padding: 5px 12px;
-    border-radius: 7px;
-    z-index: 9999;
+    white-space: nowrap; padding: 5px 12px;
+    border-radius: 7px; z-index: 9999;
     box-shadow: var(--shadow-md);
     pointer-events: none;
     border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* ---- Bottom bar (logout) ---- */
+/* ---- Bottom (logout) ---- */
 .sb-bottom {
-    padding: 10px 10px;
+    padding: 10px;
     border-top: 1px solid var(--sb-border);
     flex-shrink: 0;
+    background: #fcfcfd;
 }
-.sb-bottom .sb-link { color: #64748b !important; font-size: 0.82rem !important; }
+.sb-bottom .sb-link {
+    color: #94a3b8 !important;
+    font-size: 0.82rem !important;
+}
 .sb-bottom .sb-link:hover {
-    background: rgba(239,68,68,0.08) !important;
-    color: #f87171 !important;
+    background: #fff0f3 !important;
+    color: var(--accent) !important;
 }
+.sb-bottom .sb-link:hover .sb-icon { color: var(--accent) !important; }
 
 /* =============================================================
    HEADER
    ============================================================= */
 #ms-header {
     position: fixed !important;
-    top: 0 !important;
-    left: 256px !important;
-    right: 0 !important;
-    height: 56px !important;
+    top: 0 !important; left: 256px !important; right: 0 !important;
+    height: 58px !important;
     background: #ffffff !important;
     border-bottom: 1px solid var(--border) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 20px !important;
+    padding: 0 22px !important;
     z-index: 1100 !important;
-    transition: left var(--ease) !important;
     box-shadow: var(--shadow-xs) !important;
+    transition: left var(--ease) !important;
 }
-body.sb-is-collapsed #ms-header { left: 68px !important; }
+body.sb-is-collapsed #ms-header { left: 66px !important; }
 
-/* Toggle button */
+.hdr-left { display: flex; align-items: center; }
+.hdr-right { display: flex; align-items: center; gap: 10px; }
+
 .hdr-toggle {
     width: 34px; height: 34px;
     border-radius: 8px;
     background: transparent;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     display: flex; align-items: center; justify-content: center;
     font-size: 1.1rem; color: var(--text-2);
     cursor: pointer;
     transition: all var(--ease);
     flex-shrink: 0;
 }
-.hdr-toggle:hover { background: var(--rose-soft); border-color: var(--rose); color: var(--rose); }
+.hdr-toggle:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
 
-/* Breadcrumb / Title */
 .hdr-title {
+    margin-left: 14px;
     display: flex; align-items: center; gap: 8px;
-    margin-left: 12px;
 }
 .hdr-title-text {
     font-size: 0.875rem; font-weight: 600; color: var(--text-1);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    max-width: 340px;
+    max-width: 360px;
 }
 .hdr-badge {
-    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.6px;
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.5px;
     text-transform: uppercase;
-    background: var(--rose);
-    color: #fff;
-    padding: 2px 8px; border-radius: 20px;
+    background: var(--accent);
+    color: #fff; padding: 2px 8px; border-radius: 20px;
     flex-shrink: 0;
 }
-
-.hdr-left { display: flex; align-items: center; }
-.hdr-right { display: flex; align-items: center; gap: 8px; }
 
 /* Clock chip */
 .hdr-clock {
-    display: flex; align-items: center; gap: 6px;
-    padding: 5px 12px;
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 13px;
     background: var(--bg);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 20px;
-    font-size: 0.77rem; font-weight: 600; color: var(--text-2);
+    font-size: 0.78rem; font-weight: 600; color: var(--text-2);
 }
-.hdr-clock i { color: var(--rose); font-size: 0.75rem; }
-
-/* Logout button */
-.hdr-logout {
-    display: flex; align-items: center; gap: 6px;
-    padding: 6px 14px;
-    background: var(--rose);
-    border: none; border-radius: 8px;
-    color: #fff; font-size: 0.78rem; font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 1px 4px rgba(225,29,72,0.3);
-    transition: all var(--ease);
-    white-space: nowrap;
-}
-.hdr-logout:hover {
-    background: var(--rose-dark);
-    box-shadow: var(--shadow-rose);
-    transform: translateY(-1px);
-}
+.hdr-clock i { color: var(--accent); font-size: 0.75rem; }
 
 /* Divider */
-.hdr-divider {
-    width: 1px; height: 20px;
-    background: var(--border);
-    flex-shrink: 0;
+.hdr-div { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
+
+/* Logout */
+.hdr-logout {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 16px;
+    background: var(--accent);
+    border: none; border-radius: 8px;
+    color: #fff; font-size: 0.79rem; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(225,29,72,0.28);
+    transition: all var(--ease);
 }
+.hdr-logout:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: var(--shadow-rose); }
 
 /* =============================================================
    CONTENT
    ============================================================= */
 #ms-content {
     margin-left: 256px !important;
-    margin-top: 56px !important;
-    padding: 24px 24px 60px !important;
+    margin-top: 58px !important;
+    padding: 24px 24px 62px !important;
     min-height: 100vh !important;
     background: var(--bg) !important;
     transition: margin-left var(--ease) !important;
 }
-body.sb-is-collapsed #ms-content { margin-left: 68px !important; }
+body.sb-is-collapsed #ms-content { margin-left: 66px !important; }
 
 /* =============================================================
    FOOTER
@@ -413,37 +401,34 @@ body.sb-is-collapsed #ms-content { margin-left: 68px !important; }
 #ms-footer {
     position: fixed !important;
     bottom: 0 !important; left: 256px !important; right: 0 !important;
-    height: 40px !important;
+    height: 42px !important;
     background: #ffffff !important;
     border-top: 1px solid var(--border) !important;
-    display: flex !important;
-    align-items: center !important;
+    display: flex !important; align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 20px !important;
+    padding: 0 22px !important;
     z-index: 1000 !important;
     transition: left var(--ease) !important;
 }
-body.sb-is-collapsed #ms-footer { left: 68px !important; }
+body.sb-is-collapsed #ms-footer { left: 66px !important; }
 
 .ftr-left {
     display: flex; align-items: center; gap: 6px;
     font-size: 0.72rem; color: var(--text-3); font-weight: 500;
 }
-.ftr-left i { color: var(--rose); font-size: 0.7rem; }
-.ftr-right { position: relative; }
+.ftr-left i { color: var(--accent); }
 
+.ftr-right { position: relative; }
 .ftr-support-btn {
     display: flex; align-items: center; gap: 5px;
-    padding: 3px 11px;
-    border: 1px solid var(--border);
+    padding: 4px 13px;
+    border: 1.5px solid var(--border);
     border-radius: 20px;
     background: transparent;
     font-size: 0.71rem; font-weight: 600; color: var(--text-3);
-    cursor: pointer;
-    transition: all var(--ease);
+    cursor: pointer; transition: all var(--ease);
 }
-.ftr-support-btn:hover { border-color: var(--rose); color: var(--rose); background: var(--rose-soft); }
-.ftr-support-btn i { font-size: 0.7rem; }
+.ftr-support-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
 
 .ftr-tooltip {
     display: none;
@@ -452,23 +437,21 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
     border: 1px solid var(--border);
     border-radius: 10px; padding: 14px 18px;
     box-shadow: var(--shadow-md);
-    min-width: 210px;
-    z-index: 1500;
-    border-top: 2px solid var(--rose);
+    min-width: 210px; z-index: 1500;
+    border-top: 2px solid var(--accent);
 }
 .ftr-right:hover .ftr-tooltip { display: block; }
-.ftr-tooltip .ft-name { font-size: 0.84rem; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
-.ftr-tooltip .ft-sub  { font-size: 0.73rem; color: var(--text-3); margin-bottom: 8px; }
-.ftr-tooltip .ft-phone { font-size: 0.8rem; font-weight: 600; color: var(--rose); display: flex; align-items: center; gap: 6px; }
+.ftr-tooltip .ft-name  { font-size: 0.84rem; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
+.ftr-tooltip .ft-sub   { font-size: 0.72rem; color: var(--text-3); margin-bottom: 8px; }
+.ftr-tooltip .ft-phone { font-size: 0.8rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 6px; }
 
 /* =============================================================
    MOBILE BACKDROP
    ============================================================= */
 #ms-backdrop {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(15,22,36,0.55);
-    backdrop-filter: blur(4px);
+    display: none; position: fixed; inset: 0;
+    background: rgba(30,41,59,0.4);
+    backdrop-filter: blur(3px);
     z-index: 1150;
 }
 #ms-backdrop.show { display: block; }
@@ -485,30 +468,27 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
     }
     #ms-sidebar.sb-mobile-open {
         left: 0 !important;
-        box-shadow: 4px 0 32px rgba(15,22,36,0.35) !important;
+        box-shadow: 4px 0 30px rgba(15,23,42,0.15) !important;
     }
-    #ms-header  { left: 0 !important; width: 100% !important; }
-    #ms-footer  { left: 0 !important; width: 100% !important; }
-    #ms-content { margin-left: 0 !important; padding: 16px 14px 56px !important; }
+    #ms-header, #ms-footer { left: 0 !important; width: 100% !important; }
+    #ms-content { margin-left: 0 !important; padding: 16px 14px 58px !important; }
 
     .hdr-title-text { max-width: 150px; font-size: 0.78rem; }
-    .hdr-clock      { display: none; }
+    .hdr-clock { display: none; }
     .hdr-logout span { display: none; }
-    .hdr-logout     { padding: 6px 10px; }
+    .hdr-logout { padding: 6px 10px; }
 
-    body.sb-is-collapsed #ms-header  { left: 0 !important; }
+    body.sb-is-collapsed #ms-header, body.sb-is-collapsed #ms-footer { left: 0 !important; }
     body.sb-is-collapsed #ms-content { margin-left: 0 !important; }
-    body.sb-is-collapsed #ms-footer  { left: 0 !important; }
 }
 </style>
 </head>
 <body>
 
-<!-- Backdrop -->
 <div id="ms-backdrop"></div>
 
 <!-- ==========================================================
-     SIDEBAR
+     SIDEBAR — LIGHT
      ========================================================== -->
 <nav id="ms-sidebar">
 
@@ -536,17 +516,15 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
     <!-- Nav -->
     <div class="sb-nav">
 
-        <!-- Main -->
         <div class="sb-section">Main</div>
         <a href="{{ url('/dashboard/mahila_samiti') }}" class="sb-link" data-tip="Dashboard">
-            <i class="bi bi-grid-1x2-fill sb-icon"></i>
+            <i class="bi bi-grid-1x2 sb-icon"></i>
             <span class="sb-txt">Dashboard</span>
         </a>
 
-        <!-- Updates -->
         <div class="sb-section">Updates</div>
         <div class="sb-link" onclick="toggleSub(this)" data-tip="General Updates">
-            <i class="bi bi-collection-fill sb-icon"></i>
+            <i class="bi bi-collection sb-icon"></i>
             <span class="sb-txt">General Updates</span>
             <i class="bi bi-chevron-down sb-arrow"></i>
         </div>
@@ -558,7 +536,6 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
             <a href="{{ url('/mahila_pravartiya') }}"    class="sb-link"><span class="sb-txt">प्रवर्तिया</span></a>
         </div>
 
-        <!-- Karyakarini -->
         <div class="sb-section">कार्यकारिणी</div>
         <div class="sb-link" onclick="toggleSub(this)" data-tip="कार्यकारिणी">
             <i class="bi bi-diagram-3 sb-icon"></i>
@@ -573,7 +550,6 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
             <a href="{{ url('/mahila_ksm_members') }}"        class="sb-link"><span class="sb-txt">कार्यसमिति सदस्य</span></a>
         </div>
 
-        <!-- Media -->
         <div class="sb-section">Media</div>
         <div class="sb-link" onclick="toggleSub(this)" data-tip="Photo & Slider">
             <i class="bi bi-images sb-icon"></i>
@@ -587,7 +563,6 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
             <a href="{{ url('/mahila_home_slider') }}"          class="sb-link"><span class="sb-txt">Home Slider</span></a>
         </div>
 
-        <!-- Notifications -->
         <div class="sb-section">Notifications</div>
         <div class="sb-link" onclick="toggleSub(this)" data-tip="Notifications">
             <i class="bi bi-bell sb-icon"></i>
@@ -595,22 +570,20 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
             <i class="bi bi-chevron-down sb-arrow"></i>
         </div>
         <div class="sb-sub">
-            <a href="{{ url('/send_notification-mahila_Samiti') }}"  class="sb-link"><span class="sb-txt">Send Notification</span></a>
-            <a href="{{ url('/view_notifications_mahila_samiti') }}"  class="sb-link"><span class="sb-txt">View Notifications</span></a>
+            <a href="{{ url('/send_notification-mahila_Samiti') }}" class="sb-link"><span class="sb-txt">Send Notification</span></a>
+            <a href="{{ url('/view_notifications_mahila_samiti') }}" class="sb-link"><span class="sb-txt">View Notifications</span></a>
         </div>
 
-        <!-- Account -->
         <div class="sb-section">Account</div>
         <a href="{{ url('/change-password_mahila_samiti') }}" class="sb-link" data-tip="Change Password">
             <i class="bi bi-shield-lock sb-icon"></i>
             <span class="sb-txt">Change Password</span>
         </a>
 
-    </div><!-- /sb-nav -->
+    </div>
 
-    <!-- Logout -->
     <div class="sb-bottom">
-        <a href="javascript:void(0)" onclick="msLogout()" class="sb-link" data-tip="Logout">
+        <a href="javascript:void(0)" onclick="msLogout()" class="sb-link" data-tip="Sign Out">
             <i class="bi bi-arrow-right-square sb-icon"></i>
             <span class="sb-txt">Sign Out</span>
         </a>
@@ -628,18 +601,17 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
         </button>
         <div class="hdr-title">
             <div class="hdr-title-text">
-                श्री अ.भा. साधुमार्गी जैन महिला समिति
+                🌸 श्री अ.भा. साधुमार्गी जैन महिला समिति
             </div>
             <span class="hdr-badge">Admin</span>
         </div>
     </div>
-
     <div class="hdr-right">
         <div class="hdr-clock">
             <i class="bi bi-clock"></i>
             <span id="ms-clock">--:--</span>
         </div>
-        <div class="hdr-divider"></div>
+        <div class="hdr-div"></div>
         <button class="hdr-logout" onclick="msLogout()">
             <i class="bi bi-power"></i>
             <span>Logout</span>
@@ -683,13 +655,13 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 (function () {
-    var sb      = document.getElementById('ms-sidebar');
-    var toggle  = document.getElementById('ms-toggle');
-    var bd      = document.getElementById('ms-backdrop');
+    var sb     = document.getElementById('ms-sidebar');
+    var toggle = document.getElementById('ms-toggle');
+    var bd     = document.getElementById('ms-backdrop');
 
     function isMob() { return window.innerWidth <= 991; }
 
-    /* Restore state on desktop */
+    /* Restore collapsed state */
     if (!isMob() && localStorage.getItem('ms_col') === '1') {
         sb.classList.add('sb-collapsed');
         document.body.classList.add('sb-is-collapsed');
@@ -707,18 +679,13 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
         }
     });
 
-    /* Close mobile sidebar on backdrop */
     bd.addEventListener('click', function () {
         sb.classList.remove('sb-mobile-open');
         bd.classList.remove('show');
     });
 
-    /* Resize */
     window.addEventListener('resize', function () {
-        if (!isMob()) {
-            sb.classList.remove('sb-mobile-open');
-            bd.classList.remove('show');
-        }
+        if (!isMob()) { sb.classList.remove('sb-mobile-open'); bd.classList.remove('show'); }
     });
 
     /* Submenu */
@@ -727,38 +694,34 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
             sb.classList.remove('sb-collapsed');
             document.body.classList.remove('sb-is-collapsed');
             localStorage.setItem('ms_col', '0');
-            setTimeout(function () { _openSub(el); }, 240);
+            setTimeout(function () { _open(el); }, 240);
             return;
         }
-        var sub   = el.nextElementSibling;
-        var arrow = el.querySelector('.sb-arrow');
-        if (!sub) return;
-        sub.classList.contains('open') ? _closeSub(sub, arrow) : _openSub(el);
-    };
-    function _openSub(el) {
         var sub = el.nextElementSibling, arrow = el.querySelector('.sb-arrow');
-        if (sub)   sub.classList.add('open');
-        if (arrow) arrow.classList.add('open');
+        if (!sub) return;
+        sub.classList.contains('open') ? _close(sub, arrow) : _open(el);
+    };
+    function _open(el) {
+        var s = el.nextElementSibling, a = el.querySelector('.sb-arrow');
+        if (s) s.classList.add('open'); if (a) a.classList.add('open');
     }
-    function _closeSub(sub, arrow) {
-        if (sub)   sub.classList.remove('open');
-        if (arrow) arrow.classList.remove('open');
+    function _close(s, a) {
+        if (s) s.classList.remove('open'); if (a) a.classList.remove('open');
     }
 
-    /* Auto-active + auto-open parent */
+    /* Auto-active + auto-open parent submenu */
     var path = window.location.pathname;
     document.querySelectorAll('#ms-sidebar a.sb-link').forEach(function (a) {
         var href = (a.getAttribute('href') || '').trim();
-        if (!href || href === 'javascript:void(0)') return;
-        /* exact match or ends-with segment match */
+        if (!href || href.startsWith('javascript')) return;
         var seg = href.split('/').filter(Boolean).pop();
         if (seg && path.includes(seg)) {
             a.classList.add('sb-active');
-            var parentSub = a.closest('.sb-sub');
-            if (parentSub) {
-                parentSub.classList.add('open');
-                var t = parentSub.previousElementSibling;
-                if (t) { var ar = t.querySelector('.sb-arrow'); if (ar) ar.classList.add('open'); }
+            var ps = a.closest('.sb-sub');
+            if (ps) {
+                ps.classList.add('open');
+                var pt = ps.previousElementSibling;
+                if (pt) { var pa = pt.querySelector('.sb-arrow'); if (pa) pa.classList.add('open'); }
             }
         }
     });
@@ -766,15 +729,14 @@ body.sb-is-collapsed #ms-footer { left: 68px !important; }
     /* Logout */
     window.msLogout = function () { window.location.href = '{{ route("logout") }}'; };
 
-    /* Live clock */
+    /* Clock */
     function tick() {
         var el = document.getElementById('ms-clock');
         if (!el) return;
         var n = new Date();
         el.textContent = ('0'+n.getHours()).slice(-2) + ':' + ('0'+n.getMinutes()).slice(-2);
     }
-    tick();
-    setInterval(tick, 30000);
+    tick(); setInterval(tick, 30000);
 })();
 </script>
 
