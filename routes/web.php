@@ -449,6 +449,11 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.mahila_samiti.downloads.mahila_samiti_prativedan');
     })->name('mahila_prativedan.view');
 
+    Route::get('/mahila_description', function () {
+        return view('dashboards.mahila_samiti.mahila_samiti_description');
+    })->name('mahila_description.view');
+
+
 
     Route::get('/mobile_slider', function () {
         return view('dashboards.shree_sangh.mobile_slider.mobile_slider');

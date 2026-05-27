@@ -40,6 +40,7 @@ use App\Http\Controllers\PhotoGallery\AddPhotoController;
 use App\Http\Controllers\SanghSahitya\pakhi_ka_panna\AddPakhiController;
 use App\Http\Controllers\MahilaSamiti\MahilaSliderController;
 use App\Http\Controllers\MahilaSamiti\MahilaPstController;
+use App\Http\Controllers\MahilaSamiti\MahilaDescriptionController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaExPrsidentController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaVpSecController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaKsmMembersController;
@@ -386,6 +387,11 @@ Route::get('mahila-aavedan-patra/online', [MahilaAavedanPatraController::class, 
 // -----------------Mahila Prativedan api ------------------------------------
 Route::apiResource('mahila_prativedan', Mahila_PrativedanController::class);
 // -----------------Mahila Prativedan api ------------------------------------
+
+// -----------------Mahila Description api ------------------------------------
+Route::get('mahila-description', [MahilaDescriptionController::class, 'index']);
+Route::post('mahila-description', [MahilaDescriptionController::class, 'store']);
+// -----------------Mahila Description api ------------------------------------
 
 // -----------------Mobile Slider api ------------------------------------
 Route::apiResource('mobile-slider', MobileSliderController::class);
