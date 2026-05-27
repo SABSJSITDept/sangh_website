@@ -505,7 +505,9 @@ body.sb-is-collapsed #ms-footer { left: 72px !important; }
             <a href="{{ url('/mahila_aavedan_patra') }}" class="sb-link"><span class="sb-txt">आवेदन पत्र</span></a>
             <a href="{{ url('/mahila_prativedan') }}" class="sb-link"><span class="sb-txt">प्रतिवेदन</span></a>
             <a href="{{ url('/mahila_description') }}" class="sb-link"><span class="sb-txt">Description</span></a>
+            <a href="{{ url('/mahila_pravartiya') }}" class="sb-link"><span class="sb-txt">प्रवर्तिया</span></a>
         </div>
+
 
         <div class="sb-section">कार्यकारिणी</div>
         <div class="sb-link" onclick="toggleSub(this)" data-tip="कार्यकारिणी">

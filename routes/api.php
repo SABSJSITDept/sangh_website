@@ -41,6 +41,7 @@ use App\Http\Controllers\SanghSahitya\pakhi_ka_panna\AddPakhiController;
 use App\Http\Controllers\MahilaSamiti\MahilaSliderController;
 use App\Http\Controllers\MahilaSamiti\MahilaPstController;
 use App\Http\Controllers\MahilaSamiti\MahilaDescriptionController;
+use App\Http\Controllers\MahilaSamiti\MahilaPravartiyaController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaExPrsidentController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaVpSecController;
 use App\Http\Controllers\MahilaSamiti\Karyakarini\MahilaKsmMembersController;
@@ -392,6 +393,16 @@ Route::apiResource('mahila_prativedan', Mahila_PrativedanController::class);
 Route::get('mahila-description', [MahilaDescriptionController::class, 'index']);
 Route::post('mahila-description', [MahilaDescriptionController::class, 'store']);
 // -----------------Mahila Description api ------------------------------------
+
+// -----------------Mahila Pravartiya api ------------------------------------
+Route::prefix('mahila-pravartiya')->group(function () {
+    Route::get('/', [MahilaPravartiyaController::class, 'index']);
+    Route::post('/', [MahilaPravartiyaController::class, 'store']);
+    Route::get('/{id}', [MahilaPravartiyaController::class, 'show']);
+    Route::post('/{id}', [MahilaPravartiyaController::class, 'update']); // FormData ke liye POST use ho raha hai
+    Route::delete('/{id}', [MahilaPravartiyaController::class, 'destroy']);
+});
+// -----------------Mahila Pravartiya api ------------------------------------
 
 // -----------------Mobile Slider api ------------------------------------
 Route::apiResource('mobile-slider', MobileSliderController::class);

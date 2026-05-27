@@ -453,6 +453,11 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.mahila_samiti.mahila_samiti_description');
     })->name('mahila_description.view');
 
+    Route::get('/mahila_pravartiya', function () {
+        return view('dashboards.mahila_samiti.mahila_samiti_pravartiya');
+    })->name('mahila_pravartiya.view');
+
+
 
 
     Route::get('/mobile_slider', function () {
