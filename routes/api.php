@@ -70,6 +70,7 @@ use App\Http\Controllers\Spf\SpfProjectsController;
 use App\Http\Controllers\Spf\SpfSafarnamaController;
 use App\Http\Controllers\Spf\SpfDownloadsController;
 use App\Http\Controllers\Spf\SpfEventRegController;
+use App\Http\Controllers\Spf\SpfLinksController;
 use App\Http\Controllers\FeedBack\FeedBackController;
 use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 use App\Http\Controllers\AppRegistration\MemberAppOpenController;
@@ -444,6 +445,8 @@ Route::get('/filter-data', [JspResultController::class, 'filterData']);
 Route::apiResource('spf-about', SpfAboutController::class);
 Route::apiResource('spf-mission', SpfMissionController::class);
 Route::apiResource('spf-vision', SpfVisionController::class);
+Route::get('spf-links', [SpfLinksController::class, 'index']);
+Route::post('spf-links', [SpfLinksController::class, 'update']);
 // SPF About, Mission, Vision APIs
 
 

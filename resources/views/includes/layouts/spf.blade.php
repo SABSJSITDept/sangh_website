@@ -427,6 +427,13 @@
                 </div>
 
                 <div class="menu-section">
+                    <a href="{{ url('/dashboard/spf/links') }}" class="menu-item">
+                        <i class="bi bi-link-45deg"></i>
+                        <span>Links & Contact</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
                     <button
                         class="menu-item btn btn-blank w-100 d-flex justify-content-between align-items-center text-start"
                         type="button" data-bs-toggle="collapse" data-bs-target="#menuNotifications"

@@ -610,6 +610,10 @@ Route::get('/dashboard/spf/event-registration', function () {
     return view('dashboards.spf.SpfEventReg');
 })->name('dashboard.spf.event-registration');
 
+Route::get('/dashboard/spf/links', function () {
+    return view('dashboards.spf.links');
+})->name('dashboard.spf.links');
+
 
 Route::get('/sahitya-news', function () {
     return view('dashboards.sahitya_publication.news');
