@@ -67,22 +67,27 @@
                 <label for="classSelect" class="form-label">Select Class</label>
                 <select id="classSelect" class="form-select" style="max-width:300px;">
                     <option value="">Select Class</option>
-                    <option value=" 1">Class 1</option>
-                    <option value=" 2">Class 2</option>
-                    <option value=" 3">Class 3</option>
-                    <option value=" 4">Class 4</option>
-                    <option value=" 5">Class 5</option>
-                    <option value=" 6">Class 6</option>
-                    <option value=" 7">Class 7</option>
-                    <option value=" 8">Class 8</option>
-                    <option value=" 9">Class 9</option>
-                    <option value=" 9">Class 9</option>
-                    <option value=" 10">Class 10</option>
-                    <option value=" 11 Aagam">Class 11 Aagam</option>
-                    <option value=" 11 Tatwa">Class 11 Tatwa</option>
-                    <option value=" 12 Aagam">Class 12 Aagam</option>
-                    <option value=" 12 Tatwa">Class 12 Tatwa</option>
+                    <option value="1">Class 1</option>
+                    <option value="2">Class 2</option>
+                    <option value="3">Class 3</option>
+                    <option value="4">Class 4</option>
+                    <option value="5">Class 5</option>
+                    <option value="6">Class 6</option>
+                    <option value="7">Class 7</option>
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11 Aagam">Class 11 Aagam</option>
+                    <option value="11 Tatwa">Class 11 Tatwa</option>
+                    <option value="12 Aagam">Class 12 Aagam</option>
+                    <option value="12 Tatwa">Class 12 Tatwa</option>
                 </select>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="deleteExistingCheckbox" checked>
+                <label class="form-check-label fw-semibold text-danger" for="deleteExistingCheckbox">
+                    <i class="fas fa-trash-alt me-1"></i> Delete existing results of this class before uploading (Removes old data)
+                </label>
             </div>
             <button type="button" class="btn btn-info mb-3" id="downloadFormat">
                 <i class="fas fa-download"></i> Download Sample Excel Format
@@ -204,6 +209,7 @@ document.getElementById('bulkUploadForm').onsubmit = function(e) {
         return Object.values(row).some(val => val.trim() !== ''); // Ensure empty rows are excluded
     });
 
+    const deleteExisting = document.getElementById('deleteExistingCheckbox').checked;
     fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -211,7 +217,10 @@ document.getElementById('bulkUploadForm').onsubmit = function(e) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({ bulk: dataToSend })
+        body: JSON.stringify({ 
+            bulk: dataToSend,
+            clear_class: deleteExisting ? classValue : null
+        })
     })
     .then(res => res.json())
     .then(data => {

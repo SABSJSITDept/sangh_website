@@ -37,6 +37,11 @@ class JspResultController extends Controller
     public function store(Request $request)
     {
         if ($request->has('bulk') && is_array($request->input('bulk'))) {
+            // Check if we should clear existing results of a class first
+            if ($request->has('clear_class') && !empty($request->input('clear_class'))) {
+                JspResult::where('Class', trim($request->input('clear_class')))->delete();
+            }
+
             // Bulk upload from JSON
             $bulkData = $request->input('bulk');
             $inserted = [];
@@ -44,6 +49,11 @@ class JspResultController extends Controller
             
             foreach ($bulkData as $idx => $row) {
                 if (empty(array_filter($row))) continue; // skip empty rows
+                
+                // Trim string values in $row to avoid spaces around values
+                $row = array_map(function($val) {
+                    return is_string($val) ? trim($val) : $val;
+                }, $row);
                 
                 $validator = Validator::make($row, $this->getValidationRules());
                 if ($validator->fails()) {
@@ -65,11 +75,15 @@ class JspResultController extends Controller
             return response()->json(['success' => true, 'inserted' => count($inserted), 'message' => count($inserted) . ' records inserted']);
         } else {
             // Single record
-            $validator = Validator::make($request->all(), $this->getValidationRules());
+            $payload = array_map(function($val) {
+                return is_string($val) ? trim($val) : $val;
+            }, $request->all());
+
+            $validator = Validator::make($payload, $this->getValidationRules());
             if ($validator->fails()) {
                 return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
             }
-            $result = JspResult::create($request->all());
+            $result = JspResult::create($payload);
             return response()->json(['success' => true, 'data' => $result]);
         }
     }
@@ -112,19 +126,19 @@ class JspResultController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $class = $request->input('class');
-        $mobile = $request->input('mobile');
+        $class = trim($request->input('class'));
+        $mobile = trim($request->input('mobile'));
 
-        $result = DB::table('jsp_result')
+        $results = DB::table('jsp_result')
             ->where('Class', $class)
             ->where('Mobile', $mobile)
-            ->first();
+            ->get();
 
-        if (!$result) {
+        if ($results->isEmpty()) {
             return response()->json(['message' => 'Result not found'], 404);
         }
 
-        return response()->json(['result' => $result]);
+        return response()->json(['result' => $results]);
     }
 
     public function filterData(Request $request)
