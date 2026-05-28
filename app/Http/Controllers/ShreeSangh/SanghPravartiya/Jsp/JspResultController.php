@@ -97,6 +97,12 @@ class JspResultController extends Controller
 
     public function getResult(Request $request)
     {
+        $status = \App\Models\Status\Status::where('name', 'JSP_RESULT')->first();
+        $visible = $status ? (bool)$status->status : true;
+        if (!$visible) {
+            return response()->json(['message' => 'Results are currently hidden or not declared yet.'], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'class' => 'required|string',
             'mobile' => 'required|regex:/^\d{10}$/',
@@ -144,5 +150,28 @@ class JspResultController extends Controller
         $results = $query->get();
 
         return response()->json($results);
+    }
+
+    public function getVisibility()
+    {
+        $status = \App\Models\Status\Status::where('name', 'JSP_RESULT')->first();
+        $visible = $status ? (bool)$status->status : true;
+        return response()->json(['visible' => $visible]);
+    }
+
+    public function toggleVisibility(Request $request)
+    {
+        $request->validate([
+            'visible' => 'required|boolean'
+        ]);
+
+        $visible = $request->input('visible');
+
+        $status = \App\Models\Status\Status::updateOrCreate(
+            ['name' => 'JSP_RESULT'],
+            ['status' => $visible ? 1 : 0]
+        );
+
+        return response()->json(['success' => true, 'visible' => (bool)$status->status]);
     }
 }

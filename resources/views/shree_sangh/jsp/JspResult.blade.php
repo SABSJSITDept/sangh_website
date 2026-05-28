@@ -37,6 +37,20 @@
         </div>
     </div>
 
+    <!-- Result Visibility Control Card -->
+    <div class="card card-rounded p-3 mb-4 bg-white border-0 shadow-sm">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <h5 class="mb-1 fw-bold text-dark">JSP Results Visibility</h5>
+                <p class="text-muted small mb-0">Control whether students can search and view their results on the frontend.</p>
+            </div>
+            <div class="form-check form-switch form-switch-md d-flex align-items-center">
+                <input class="form-check-input" type="checkbox" role="switch" id="resultVisibilityToggle" style="width: 2.8rem; height: 1.5rem; cursor: pointer;">
+                <label class="form-check-label fw-semibold ms-2" for="resultVisibilityToggle" id="visibilityStatusText">Loading...</label>
+            </div>
+        </div>
+    </div>
+
     <div class="card card-rounded p-3">
         <ul class="nav nav-tabs mb-3" id="jspTabs" role="tablist">
             <li class="nav-item" role="presentation">
@@ -122,6 +136,9 @@
             <!-- Fetch Result Tab -->
             <div class="tab-pane fade" id="fetch-result" role="tabpanel" aria-labelledby="fetch-result-tab">
                 <div class="card p-3 card-rounded">
+                    <div id="fetchVisibilityWarning" class="alert alert-warning d-none mb-3">
+                        ⚠️ <strong>Note:</strong> Results are currently set to <strong>Hidden</strong>. Students won't be able to search or view their results on the frontend.
+                    </div>
                     <form id="fetchResultForm" class="row g-3">
                         <div class="col-md-4">
                             <label class="form-label">Class</label>
@@ -376,8 +393,71 @@
         });
     }
 
+    // Visibility toggle functions
+    const visibilityToggle = document.getElementById('resultVisibilityToggle');
+    const visibilityStatusText = document.getElementById('visibilityStatusText');
+    const fetchWarning = document.getElementById('fetchVisibilityWarning');
+
+    async function checkVisibility() {
+        try {
+            const res = await fetch('/api/jsp-result/visibility', {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const data = await res.json();
+            const isVisible = data.visible;
+            
+            visibilityToggle.checked = isVisible;
+            updateVisibilityUI(isVisible);
+        } catch (err) {
+            console.error('Error fetching visibility status:', err);
+        }
+    }
+
+    function updateVisibilityUI(isVisible) {
+        if (isVisible) {
+            visibilityStatusText.textContent = 'Visible to Students';
+            visibilityStatusText.className = 'form-check-label fw-semibold ms-2 text-success';
+            if (fetchWarning) fetchWarning.classList.add('d-none');
+        } else {
+            visibilityStatusText.textContent = 'Hidden from Students';
+            visibilityStatusText.className = 'form-check-label fw-semibold ms-2 text-danger';
+            if (fetchWarning) fetchWarning.classList.remove('d-none');
+        }
+    }
+
+    visibilityToggle.addEventListener('change', async function() {
+        const isVisible = this.checked;
+        visibilityStatusText.textContent = 'Updating...';
+        try {
+            const res = await fetch('/api/jsp-result/toggle-visibility', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ visible: isVisible })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast(isVisible ? 'Results are now visible to students' : 'Results are now hidden from students', 'success');
+                updateVisibilityUI(isVisible);
+            } else {
+                showToast('Failed to update visibility', 'danger');
+                visibilityToggle.checked = !isVisible;
+                updateVisibilityUI(!isVisible);
+            }
+        } catch (err) {
+            console.error('Failed to update visibility:', err);
+            showToast('Failed to update visibility', 'danger');
+            visibilityToggle.checked = !isVisible;
+            updateVisibilityUI(!isVisible);
+        }
+    });
+
     // init
     fetchResults();
+    checkVisibility();
 </script>
 </body>
 </html>

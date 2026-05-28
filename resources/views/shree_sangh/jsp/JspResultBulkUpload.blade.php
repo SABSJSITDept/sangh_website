@@ -55,6 +55,14 @@
             <h2 class="mb-0">Bulk Upload JSP Results (Excel)</h2>
         </div>
         <div class="card-body">
+            <!-- Results Visibility Status Indicator -->
+            <div class="alert alert-light d-flex align-items-center justify-content-between p-3 mb-3 border rounded-3 bg-light">
+                <div>
+                    <h6 class="mb-1 fw-bold text-dark"><i class="fas fa-eye me-2"></i>JSP Results Visibility Status</h6>
+                    <span id="visibilityStatusText" class="badge bg-secondary">Loading status...</span>
+                </div>
+                <a href="{{ route('jsp.result') }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-cog me-1"></i> Manage Visibility</a>
+            </div>
             <div class="mb-3">
                 <label for="classSelect" class="form-label">Select Class</label>
                 <select id="classSelect" class="form-select" style="max-width:300px;">
@@ -250,7 +258,28 @@ function fetchResults() {
             document.getElementById('resultsTable').innerHTML = html;
         });
 }
+
+async function checkVisibility() {
+    try {
+        const res = await fetch('/api/jsp-result/visibility', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const data = await res.json();
+        const badge = document.getElementById('visibilityStatusText');
+        if (data.visible) {
+            badge.textContent = 'Visible to Students';
+            badge.className = 'badge bg-success';
+        } else {
+            badge.textContent = 'Hidden from Students';
+            badge.className = 'badge bg-danger';
+        }
+    } catch (err) {
+        console.error('Error checking visibility status:', err);
+    }
+}
+
 fetchResults();
+checkVisibility();
 </script>
 </body>
 </html>

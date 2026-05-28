@@ -271,6 +271,8 @@ Route::apiResource('jsp-basic', SpBasicController::class);
 Route::apiResource('jsp-exam', JspExamController::class);
 // -----------------JSP Exam api ------------------------------------
 
+Route::get('/jsp-result/visibility', [JspResultController::class, 'getVisibility']);
+Route::post('/jsp-result/toggle-visibility', [JspResultController::class, 'toggleVisibility']);
 Route::apiResource('jsp-result', JspResultController::class);
 
 
