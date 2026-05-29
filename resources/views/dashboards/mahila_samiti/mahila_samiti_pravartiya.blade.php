@@ -353,7 +353,7 @@ document.getElementById('pvForm').addEventListener('submit', async function (e) 
     btn.disabled = true;
     btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> सहेज रहे हैं...';
 
-    const url    = id ? `${API}/${id}` : `${API}/`;
+    const url    = id ? `${API}/${id}` : API;
     // For update with file, use POST with _method=PUT override
     if (id) form.append('_method', 'PUT');
 
