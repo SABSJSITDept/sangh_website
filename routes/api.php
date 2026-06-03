@@ -77,6 +77,7 @@ use App\Http\Controllers\FeedBack\FeedBackController;
 use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 use App\Http\Controllers\AppRegistration\MemberAppOpenController;
 use App\Http\Controllers\Panchang\PanchangApiController;
+use App\Http\Controllers\SanghHelplineController;
 
 
 
@@ -531,3 +532,7 @@ Route::prefix('panchang')->group(function () {
     Route::get('/today', [PanchangApiController::class, 'today']);   // sirf aaj ka record
 });
 // ------------------Panchang api ------------------------------------
+
+// ------------------Sangh Helpline api ------------------------------------
+Route::apiResource('sangh-helplines', SanghHelplineController::class);
+// ------------------Sangh Helpline api ------------------------------------
