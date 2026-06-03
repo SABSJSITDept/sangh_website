@@ -24,6 +24,10 @@ class SanghHelplineController extends Controller
             'sequence' => 'integer',
         ]);
 
+        if (isset($validated['sequence'])) {
+            SanghHelpline::where('sequence', '>=', $validated['sequence'])->increment('sequence');
+        }
+
         $helpline = SanghHelpline::create($validated);
         return response()->json($helpline, 201);
     }
@@ -40,6 +44,12 @@ class SanghHelplineController extends Controller
             'is_only_whatsapp' => 'boolean',
             'sequence' => 'integer',
         ]);
+
+        if (isset($validated['sequence']) && $helpline->sequence != $validated['sequence']) {
+            SanghHelpline::where('sequence', '>=', $validated['sequence'])
+                ->where('id', '!=', $helpline->id)
+                ->increment('sequence');
+        }
 
         $helpline->update($validated);
         return response()->json($helpline);
