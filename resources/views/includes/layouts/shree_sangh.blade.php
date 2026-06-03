@@ -545,6 +545,9 @@
                         <a href="{{ url('/aavedan_patra') }}">
                             <i class="bi bi-file-earmark-text"></i> आवेदन पत्र
                         </a>
+                        <a href="{{ url('/dashboard/sangh-helpline') }}">
+                            <i class="bi bi-telephone"></i> संघ हेल्पलाइन
+                        </a>
                     </div>
                 </div>
 

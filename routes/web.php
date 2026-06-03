@@ -214,6 +214,10 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.shree_sangh.index');
     })->name('dashboard.shree_sangh');
     // Shared routes for any authenticated user
+    Route::get('/dashboard/sangh-helpline', function () {
+        return view('dashboards.shree_sangh.sangh_helpline');
+    })->name('sangh.helpline');
+
 
     Route::get('/dashboard/vihar-sewa', function () {
         return view('dashboards.shree_sangh.vihar_sewa');
