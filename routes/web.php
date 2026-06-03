@@ -218,6 +218,10 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.shree_sangh.sangh_helpline');
     })->name('sangh.helpline');
 
+    Route::get('/dashboard/sangh-offices', function () {
+        return view('dashboards.shree_sangh.sangh_offices');
+    })->name('sangh.offices');
+
 
     Route::get('/dashboard/vihar-sewa', function () {
         return view('dashboards.shree_sangh.vihar_sewa');

@@ -78,6 +78,7 @@ use App\Http\Controllers\AppRegistration\AddAppRegistrationController;
 use App\Http\Controllers\AppRegistration\MemberAppOpenController;
 use App\Http\Controllers\Panchang\PanchangApiController;
 use App\Http\Controllers\SanghHelplineController;
+use App\Http\Controllers\SanghOfficeController;
 
 
 
@@ -536,3 +537,7 @@ Route::prefix('panchang')->group(function () {
 // ------------------Sangh Helpline api ------------------------------------
 Route::apiResource('sangh-helplines', SanghHelplineController::class);
 // ------------------Sangh Helpline api ------------------------------------
+
+// ------------------Sangh Offices api ------------------------------------
+Route::apiResource('sangh-offices', SanghOfficeController::class);
+// ------------------Sangh Offices api ------------------------------------

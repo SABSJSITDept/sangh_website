@@ -548,6 +548,9 @@
                         <a href="{{ url('/dashboard/sangh-helpline') }}">
                             <i class="bi bi-telephone"></i> संघ हेल्पलाइन
                         </a>
+                        <a href="{{ url('/dashboard/sangh-offices') }}">
+                            <i class="bi bi-building"></i> संघ ऑफिस
+                        </a>
                     </div>
                 </div>
 
