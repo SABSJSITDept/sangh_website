@@ -17,9 +17,13 @@
                 <label class="form-label">Class</label>
                 <select class="form-select" name="class" required>
                     <option value="">Select Class</option>
-                    @for ($i = 1; $i <= 12; $i++)
+                    @for ($i = 1; $i <= 10; $i++)
                         <option value="{{ $i }}">{{ $i }}</option>
                     @endfor
+                    <option value="11 aagam">11 aagam</option>
+                    <option value="11 tatwa">11 tatwa</option>
+                    <option value="12 aagam">12 aagam</option>
+                    <option value="12 tatwa">12 tatwa</option>
                 </select>
             </div>
             <div class="col-md-4">

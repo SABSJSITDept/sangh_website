@@ -24,7 +24,7 @@ class JspOldPapersController extends Controller
     public function store(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'class' => 'required|integer|between:1,12',
+        'class' => 'required|string|in:1,2,3,4,5,6,7,8,9,10,11 aagam,11 tatwa,12 aagam,12 tatwa',
         'year' => 'required|integer|min:2000|max:' . date('Y'),
         'pdf' => 'required|mimes:pdf|max:2048'
     ]);
