@@ -61,6 +61,12 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label fw-bold">Registration Link</label>
+                <input type="url" class="form-control" id="registration_link" name="registration_link" placeholder="https://example.com/register">
+            </div>
+
+
+            <div class="mb-3">
                 <label class="form-label fw-bold">Description <span class="text-danger">*</span></label>
                 <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
             </div>
@@ -220,6 +226,8 @@
             formData.append("spf_project_id", document.getElementById("spf_project_id").value);
             formData.append("event_reg_start", document.getElementById("event_reg_start").value);
             formData.append("event_reg_close", document.getElementById("event_reg_close").value);
+            formData.append("registration_link", document.getElementById("registration_link").value);
+
 
             let photoFile = document.getElementById("photo").files[0];
             if (photoFile) {
@@ -279,6 +287,7 @@
                                     <p><strong>📅 Date:</strong> ${event.date}</p>
                                     <p><strong>🕐 Time:</strong> ${event.time}</p>
                                     <p><strong>📍 Location:</strong> ${event.location}</p>
+                                    ${event.registration_link ? `<p><strong>🔗 Registration Link:</strong> <a href="${event.registration_link}" target="_blank">${event.registration_link}</a></p>` : ''}
                                     <p><strong>📝 Description:</strong></p>
                                     <p>${event.description}</p>
                                 </div>
@@ -310,6 +319,8 @@
                     document.getElementById("spf_project_id").value = event.spf_project_id || "";
                     document.getElementById("event_reg_start").value = event.event_reg_start || "";
                     document.getElementById("event_reg_close").value = event.event_reg_close || "";
+                    document.getElementById("registration_link").value = event.registration_link || "";
+
 
                     const photoUrl = event.photo ? `/storage/${event.photo}` : '';
                     if (photoUrl) {

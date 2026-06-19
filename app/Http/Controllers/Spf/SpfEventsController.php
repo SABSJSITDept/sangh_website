@@ -49,6 +49,7 @@ class SpfEventsController extends Controller
             'spf_project_id' => 'required|exists:spf_projects,id',
             'event_reg_start' => 'nullable|date',
             'event_reg_close' => 'nullable|date',
+            'registration_link' => 'nullable|string|max:255',
         ]);
 
         $photoPath = null;
@@ -66,6 +67,7 @@ class SpfEventsController extends Controller
             'spf_project_id' => $request->spf_project_id,
             'event_reg_start' => $request->event_reg_start,
             'event_reg_close' => $request->event_reg_close,
+            'registration_link' => $request->registration_link,
         ]);
 
         return response()->json([
@@ -119,6 +121,7 @@ class SpfEventsController extends Controller
             'spf_project_id' => 'nullable|exists:spf_projects,id',
             'event_reg_start' => 'nullable|date',
             'event_reg_close' => 'nullable|date',
+            'registration_link' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('photo')) {
