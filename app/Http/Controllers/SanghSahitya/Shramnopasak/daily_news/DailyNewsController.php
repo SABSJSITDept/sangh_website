@@ -12,6 +12,18 @@ class DailyNewsController extends Controller
         return view('dashboards.shramnopasak_news.daily_news');
     }
 
+    public function fetchNews(\Illuminate\Http\Request $request)
+    {
+        $query = \App\Models\SanghSahitya\Shramnopasak\daily_news\DailyNews::orderBy('created_at', 'desc');
+        
+        if ($request->has('anchal_id')) {
+            $query->where('anchal_id', $request->anchal_id);
+        }
+
+        $news = $query->paginate(10);
+        return response()->json($news);
+    }
+
     public function like($id)
     {
         $news = \App\Models\SanghSahitya\Shramnopasak\daily_news\DailyNews::find($id);

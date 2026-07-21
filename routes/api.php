@@ -303,7 +303,15 @@ Route::apiResource('shramnopasak', AddShramnopasakController::class);
 // -----------------Shramnopasak api ------------------------------------
 
 // -----------------Shramnopasak Daily News ------------------------------
+Route::get('/shramnopasak/daily-news', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'fetchNews']);
 Route::post('/shramnopasak/daily-news/{id}/like', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'like']);
+
+// Comments
+Route::get('/shramnopasak/daily-news/{id}/comments', [\App\Http\Controllers\SanghSahitya\Shramnopasak\news_comments\NewsCommentsController::class, 'fetchComments']);
+Route::post('/shramnopasak/daily-news/{id}/comments', [\App\Http\Controllers\SanghSahitya\Shramnopasak\news_comments\NewsCommentsController::class, 'storeComment']);
+
+// Advertisements
+Route::get('/shramnopasak/advertisements', [\App\Http\Controllers\SanghSahitya\Shramnopasak\news_advertisement\NewsAdvertisementController::class, 'fetchAdvertisements']);
 // -----------------------------------------------------------------------
 
 
