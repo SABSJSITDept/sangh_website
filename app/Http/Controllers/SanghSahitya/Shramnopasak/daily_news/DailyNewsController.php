@@ -39,4 +39,73 @@ class DailyNewsController extends Controller
             'like_count' => $news->like_count
         ]);
     }
+
+    // Admin Panel CRUD methods
+
+    public function store(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'date' => 'required|date',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $data = $request->except(['photo']);
+
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('uploads/shramnopasak_news'), $imageName);
+            $data['photo'] = 'uploads/shramnopasak_news/' . $imageName;
+        }
+
+        \App\Models\SanghSahitya\Shramnopasak\daily_news\DailyNews::create($data);
+
+        return response()->json(['success' => true, 'message' => 'News added successfully!']);
+    }
+
+    public function fetch()
+    {
+        $news = \App\Models\SanghSahitya\Shramnopasak\daily_news\DailyNews::orderBy('created_at', 'desc')->get();
+        return response()->json(['data' => $news]);
+    }
+
+    public function update(\Illuminate\Http\Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'date' => 'required|date',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $news = \App\Models\SanghSahitya\Shramnopasak\daily_news\DailyNews::findOrFail($id);
+        $data = $request->except(['photo']);
+
+        if ($request->hasFile('photo')) {
+            if ($news->photo && file_exists(public_path($news->photo))) {
+                unlink(public_path($news->photo));
+            }
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('uploads/shramnopasak_news'), $imageName);
+            $data['photo'] = 'uploads/shramnopasak_news/' . $imageName;
+        }
+
+        $news->update($data);
+
+        return response()->json(['success' => true, 'message' => 'News updated successfully!']);
+    }
+
+    public function destroy($id)
+    {
+        $news = \App\Models\SanghSahitya\Shramnopasak\daily_news\DailyNews::findOrFail($id);
+        
+        if ($news->photo && file_exists(public_path($news->photo))) {
+            unlink(public_path($news->photo));
+        }
+        
+        $news->delete();
+
+        return response()->json(['success' => true, 'message' => 'News deleted successfully!']);
+    }
 }

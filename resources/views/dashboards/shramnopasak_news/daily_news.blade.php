@@ -159,6 +159,103 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('display_city').value = '';
         }
     });
+
+    // --- NEW: AJAX Logic for CRUD ---
+    
+    function fetchNewsTable() {
+        fetch('/shramnopasak/daily-news/fetch')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('newsTableBody');
+                tbody.innerHTML = '';
+                if(data.data) {
+                    data.data.forEach(news => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${news.id}</td>
+                            <td>${news.photo ? `<img src="/${news.photo}" width="50" height="50" style="object-fit: cover;">` : 'No Image'}</td>
+                            <td>${news.title}</td>
+                            <td>${news.date}</td>
+                            <td>${news.description ? news.description.substring(0, 50) + '...' : ''}</td>
+                            <td>${news.like_count}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${news.id}">Delete</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            });
+    }
+
+    // Load table on page load
+    fetchNewsTable();
+
+    // Handle form submit via AJAX
+    document.getElementById('dailyNewsForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent page refresh!
+        
+        let formData = new FormData(this);
+        let editId = document.getElementById('editId').value;
+        
+        let url = '/shramnopasak/daily-news/store';
+        if (editId) {
+            url = `/shramnopasak/daily-news/update/${editId}`;
+        }
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                alert(data.message);
+                this.reset(); // Clear the form
+                document.getElementById('editId').value = '';
+                document.getElementById('branchSelect').selectedIndex = 0; // Reset dropdown
+                
+                // Reset display fields
+                document.getElementById('display_anchal').value = '';
+                document.getElementById('display_state').value = '';
+                document.getElementById('display_city').value = '';
+
+                fetchNewsTable(); // Refresh the table
+            } else {
+                alert('Error saving news');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Something went wrong!');
+        });
+    });
+
+    // Handle delete via AJAX event delegation
+    document.getElementById('newsTableBody').addEventListener('click', function(e) {
+        if(e.target.classList.contains('delete-btn')) {
+            if(confirm('Are you sure you want to delete this news?')) {
+                const id = e.target.getAttribute('data-id');
+                fetch(`/shramnopasak/daily-news/delete/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        alert(data.message);
+                        fetchNewsTable(); // Refresh table
+                    }
+                })
+                .catch(err => console.error('Delete error:', err));
+            }
+        }
+    });
 });
 </script>
 @endsection

@@ -373,6 +373,11 @@ Route::middleware(['web', 'checkSession'])->group(function () {
     })->name('shramnopasak.view');
 
     Route::get('/shramnopasak/daily-news', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'index'])->name('shramnopasak.daily_news');
+    Route::post('/shramnopasak/daily-news/store', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'store'])->name('shramnopasak.daily_news.store');
+    Route::get('/shramnopasak/daily-news/fetch', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'fetch'])->name('shramnopasak.daily_news.fetch');
+    Route::post('/shramnopasak/daily-news/update/{id}', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'update'])->name('shramnopasak.daily_news.update');
+    Route::delete('/shramnopasak/daily-news/delete/{id}', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'destroy'])->name('shramnopasak.daily_news.delete');
+
     Route::get('/shramnopasak/news-comments', [\App\Http\Controllers\SanghSahitya\Shramnopasak\news_comments\NewsCommentsController::class, 'index'])->name('shramnopasak.news_comments');
     Route::get('/shramnopasak/news-advertisement', [\App\Http\Controllers\SanghSahitya\Shramnopasak\news_advertisement\NewsAdvertisementController::class, 'index'])->name('shramnopasak.news_advertisement');
 
