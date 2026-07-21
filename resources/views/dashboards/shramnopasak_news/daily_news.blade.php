@@ -24,21 +24,29 @@
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="3"></textarea>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">State ID</label>
-                            <input type="number" name="state_id" class="form-control">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Select Branch (Local Sangh)</label>
+                            <select id="branchSelect" class="form-select" required>
+                                <option value="">Loading branches...</option>
+                            </select>
+                            
+                            <!-- Hidden inputs for saving to DB -->
+                            <input type="hidden" name="local_sangh_id" id="local_sangh_id">
+                            <input type="hidden" name="state_id" id="state_id">
+                            <input type="hidden" name="anchal_id" id="anchal_id">
+                            <input type="hidden" name="city_id" id="city_id">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">City ID</label>
-                            <input type="number" name="city_id" class="form-control">
+                            <label class="form-label">Anchal</label>
+                            <input type="text" id="display_anchal" class="form-control" readonly placeholder="Auto-filled">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Anchal ID</label>
-                            <input type="number" name="anchal_id" class="form-control">
+                            <label class="form-label">State</label>
+                            <input type="text" id="display_state" class="form-control" readonly placeholder="Auto-filled">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Local Sangh ID</label>
-                            <input type="number" name="local_sangh_id" class="form-control">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" id="display_city" class="form-control" readonly placeholder="Auto-filled">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Photo</label>
@@ -75,4 +83,82 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const branchSelect = document.getElementById('branchSelect');
+    let citiesMap = {}; // Maps lowercase city name to city_id
+    
+    // Fetch cities to map city_name -> city_id
+    fetch('https://mrm.sadhumargi.org/api/cities')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.cities) {
+                data.cities.forEach(city => {
+                    // Normalize to lowercase for robust matching
+                    citiesMap[city.city_name.toLowerCase().trim()] = city.city_id;
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching cities:', error));
+    
+    // Fetch branches from external API
+    fetch('https://mrm.sadhumargi.org/api/branches')
+        .then(response => response.json())
+        .then(data => {
+            if(data && data.branches) {
+                branchSelect.innerHTML = '<option value="">-- Select a Branch --</option>';
+                data.branches.forEach(branch => {
+                    const option = document.createElement('option');
+                    option.value = branch.id;
+                    option.textContent = `${branch.branch_name} (${branch.branch_name_hin})`;
+                    
+                    // Store extra data in dataset for quick access
+                    option.dataset.stateId = branch.state_id || '';
+                    option.dataset.stateName = branch.state_name || '';
+                    option.dataset.anchalId = branch.anchal_id || '';
+                    option.dataset.anchalName = branch.anchal_name || '';
+                    option.dataset.city = branch.city || '';
+                    
+                    branchSelect.appendChild(option);
+                });
+            } else {
+                branchSelect.innerHTML = '<option value="">No branches found</option>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching branches:', error);
+            branchSelect.innerHTML = '<option value="">Error loading branches</option>';
+        });
+        
+    // Update hidden inputs and read-only displays when a branch is selected
+    branchSelect.addEventListener('change', function() {
+        const selected = this.options[this.selectedIndex];
+        
+        if (selected.value) {
+            document.getElementById('local_sangh_id').value = selected.value;
+            document.getElementById('state_id').value = selected.dataset.stateId;
+            document.getElementById('anchal_id').value = selected.dataset.anchalId;
+            
+            const cityName = selected.dataset.city || "";
+            // Look up city_id from the map
+            const cityId = cityName ? citiesMap[cityName.toLowerCase().trim()] : "";
+            document.getElementById('city_id').value = cityId || "";
+            
+            document.getElementById('display_anchal').value = selected.dataset.anchalName;
+            document.getElementById('display_state').value = selected.dataset.stateName;
+            document.getElementById('display_city').value = cityName;
+        } else {
+            document.getElementById('local_sangh_id').value = '';
+            document.getElementById('state_id').value = '';
+            document.getElementById('anchal_id').value = '';
+            document.getElementById('city_id').value = '';
+            
+            document.getElementById('display_anchal').value = '';
+            document.getElementById('display_state').value = '';
+            document.getElementById('display_city').value = '';
+        }
+    });
+});
+</script>
 @endsection
