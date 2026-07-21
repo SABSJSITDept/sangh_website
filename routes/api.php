@@ -302,6 +302,10 @@ Route::get('/shramnopasak/latest', [AddShramnopasakController::class, 'latest'])
 Route::apiResource('shramnopasak', AddShramnopasakController::class);
 // -----------------Shramnopasak api ------------------------------------
 
+// -----------------Shramnopasak Daily News ------------------------------
+Route::post('/shramnopasak/daily-news/{id}/like', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'like']);
+// -----------------------------------------------------------------------
+
 
 // -----------------Sahitya api ------------------------------------
 Route::apiResource('sahitya', AddSahityaController::class)->except(['show']);

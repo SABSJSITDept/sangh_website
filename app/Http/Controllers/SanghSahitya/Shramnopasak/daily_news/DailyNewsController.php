@@ -11,4 +11,20 @@ class DailyNewsController extends Controller
     {
         return view('dashboards.shramnopasak_news.daily_news');
     }
+
+    public function like($id)
+    {
+        $news = \App\Models\SanghSahitya\Shramnopasak\daily_news\DailyNews::find($id);
+        if (!$news) {
+            return response()->json(['status' => 'error', 'message' => 'News not found'], 404);
+        }
+
+        $news->increment('like_count');
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Liked successfully',
+            'like_count' => $news->like_count
+        ]);
+    }
 }
