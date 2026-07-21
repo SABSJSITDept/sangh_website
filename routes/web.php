@@ -372,6 +372,10 @@ Route::middleware(['web', 'checkSession'])->group(function () {
         return view('dashboards.sahitya.shramnopasak');
     })->name('shramnopasak.view');
 
+    Route::get('/shramnopasak/daily-news', [\App\Http\Controllers\SanghSahitya\Shramnopasak\daily_news\DailyNewsController::class, 'index'])->name('shramnopasak.daily_news');
+    Route::get('/shramnopasak/news-comments', [\App\Http\Controllers\SanghSahitya\Shramnopasak\news_comments\NewsCommentsController::class, 'index'])->name('shramnopasak.news_comments');
+    Route::get('/shramnopasak/news-advertisement', [\App\Http\Controllers\SanghSahitya\Shramnopasak\news_advertisement\NewsAdvertisementController::class, 'index'])->name('shramnopasak.news_advertisement');
+
     Route::get('/shramnopasak/all-view', function () {
         return view('dashboards.sahitya.shramnopasak_all');
     });

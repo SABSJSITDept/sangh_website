@@ -500,6 +500,27 @@ main.content {
                 </div>
              
                 <div class="nav-item">
+                     <a href="{{ route('shramnopasak.daily_news') }}"  class="nav-link">
+                        <i class="bi bi-newspaper"></i>
+                        <span class="link-text">Daily News</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                     <a href="{{ route('shramnopasak.news_comments') }}"  class="nav-link">
+                        <i class="bi bi-chat-dots"></i>
+                        <span class="link-text">News Comments</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                     <a href="{{ route('shramnopasak.news_advertisement') }}"  class="nav-link">
+                        <i class="bi bi-megaphone"></i>
+                        <span class="link-text">News Advertisement</span>
+                    </a>
+                </div>
+             
+                <div class="nav-item">
                      <a href="{{ url('/chaturmas-suchi') }}"  class="nav-link">
                         <i class="bi bi-speedometer2"></i>
                         <span class="link-text">CHATURMAS SHUCIYA</span>
